@@ -12,4 +12,4 @@ CREATE TABLE IF NOT EXISTS addr (
     addr_ind    CHAR(1),    -- 地址指示
     address     CHAR(72),   -- 地址
     tel         CHAR(11)    -- 電話
-)
+);

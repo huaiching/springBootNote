@@ -1260,8 +1260,9 @@ pre[class*="language-"] {
 ├─ 📁controller                 # 對外 API 接口
 ├─ 📁service                    # 業務邏輯層 的 interface
 │   ├─ 📁Impl                   # service 的實作類別，處理實際商業邏輯
-├─ 📁entity                     # JPA 實體類別，對應資料庫中的資料表結構
-├─ 📁dto                        # 資料傳輸物件
+├─ 📁repository                 # JPA 資料存取層，繼承 JpaRepository 產生 資料
+├─ 📁entity                     # JPA 資料傳輸物件，對應資料庫中的資料表結構庫互動方法
+├─ 📁dto                        # 一般 資料傳輸物件
 ├─ 📁util                       # 工具類別，例如：時間格式處理、API 回應包裝
 ├─ 📁mapper                     # Entity 與 DTO 之間的轉換邏輯</span>
 
@@ -1299,6 +1300,8 @@ pre[class*="language-"] {
 </ul>
 </li>
 </ul>
+<h3 class="atx" id="📁repository">📁repository</h3>
+<p>放置 <code>JPA 資料存取層</code> 的 資料夾，繼承 <code>JpaRepository</code> 就可以有 <code>entity</code> 的 <code>CURD</code> 方法。</p>
 <h3 class="atx" id="📁entity：資料傳輸物件db相關">📁entity：資料傳輸物件(DB相關)</h3>
 <p>Spring Boot 裡面的 <code>資料傳輸物件</code> 資料夾。</p>
 <p>放置 <code>JPA 資料表實體類</code>，基本上可以視為 <code>table 檔案結構物件</code>，

@@ -15,8 +15,9 @@ java
 ├─ 📁controller                 # 對外 API 接口
 ├─ 📁service                    # 業務邏輯層 的 interface
 │   ├─ 📁Impl                   # service 的實作類別，處理實際商業邏輯
-├─ 📁entity                     # JPA 實體類別，對應資料庫中的資料表結構
-├─ 📁dto                        # 資料傳輸物件
+├─ 📁repository                 # JPA 資料存取層，繼承 JpaRepository 產生 資料
+├─ 📁entity                     # JPA 資料傳輸物件，對應資料庫中的資料表結構庫互動方法
+├─ 📁dto                        # 一般 資料傳輸物件
 ├─ 📁util                       # 工具類別，例如：時間格式處理、API 回應包裝
 ├─ 📁mapper                     # Entity 與 DTO 之間的轉換邏輯
 
@@ -62,6 +63,10 @@ resources
 - `內層` 透過 繼承 `service` 來 `實作業務邏輯`。
   
   - 需要設定 `@Service`。
+
+### 📁repository
+
+放置 `JPA 資料存取層` 的 資料夾，繼承 `JpaRepository` 就可以有 `entity` 的 `CURD` 方法。
 
 ### 📁entity：資料傳輸物件(DB相關)
 
