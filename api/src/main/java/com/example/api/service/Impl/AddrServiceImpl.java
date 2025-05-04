@@ -3,6 +3,8 @@ package com.example.api.service.Impl;
 import com.example.api.entity.Addr;
 import com.example.api.repository.AddrRepository;
 import com.example.api.service.AddrService;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,21 +53,21 @@ public class AddrServiceImpl implements AddrService {
     public void update(Addr entityOri, Addr entityNew) {
         // 建立 SQL
         String sql = "UPDATE addr " +
-                     "SET clinet_id = :clinetIdNew " +
+                     "SET client_id = :clientIdNew " +
                      "   ,addr_ind = :addrIndNew " +
                      "   ,address = :addressNew " +
                      "   ,tel = :telNew " +
-                     "WHERE clinet_id = :clinetIdOri " +
+                     "WHERE client_id = :clientIdOri " +
                      "  AND addr_ind = :addrIndOri " + 
                      "  AND address = :addressOri " + 
                      "  AND tel = :telOri ";
         // 填入 參數
         Map<String, Object> params = new HashMap<>();
-        params.put("clinetIdNew", entityNew.getClinetId());
+        params.put("clientIdNew", entityNew.getClientId());
         params.put("addrIndNew", entityNew.getAddrInd());
         params.put("addressNew", entityNew.getAddress());
         params.put("telNew", entityNew.getTel());
-        params.put("clinetIdOri", entityOri.getClinetId());
+        params.put("clientIdOri", entityOri.getClientId());
         params.put("addrIndOri", entityOri.getAddrInd());
         params.put("addressOri", entityOri.getAddress());
         params.put("telOri", entityOri.getTel());
@@ -94,5 +96,25 @@ public class AddrServiceImpl implements AddrService {
         if (addrRepository.existsById(id)) {
             addrRepository.deleteById(id);
         }
+    }
+
+    /**
+     * 模糊 進行 地址搜尋
+     *
+     * @param address 要搜尋的地址字串
+     * @return 查詢到 Addr 資料清單
+     */
+    @Override
+    public List<Addr> queryAddress(String address) {
+        // 建立 SQL
+        String sql = "SELECT * FROM addr " +
+                "WHERE address LIKE :address";
+        // 填入 參數
+        Map<String, Object> params = new HashMap<>();
+        params.put("address", "%" + address + "%");
+        // 執行 方法
+        List<Addr> addrList = namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Addr.class));
+
+        return addrList;
     }
 }

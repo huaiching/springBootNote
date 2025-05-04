@@ -19,8 +19,8 @@ public class Addr implements Serializable {
 
     @Id
     @Schema(description = "客戶姓名")
-    @Column(name = "clinet_id")
-    private String clinetId;
+    @Column(name = "client_id")
+    private String clientId;
 
     @Id
     @Schema(description = "地址指示")
@@ -40,12 +40,12 @@ public class Addr implements Serializable {
     }
 
     // getting 和 setting: IDE 生成
-    public String getClinetId() {
-        return clinetId!= null ? clinetId.trim() : null;
+    public String getClientId() {
+        return clientId!= null ? clientId.trim() : null;
     }
 
-    public void setClinetId(String clinetId) {
-        this.clinetId = clinetId;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getAddrInd() {
@@ -78,30 +78,30 @@ public class Addr implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Addr that = (Addr) o;
-        return Objects.equals(clinetId, that.clinetId) && Objects.equals(addrInd, that.addrInd);
+        return Objects.equals(clientId, that.clientId) && Objects.equals(addrInd, that.addrInd);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clinetId, addrInd);
+        return Objects.hash(clientId, addrInd);
     }
 
     // 主鍵 實體類
     public static class AddrKey implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        private String clinetId;
+        private String clientId;
         private String addrInd;
 
         public AddrKey() {
         }
 
-        public String getClinetId() {
-            return clinetId;
+        public String getClientId() {
+            return clientId;
         }
 
-        public void setClinetId(String clinetId) {
-            this.clinetId = clinetId;
+        public void setClientId(String clientId) {
+            this.clientId = clientId;
         }
 
         public String getAddrInd() {
@@ -117,12 +117,12 @@ public class Addr implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             AddrKey that = (AddrKey) o;
-            return Objects.equals(clinetId, that.clinetId) && Objects.equals(addrInd, that.addrInd);
+            return Objects.equals(clientId, that.clientId) && Objects.equals(addrInd, that.addrInd);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(clinetId, addrInd);
+            return Objects.hash(clientId, addrInd);
         }
     }
 }

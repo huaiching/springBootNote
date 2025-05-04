@@ -17,8 +17,8 @@ public class Clnt implements Serializable {
 
     @Id
     @Schema(description = "客戶證號")
-    @Column(name = "clinet_id")
-    private String clinetId;
+    @Column(name = "client_id")
+    private String clientId;
 
     @Schema(description = "客戶姓名")
     @Column(name = "names")
@@ -37,12 +37,12 @@ public class Clnt implements Serializable {
     }
 
     // getting 和 setting
-    public String getClinetId() {
-        return clinetId!= null ? clinetId.trim() : null;
+    public String getClientId() {
+        return clientId!= null ? clientId.trim() : null;
     }
 
-    public void setClinetId(String clinetId) {
-        this.clinetId = clinetId;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getNames() {
@@ -75,11 +75,11 @@ public class Clnt implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Clnt that = (Clnt) o;
-        return Objects.equals(clinetId, that.clinetId);
+        return Objects.equals(clientId, that.clientId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clinetId);
+        return Objects.hash(clientId);
     }
 }

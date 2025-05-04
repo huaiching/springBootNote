@@ -2,6 +2,7 @@ package com.example.api.controller;
 
 import com.example.api.dto.AddrUpdate;
 import com.example.api.entity.Addr;
+import com.example.api.repository.AddrRepository;
 import com.example.api.service.AddrService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ public class AddrController {
 
     @Autowired
     private AddrService addrService;
+    @Autowired
+    private AddrRepository addrRepository;
 
     @Operation(summary = "根據主鍵 新增或更新 Addr",
                description = "根據主鍵，若有資料則更新，無資料則新增",
@@ -52,8 +55,8 @@ public class AddrController {
     @Operation(summary = "根據主鍵 查詢 Addr",
                description = "根據主鍵查詢 Addr 資料",
                operationId = "findById")
-    @PostMapping("/getByIds")
-    public ResponseEntity<Addr> getByIds(@RequestBody Addr.AddrKey id) {
+    @PostMapping("/findById")
+    public ResponseEntity<Addr> findById(@RequestBody Addr.AddrKey id) {
         Addr entity = addrService.findById(id);
         if (entity == null) {
             return ResponseEntity.ok(null); // 回傳 HTTP 200 OK 且 資料為 null
@@ -68,5 +71,24 @@ public class AddrController {
     public ResponseEntity<Void> delete(@RequestBody Addr.AddrKey id) {
         addrService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+
+    @Operation(summary = "根據 ID 查詢 Addr 資料",
+               description = "根據 ID 查詢 Addr 資料",
+               operationId = "findByClientId")
+    @GetMapping("/findByClientId")
+    public ResponseEntity<List<Addr>> findByClientId(@RequestParam String clientId) {
+        return ResponseEntity.ok(addrRepository.findByClientId(clientId));
+    }
+
+
+
+    @Operation(summary = "地址 模糊查詢 Addr 資料",
+            description = "地址 模糊查詢 Addr 資料",
+            operationId = "queryAddress")
+    @GetMapping("/queryAddress")
+    public ResponseEntity<List<Addr>> queryAddress(@RequestParam String address) {
+        return ResponseEntity.ok(addrService.queryAddress(address));
     }
 }

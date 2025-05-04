@@ -1,4 +1,4 @@
-# entity - JPA 資料傳輸物件
+# entity - JPA 的 資料傳輸物件
 
 `entity` 資料夾 是負責擺放 `JPA` 的 `資料傳輸物件`。
 

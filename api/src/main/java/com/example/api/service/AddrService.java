@@ -40,4 +40,11 @@ public interface AddrService {
      * @param id 主鍵值
      */
     void deleteById(Addr.AddrKey id);
+
+    /**
+     * 模糊 進行 地址搜尋
+     * @param address 要搜尋的地址字串
+     * @return 查詢到 Addr 資料清單
+     */
+    List<Addr> queryAddress(String address);
 }

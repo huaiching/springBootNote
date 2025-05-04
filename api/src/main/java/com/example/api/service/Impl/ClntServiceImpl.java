@@ -51,21 +51,21 @@ public class ClntServiceImpl implements ClntService {
     public void update(Clnt entityOri, Clnt entityNew) {
         // 建立 SQL
         String sql = "UPDATE clnt " +
-                     "SET clinet_id = :clinetIdNew " +
+                     "SET client_id = :clientIdNew " +
                      "   ,names = :namesNew " +
                      "   ,sex = :sexNew " +
                      "   ,age = :ageNew " +
-                     "WHERE clinet_id = :clinetIdOri " +
+                     "WHERE client_id = :clientIdOri " +
                      "  AND names = :namesOri " + 
                      "  AND sex = :sexOri " + 
                      "  AND age = :ageOri ";
         // 填入 參數
         Map<String, Object> params = new HashMap<>();
-        params.put("clinetIdNew", entityNew.getClinetId());
+        params.put("clientIdNew", entityNew.getClientId());
         params.put("namesNew", entityNew.getNames());
         params.put("sexNew", entityNew.getSex());
         params.put("ageNew", entityNew.getAge());
-        params.put("clinetIdOri", entityOri.getClinetId());
+        params.put("clientIdOri", entityOri.getClientId());
         params.put("namesOri", entityOri.getNames());
         params.put("sexOri", entityOri.getSex());
         params.put("ageOri", entityOri.getAge());
