@@ -35,9 +35,9 @@ H2 資料庫 是一個 可以透過 Spring Initializr 進行安裝 的 輕量級
    spring.h2.console.path=/h2-console
    ```
    
-   ![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\h2_01.png)
+   ![](image\h2_01.png)
    
-   ![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\h2_02.png)
+   ![](image\h2_02.png)
 
 3. 啟動 初始化 SQL 文件
    

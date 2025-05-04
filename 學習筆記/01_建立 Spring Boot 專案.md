@@ -19,7 +19,7 @@
    
    - `Spring Reactive Web`：Spring Boot 的 非阻塞Web框架，主要負責 API 請求，主要會使用裡面的 `WebClient` 進行 API 呼叫。
    
-   ![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\springInitializr.png)
+   ![](image\springInitializr.png)
 
 ## maven 設定
 
@@ -33,7 +33,7 @@
    
    - 將 `Java` 調降為 `11`。
    
-   ![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\pom.png)
+   ![](image\pom.png)
 
 2. 安裝 `swagger doc`
    
@@ -154,4 +154,4 @@ public class ApiDemoApplication {
 
 - 頁面上方 會顯示 我們剛剛於 `SwaggerDocConfig` 設定的相關內容。
 
-![swagger.png](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\swagger.png)
+![swagger.png](image\swagger.png)

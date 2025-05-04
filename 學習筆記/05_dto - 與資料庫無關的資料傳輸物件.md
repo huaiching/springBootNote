@@ -59,4 +59,4 @@
 
 需要等到 `controller` 設定完畢 且 有實際使用這個檔案，才能在 `Swagger UI` 顯示，
 
-![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\dto_swagger.png)
+![](image\dto_swagger.png)

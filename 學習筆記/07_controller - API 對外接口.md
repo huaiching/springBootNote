@@ -107,18 +107,18 @@
 
 1. `@PostMapping` + `@RequestBody`
    
-   ![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\controller_01.png)
+   ![](image\controller_01.png)
    
-   ![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\controller_02.png)
+   ![](image\controller_02.png)
 
 2. `@GetMapping` + `@RequestParam`
    
    請注意 URL 的顯示方式
    
-   ![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\controller_03.png)
+   ![](image\controller_03.png)
 
 3. `@GetMapping` + `@PathVariable`
    
    請注意 URL 的顯示方式
    
-   ![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\controller_04.png)
+   ![](image\controller_04.png)

@@ -28,7 +28,7 @@ resources
 
 當 前端 發出 `API請求` 時，會 依序執行 各資料夾 中的程式代碼。
 
-![](C:\Users\ray03\Desktop\spring%20boot\學習筆記\image\callApi.png)
+![](image\callApi.png)
 
 ## 各資料夾 簡介
 
