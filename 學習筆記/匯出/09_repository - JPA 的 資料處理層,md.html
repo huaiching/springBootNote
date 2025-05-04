@@ -1262,27 +1262,86 @@ pre[class*="language-"] {
 </ul>
 <p>透過 <code>JpaRepository</code> 自動生成的 <code>CRUD</code> 方法，常用的有；</p>
 <ul>
-<li><p><code>save</code>：根據 <code>主鍵</code> 進行 <code>新增</code> 或 <code>更新</code> 資料。 (單筆) 
-(無資料 = 新增 / 有資料 = 更新)</p>
+<li><p><code>save</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 進行 <code>新增</code> 或 <code>更新</code> 資料。 (單筆) </p>
 </li>
-<li><p><code>saveAll</code>：根據 <code>主鍵</code> 進行 <code>新增</code> 或 <code>更新</code> 資料。 (多筆) 
-(無資料 = 新增 / 有資料 = 更新)</p>
+<li><p>(無資料 = 新增 / 有資料 = 更新)</p>
 </li>
-<li><p><code>findById</code>：根據 <code>主鍵</code> 查詢 資料 (單筆)</p>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> savedEntity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Addr</span> savedEntity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 </li>
-<li><p><code>findAllById</code>：根據 <code>主鍵</code> 查詢 資料 (多筆)</p>
+</ul>
 </li>
-<li><p><code>deleteById</code>：根據 <code>主鍵</code> 刪除 資料 (單筆)</p>
+<li><p><code>saveAll</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 進行 <code>新增</code> 或 <code>更新</code> 資料。 (多筆) </p>
 </li>
-<li><p><code>deleteAllById</code>：根據 <code>主鍵</code> 刪除 資料 (多筆)</p>
+<li><p>(無資料 = 新增 / 有資料 = 更新)</p>
 </li>
-<li><p><code>existsById</code>：判斷 <code>主鍵</code> 是否有資料。 (true = 有資料 / fakse = 無資料)</p>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">&gt;</span></span> savedEntityList <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">saveAll</span><span class="token punctuation">(</span>entityList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> savedEntityList <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">saveAll</span><span class="token punctuation">(</span>entityList<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>findById</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 查詢 資料 (單筆)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> savedEntity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Addr</span> savedEntity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>findAllById</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 查詢 資料 (多筆)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> entity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">orElse</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Addr</span> entity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">orElse</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>deleteById</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 刪除 資料 (單筆)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java">clntRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+addrRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>deleteAllById</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 刪除 資料 (多筆)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java">clntRepository<span class="token punctuation">.</span><span class="token function">deleteAllById</span><span class="token punctuation">(</span>idList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+addrRepository<span class="token punctuation">.</span><span class="token function">deleteAllById</span><span class="token punctuation">(</span>idList<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>existsById</code>：</p>
+<ul>
+<li><p>判斷 <code>主鍵</code> 是否有資料。 (true = 有資料 / fakse = 無資料)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">Boolean</span> clntExists <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">existsById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Boolean</span> addrExists <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">existsById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
 </li>
 </ul>
 </li>
 <li><p>根據 <code>命名規則</code> 產生 <code>CRUD</code> 方法。
 根據下面的規則 組合 方法名稱，<code>JPA</code> 會自動生成 <code>SQL 方法</code> 提供使用。
 ＊規則 = <code>關鍵字</code> + <code>屬性條件</code> (至少一個屬性) + <code>排序</code> (選填)</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">findByClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <ul>
 <li><p>關鍵字</p>
 <table>
@@ -1392,7 +1451,6 @@ pre[class*="language-"] {
 <td align="center">findByAgeOrderByCreateDateDesc</td>
 </tr>
 </tbody></table>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">findByClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 </li>
 </ul>
 </li>

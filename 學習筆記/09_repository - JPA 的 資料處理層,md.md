@@ -14,25 +14,94 @@
    
    透過 `JpaRepository` 自動生成的 `CRUD` 方法，常用的有；
    
-   - `save`：根據 `主鍵` 進行 `新增` 或 `更新` 資料。 (單筆) 
-     (無資料 = 新增 / 有資料 = 更新)
+   - `save`：
+     
+     - 根據 `主鍵` 進行 `新增` 或 `更新` 資料。 (單筆) 
+     
+     - (無資料 = 新增 / 有資料 = 更新)
+     
+     - 範例
+       
+       ```java
+       Clnt savedEntity = clntRepository.save(entity);
+       Addr savedEntity = addrRepository.save(entity);
+       ```
    
-   - `saveAll`：根據 `主鍵` 進行 `新增` 或 `更新` 資料。 (多筆) 
-     (無資料 = 新增 / 有資料 = 更新)
+   - `saveAll`：
+     
+     - 根據 `主鍵` 進行 `新增` 或 `更新` 資料。 (多筆) 
+     
+     - (無資料 = 新增 / 有資料 = 更新)
+     
+     - 範例
+       
+       ```java
+       List<Clnt> savedEntityList = clntRepository.saveAll(entityList);
+       List<Addr> savedEntityList = addrRepository.saveAll(entityList);
+       ```
    
-   - `findById`：根據 `主鍵` 查詢 資料 (單筆)
+   - `findById`：
+     
+     - 根據 `主鍵` 查詢 資料 (單筆)
+     
+     - 範例
+       
+       ```java
+       Clnt savedEntity = clntRepository.save(entity);
+       Addr savedEntity = addrRepository.save(entity);
+       ```
    
-   - `findAllById`：根據 `主鍵` 查詢 資料 (多筆)
+   - `findAllById`：
+     
+     - 根據 `主鍵` 查詢 資料 (多筆)
+     
+     - 範例
+       
+       ```java
+       Clnt entity = clntRepository.findById(id).orElse(null);
+       Addr entity = addrRepository.findById(id).orElse(null);
+       ```
    
-   - `deleteById`：根據 `主鍵` 刪除 資料 (單筆)
+   - `deleteById`：
+     
+     - 根據 `主鍵` 刪除 資料 (單筆)
+     
+     - 範例
+       
+       ```java
+       clntRepository.deleteById(id);
+       addrRepository.deleteById(id);
+       ```
    
-   - `deleteAllById`：根據 `主鍵` 刪除 資料 (多筆)
+   - `deleteAllById`：
+     
+     - 根據 `主鍵` 刪除 資料 (多筆)
+     
+     - 範例
+       
+       ```java
+       clntRepository.deleteAllById(idList);
+       addrRepository.deleteAllById(idList);
+       ```
    
-   - `existsById`：判斷 `主鍵` 是否有資料。 (true = 有資料 / fakse = 無資料)
+   - `existsById`：
+     
+     - 判斷 `主鍵` 是否有資料。 (true = 有資料 / fakse = 無資料)
+     
+     - 範例
+       
+       ```java
+       Boolean clntExists = clntRepository.existsById(id);
+       Boolean addrExists = addrRepository.existsById(id);
+       ```
 
 2. 根據 `命名規則` 產生 `CRUD` 方法。
    根據下面的規則 組合 方法名稱，`JPA` 會自動生成 `SQL 方法` 提供使用。
    ＊規則 = `關鍵字` + `屬性條件` (至少一個屬性) + `排序` (選填)
+   
+   ```java
+   List<Addr> findByClientId(String clientId);
+   ```
    
    - 關鍵字
      
@@ -67,10 +136,6 @@
      |:-------------------:|:----:|:------------------------------:|
      | OrderBy + 屬性 + Asc  | 升序排列 | findByAgeOrderByNameAsc        |
      | OrderBy + 屬性 + Desc | 降序排列 | findByAgeOrderByCreateDateDesc |
-     
-     ```java
-     List<Addr> findByClientId(String clientId);
-     ```
 
 3. 透過 `nativeQurey` 執行 `簡單的 自定義 SQL`。
    
