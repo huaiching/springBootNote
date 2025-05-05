@@ -4,7 +4,6 @@ import com.example.api.entity.Addr;
 import com.example.api.repository.AddrRepository;
 import com.example.api.service.AddrService;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
