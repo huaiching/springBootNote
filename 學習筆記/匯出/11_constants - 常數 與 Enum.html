@@ -1262,14 +1262,14 @@ sex = 2 代表 女性
 </li>
 <li><p>開啟 <code>SexEnum.java</code>，並依照下面範例 新增相關程式。</p>
 <ul>
-<li><p>先設定 名詞解釋</p>
+<li><p>先設定 <code>欄位</code>，再設定 <code>名詞解釋</code>。</p>
 <pre><code class="fenced-code-block language-java">    <span class="token class-name">Man</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span><span class="token string">"男"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
     <span class="token class-name">Woman</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">,</span><span class="token string">"女"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token keyword">private</span> <span class="token class-name">String</span> code<span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token class-name">String</span> desc<span class="token punctuation">;</span></code></pre>
 </li>
-<li><p>透過 IDE 工具，生成 <code>建構式</code> <code>getting</code> <code>setting</code></p>
+<li><p>透過 IDE 工具，生成 <code>建構式</code> <code>getting</code> <code>setting</code>。</p>
 <pre><code class="fenced-code-block language-java">    <span class="token comment">// 建構式: IDE 自動產生</span>
     <span class="token class-name">SexEnum</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">,</span> <span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
@@ -1293,7 +1293,7 @@ sex = 2 代表 女性
         <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
     <span class="token punctuation">}</span></code></pre>
 </li>
-<li><p>自行撰寫 需要的 方法</p>
+<li><p>自行撰寫 需要的 方法。</p>
 <ul>
 <li><p>透過 代碼 取得 Enum。</p>
 <pre><code class="fenced-code-block language-java">    <span class="token comment">/**
