@@ -13,6 +13,13 @@
 但是 如果想要執行 `複雜的 SQL`，
 我們可以透過 JPA 提供的 `NamedParameterJdbcTemplate` 來簡單執行。
 
+- `hibernate` 本身有提供 透過 `nativeQuery` 來執行 `複雜SQL`，
+  但因為 `不會自動處理` 欄位的命名規則轉換 `下底線 無法自動轉換為 小駝峰`，
+  所以 不推薦 此方法。
+
+- 透過 `NamedParameterJdbcTemplate` 處理 `複雜SQL` 好處是 `自動轉換 小駝峰`。
+  DB 欄位為 `下底線` 時，DTO 欄位允許 `下底線` `小駝峰` 且會 自動轉換匹配。 
+
 其流程 共可分成 4 步驟：
 
 1. 注入 `NamedParameterJdbcTemplate`
@@ -128,5 +135,3 @@
         namedParameterJdbcTemplate.update(sql, params);
     }
 ```
-
-

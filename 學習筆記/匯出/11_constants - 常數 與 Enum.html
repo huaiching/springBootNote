@@ -1248,116 +1248,149 @@ pre[class*="language-"] {
   <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
 <body>
-  <article class="markdown-body"><h1 class="atx" id="jpa-執行-複雜sql">JPA 執行 複雜SQL</h1>
-<h2 class="atx" id="說明">說明</h2>
-<p><code>簡單的SQL</code> 可以在 <code>repository</code> 有以下三種方式：</p>
-<ul>
-<li><p>透過 繼承 <code>JpaRepository</code> 取得 <code>根據主鍵自動生成的 CRUD</code>。</p>
-</li>
-<li><p>根據 <code>命名規則</code> 來 設定 方法名稱。</p>
-</li>
-<li><p>透過 <code>nativeQurey</code> 執行 <code>簡單的 自定義 SQL</code>。</p>
-</li>
-</ul>
-<p>但是 如果想要執行 <code>複雜的 SQL</code>，
-我們可以透過 JPA 提供的 <code>NamedParameterJdbcTemplate</code> 來簡單執行。</p>
-<ul>
-<li><p><code>hibernate</code> 本身有提供 透過 <code>nativeQuery</code> 來執行 <code>複雜SQL</code>，
-但因為 <code>不會自動處理</code> 欄位的命名規則轉換 <code>下底線 無法自動轉換為 小駝峰</code>，
-所以 不推薦 此方法。</p>
-</li>
-<li><p>透過 <code>NamedParameterJdbcTemplate</code> 處理 <code>複雜SQL</code> 好處是 <code>自動轉換 小駝峰</code>。
-DB 欄位為 <code>下底線</code> 時，DTO 欄位允許 <code>下底線</code> <code>小駝峰</code> 且會 自動轉換匹配。 </p>
-</li>
-</ul>
-<p>其流程 共可分成 4 步驟：</p>
+  <article class="markdown-body"><h2 class="atx" id="constants---常數-與-enum">constants - 常數 與 Enum</h2>
+<p><code>constants</code> 資料夾 是用來 <code>常數</code> <code>Enum</code> 的地方。</p>
+<p>擺放在 <code>constants</code> 的資料，屬於 <code>名詞解釋</code> 類型的資料，通常 <code>很少修改</code>。</p>
+<h2 class="atx" id="建立-enum">建立 Enum</h2>
+<p>讓我們 替 <code>Clnt</code> 中的 <code>sex</code> 欄位，設定 <code>名詞解釋</code>。</p>
+<pre><code class="fenced-code-block language-textile"><span class="token phrase">需求：
+sex = 1 代表 男性
+sex = 2 代表 女性
+其他資料 代表 未定義，給予 空白</span></code></pre>
 <ol>
-<li><p>注入 <code>NamedParameterJdbcTemplate</code></p>
-<pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@Autowired</span>
-<span class="token keyword">private</span> <span class="token class-name">NamedParameterJdbcTemplate</span> namedParameterJdbcTemplate<span class="token punctuation">;</span></code></pre>
+<li><p>首先 讓我們 創立 <code>constants</code> 資料夾，並新增一個檔案 <code>SexEnum.java</code>。</p>
 </li>
-<li><p>撰寫 SQL 語法</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">String</span> sql1 <span class="token operator">=</span> <span class="token string">"SELECT * FROM addr "</span> <span class="token operator">+</span>
-              <span class="token string">"WHERE address LIKE :address"</span><span class="token punctuation">;</span></code></pre>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">String</span> sql2 <span class="token operator">=</span> <span class="token string">"UPDATE addr "</span> <span class="token operator">+</span>
-              <span class="token string">"SET client_id = :clientIdNew "</span> <span class="token operator">+</span>
-              <span class="token string">"   ,addr_ind = :addrIndNew "</span> <span class="token operator">+</span>
-              <span class="token string">"   ,address = :addressNew "</span> <span class="token operator">+</span>
-              <span class="token string">"   ,tel = :telNew "</span> <span class="token operator">+</span>
-              <span class="token string">"WHERE client_id = :clientIdOri "</span> <span class="token operator">+</span>
-              <span class="token string">"  AND addr_ind = :addrIndOri "</span> <span class="token operator">+</span> 
-              <span class="token string">"  AND address = :addressOri "</span> <span class="token operator">+</span> 
-              <span class="token string">"  AND tel = :telOri "</span><span class="token punctuation">;</span></code></pre>
-</li>
-<li><p>透過 Map 設定參數</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params1<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"address"</span><span class="token punctuation">,</span> <span class="token string">"%"</span> <span class="token operator">+</span> address <span class="token operator">+</span> <span class="token string">"%"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"clientIdNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addrIndNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getAddrInd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addressNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"telNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getTel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"clientIdOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addrIndOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getAddrInd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addressOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"telOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getTel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token number">4.</span> </code></pre>
-</li>
-<li><p>執行 SQL</p>
+<li><p>開啟 <code>SexEnum.java</code>，並依照下面範例 新增相關程式。</p>
 <ul>
-<li><p><code>查詢</code> 透過 <code>namedParameterJdbcTemplate.query</code> 執行。</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> addrList <span class="token operator">=</span> namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql1<span class="token punctuation">,</span> params1<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">BeanPropertyRowMapper</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Addr</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<li><p>先設定 名詞解釋</p>
+<pre><code class="fenced-code-block language-java">    <span class="token class-name">Man</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span><span class="token string">"男"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">Woman</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">,</span><span class="token string">"女"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">String</span> code<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> desc<span class="token punctuation">;</span></code></pre>
 </li>
-<li><p><code>增刪修</code> 透過 <code>namedParameterJdbcTemplate.update</code> 執行。</p>
-<pre><code class="fenced-code-block language-java">namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>sql2<span class="token punctuation">,</span> params2<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<li><p>透過 IDE 工具，生成 <code>建構式</code> <code>getting</code> <code>setting</code></p>
+<pre><code class="fenced-code-block language-java">    <span class="token comment">// 建構式: IDE 自動產生</span>
+    <span class="token class-name">SexEnum</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">,</span> <span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// getting 和 setting: IDE 自動產生</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> code<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getDesc</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setDesc</span><span class="token punctuation">(</span><span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>自行撰寫 需要的 方法</p>
+<ul>
+<li><p>透過 代碼 取得 Enum。</p>
+<pre><code class="fenced-code-block language-java">    <span class="token comment">/**
+     * 根據 代碼 尋找 Enum
+     * @param code 要查詢的代碼
+     * @return 代碼對應的 Enum
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">SexEnum</span> <span class="token function">getEnumByCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">SexEnum</span> sexEnum <span class="token operator">:</span> <span class="token class-name">SexEnum</span><span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>sexEnum<span class="token punctuation">.</span><span class="token function">getCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> sexEnum<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>透過 代碼 取得 中文。</p>
+<pre><code class="fenced-code-block language-java">    <span class="token comment">/**
+     * 根據 代碼 查詢 中文
+     * @param code 要查詢的代碼
+     * @return 對應的中文
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getDescByCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">SexEnum</span> sexEnum <span class="token operator">=</span> <span class="token function">getEnumByCode</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sexEnum <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> sexEnum<span class="token punctuation">.</span><span class="token function">getDesc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
 </li>
 </ul>
 </li>
 </ol>
-<h2 class="atx" id="範例：查詢---複雜sql">範例：查詢 - 複雜SQL</h2>
-<p>替 <code>Addr</code> 設計一個 <code>輸入 clientId 查詢 Addr 資料</code> 的方法。</p>
-<pre><code class="fenced-code-block language-java">    <span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryAddress</span><span class="token punctuation">(</span><span class="token class-name">String</span> address<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// 建立 SQL</span>
-        <span class="token class-name">String</span> sql <span class="token operator">=</span> <span class="token string">"SELECT * FROM addr "</span> <span class="token operator">+</span>
-                <span class="token string">"WHERE address LIKE :address"</span><span class="token punctuation">;</span>
-        <span class="token comment">// 填入 參數</span>
-        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"address"</span><span class="token punctuation">,</span> <span class="token string">"%"</span> <span class="token operator">+</span> address <span class="token operator">+</span> <span class="token string">"%"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 執行 方法</span>
-        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> addrList <span class="token operator">=</span> namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> params<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">BeanPropertyRowMapper</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Addr</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>完整的程式碼範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">SexEnum</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Man</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span><span class="token string">"男"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">Woman</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">,</span><span class="token string">"女"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="token keyword">return</span> addrList<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
-<h2 class="atx" id="範例：修改---複雜的sql">範例：修改 - 複雜的SQL</h2>
-<p>替 <code>Addr</code> 設計一個 <code>更新資料</code> 的方法。</p>
-<p>給予 <code>變更前Addr</code> <code>變更後Addr</code> 並將 Addr 資料進行更新。</p>
-<ul>
-<li><code>@Transactional</code>：設定為 <code>交易</code>，當執行失敗時，資料可回朔，</li>
-</ul>
-<pre><code class="fenced-code-block language-java">    <span class="token annotation punctuation">@Transactional</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">update</span><span class="token punctuation">(</span><span class="token class-name">Addr</span> entityOri<span class="token punctuation">,</span> <span class="token class-name">Addr</span> entityNew<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// 建立 SQL</span>
-        <span class="token class-name">String</span> sql <span class="token operator">=</span> <span class="token string">"UPDATE addr "</span> <span class="token operator">+</span>
-                     <span class="token string">"SET client_id = :clientIdNew "</span> <span class="token operator">+</span>
-                     <span class="token string">"   ,addr_ind = :addrIndNew "</span> <span class="token operator">+</span>
-                     <span class="token string">"   ,address = :addressNew "</span> <span class="token operator">+</span>
-                     <span class="token string">"   ,tel = :telNew "</span> <span class="token operator">+</span>
-                     <span class="token string">"WHERE client_id = :clientIdOri "</span> <span class="token operator">+</span>
-                     <span class="token string">"  AND addr_ind = :addrIndOri "</span> <span class="token operator">+</span> 
-                     <span class="token string">"  AND address = :addressOri "</span> <span class="token operator">+</span> 
-                     <span class="token string">"  AND tel = :telOri "</span><span class="token punctuation">;</span>
-        <span class="token comment">// 填入 參數</span>
-        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"clientIdNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addrIndNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getAddrInd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addressNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"telNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getTel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"clientIdOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addrIndOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getAddrInd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addressOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"telOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getTel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 執行 方法</span>
-        namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> params<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> code<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> desc<span class="token punctuation">;</span>
+
+    <span class="token comment">// 建構式: IDE 自動產生</span>
+    <span class="token class-name">SexEnum</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">,</span> <span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// getting 和 setting: IDE 自動產生</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> code<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getDesc</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setDesc</span><span class="token punctuation">(</span><span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token comment">/**
+     * 根據 代碼 尋找 Enum
+     * @param code 要查詢的代碼
+     * @return 代碼對應的 Enum
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">SexEnum</span> <span class="token function">getEnumByCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">SexEnum</span> sexEnum <span class="token operator">:</span> <span class="token class-name">SexEnum</span><span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>sexEnum<span class="token punctuation">.</span><span class="token function">getCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> sexEnum<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 根據 代碼 查詢 中文
+     * @param code 要查詢的代碼
+     * @return 對應的中文
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getDescByCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">SexEnum</span> sexEnum <span class="token operator">=</span> <span class="token function">getEnumByCode</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sexEnum <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> sexEnum<span class="token punctuation">.</span><span class="token function">getDesc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
 </article>
 </body>
 </html>
