@@ -1248,286 +1248,149 @@ pre[class*="language-"] {
   <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
 <body>
-  <article class="markdown-body"><h1 class="atx" id="repository---jpa-的-資料處理層">repository - JPA 的 資料處理層</h1>
-<p><code>repository</code> 資料夾，用來擺放 <code>entity</code> 的 <code>JPA 資料交互設定</code>。</p>
-<p>在這裡面，我們可以透過 下面三種方法 取得，<code>entity</code> 的 <code>CRUD</code> 方法。</p>
+  <article class="markdown-body"><h2 class="atx" id="constants---常數-與-enum">constants - 常數 與 Enum</h2>
+<p><code>constants</code> 資料夾 是用來 <code>常數</code> <code>Enum</code> 的地方。</p>
+<p>擺放在 <code>constants</code> 的資料，屬於 <code>名詞解釋</code> 類型的資料，通常 <code>很少修改</code>。</p>
+<h2 class="atx" id="建立-enum">建立 Enum</h2>
+<p>讓我們 替 <code>Clnt</code> 中的 <code>sex</code> 欄位，設定 <code>名詞解釋</code>。</p>
+<pre><code class="fenced-code-block language-textile"><span class="token phrase">需求：
+sex = 1 代表 男性
+sex = 2 代表 女性
+其他資料 代表 未定義，給予 空白</span></code></pre>
 <ol>
-<li><p>繼承 <code>JpaRepository</code> 獲得 <code>針對主鍵 的 CRUD</code>。</p>
-<p>會有兩個參數要定義，分別是 <code>entity</code> 和 <code>主鍵型態</code>。</p>
+<li><p>首先 讓我們 創立 <code>constants</code> 資料夾，並新增一個檔案 <code>SexEnum.java</code>。</p>
+</li>
+<li><p>開啟 <code>SexEnum.java</code>，並依照下面範例 新增相關程式。</p>
 <ul>
-<li><p><code>單一主鍵</code>：主鍵的屬性型態。</p>
+<li><p>先設定 <code>欄位</code>，再設定 <code>名詞解釋</code>。</p>
+<pre><code class="fenced-code-block language-java">    <span class="token class-name">Man</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span><span class="token string">"男"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">Woman</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">,</span><span class="token string">"女"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">String</span> code<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> desc<span class="token punctuation">;</span></code></pre>
 </li>
-<li><p><code>多重主鍵</code>：<code>@IdClass</code> 設定的 <code>主鍵類別</code>。</p>
+<li><p>透過 IDE 工具，生成 <code>建構式</code> <code>getting</code> <code>setting</code>。</p>
+<pre><code class="fenced-code-block language-java">    <span class="token comment">// 建構式: IDE 自動產生</span>
+    <span class="token class-name">SexEnum</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">,</span> <span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// getting 和 setting: IDE 自動產生</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> code<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getDesc</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setDesc</span><span class="token punctuation">(</span><span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
 </li>
-</ul>
-<p>透過 <code>JpaRepository</code> 自動生成的 <code>CRUD</code> 方法，常用的有；</p>
+<li><p>自行撰寫 需要的 方法。</p>
 <ul>
-<li><p><code>save</code>：</p>
-<ul>
-<li><p>根據 <code>主鍵</code> 進行 <code>新增</code> 或 <code>更新</code> 資料。 (單筆) </p>
+<li><p>透過 代碼 取得 Enum。</p>
+<pre><code class="fenced-code-block language-java">    <span class="token comment">/**
+     * 根據 代碼 尋找 Enum
+     * @param code 要查詢的代碼
+     * @return 代碼對應的 Enum
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">SexEnum</span> <span class="token function">getEnumByCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">SexEnum</span> sexEnum <span class="token operator">:</span> <span class="token class-name">SexEnum</span><span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>sexEnum<span class="token punctuation">.</span><span class="token function">getCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> sexEnum<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
 </li>
-<li><p>(無資料 = 新增 / 有資料 = 更新)</p>
-</li>
-<li><p>範例</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> savedEntity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name">Addr</span> savedEntity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-</li>
-</ul>
-</li>
-<li><p><code>saveAll</code>：</p>
-<ul>
-<li><p>根據 <code>主鍵</code> 進行 <code>新增</code> 或 <code>更新</code> 資料。 (多筆) </p>
-</li>
-<li><p>(無資料 = 新增 / 有資料 = 更新)</p>
-</li>
-<li><p>範例</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">&gt;</span></span> savedEntityList <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">saveAll</span><span class="token punctuation">(</span>entityList<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> savedEntityList <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">saveAll</span><span class="token punctuation">(</span>entityList<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-</li>
-</ul>
-</li>
-<li><p><code>findById</code>：</p>
-<ul>
-<li><p>根據 <code>主鍵</code> 查詢 資料 (單筆)</p>
-</li>
-<li><p>範例</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> savedEntity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name">Addr</span> savedEntity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-</li>
-</ul>
-</li>
-<li><p><code>findAllById</code>：</p>
-<ul>
-<li><p>根據 <code>主鍵</code> 查詢 資料 (多筆)</p>
-</li>
-<li><p>範例</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> entity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">orElse</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name">Addr</span> entity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">orElse</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-</li>
-</ul>
-</li>
-<li><p><code>deleteById</code>：</p>
-<ul>
-<li><p>根據 <code>主鍵</code> 刪除 資料 (單筆)</p>
-</li>
-<li><p>範例</p>
-<pre><code class="fenced-code-block language-java">clntRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-addrRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-</li>
-</ul>
-</li>
-<li><p><code>deleteAllById</code>：</p>
-<ul>
-<li><p>根據 <code>主鍵</code> 刪除 資料 (多筆)</p>
-</li>
-<li><p>範例</p>
-<pre><code class="fenced-code-block language-java">clntRepository<span class="token punctuation">.</span><span class="token function">deleteAllById</span><span class="token punctuation">(</span>idList<span class="token punctuation">)</span><span class="token punctuation">;</span>
-addrRepository<span class="token punctuation">.</span><span class="token function">deleteAllById</span><span class="token punctuation">(</span>idList<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-</li>
-</ul>
-</li>
-<li><p><code>existsById</code>：</p>
-<ul>
-<li><p>判斷 <code>主鍵</code> 是否有資料。 (true = 有資料 / fakse = 無資料)</p>
-</li>
-<li><p>範例</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">Boolean</span> clntExists <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">existsById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name">Boolean</span> addrExists <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">existsById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<li><p>透過 代碼 取得 中文。</p>
+<pre><code class="fenced-code-block language-java">    <span class="token comment">/**
+     * 根據 代碼 查詢 中文
+     * @param code 要查詢的代碼
+     * @return 對應的中文
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getDescByCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">SexEnum</span> sexEnum <span class="token operator">=</span> <span class="token function">getEnumByCode</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sexEnum <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> sexEnum<span class="token punctuation">.</span><span class="token function">getDesc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
 </li>
 </ul>
 </li>
 </ul>
-</li>
-<li><p>根據 <code>命名規則</code> 產生 <code>CRUD</code> 方法。
-根據下面的規則 組合 方法名稱，<code>JPA</code> 會自動生成 <code>SQL 方法</code> 提供使用。
-＊規則 = <code>關鍵字</code> + <code>屬性條件</code> (至少一個屬性) + <code>排序</code> (選填)</p>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">findByClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<ul>
-<li><p>關鍵字</p>
-<table>
-<thead>
-<tr>
-<th align="center">命名規則</th>
-<th align="center">定義</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>findBy</code></td>
-<td align="center">查詢結果 (多筆)</td>
-</tr>
-<tr>
-<td align="center"><code>countBy</code></td>
-<td align="center">計算符合條件的數量</td>
-</tr>
-<tr>
-<td align="center"><code>existsBy</code></td>
-<td align="center">檢查是否存在</td>
-</tr>
-</tbody></table>
-</li>
-<li><p>屬性條件：<code>欄位名稱</code> + <code>連接符號</code></p>
-<table>
-<thead>
-<tr>
-<th align="center">連接符號</th>
-<th align="center">對應 SQL</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">And</td>
-<td align="center">AND</td>
-</tr>
-<tr>
-<td align="center">Or</td>
-<td align="center">OR</td>
-</tr>
-<tr>
-<td align="center">Between</td>
-<td align="center">BETWEEN</td>
-</tr>
-<tr>
-<td align="center">LessThan</td>
-<td align="center">&lt;</td>
-</tr>
-<tr>
-<td align="center">LessThanEqual</td>
-<td align="center">&lt;=</td>
-</tr>
-<tr>
-<td align="center">GreaterThan</td>
-<td align="center">&gt;</td>
-</tr>
-<tr>
-<td align="center">GreaterThanEqual</td>
-<td align="center">&gt;=</td>
-</tr>
-<tr>
-<td align="center">Like</td>
-<td align="center">LIKE</td>
-</tr>
-<tr>
-<td align="center">NotLike</td>
-<td align="center">NOT LIKE</td>
-</tr>
-<tr>
-<td align="center">StartingWith</td>
-<td align="center">LIKE 'value%'</td>
-</tr>
-<tr>
-<td align="center">EndingWith</td>
-<td align="center">LIKE '%value'</td>
-</tr>
-<tr>
-<td align="center">Containing</td>
-<td align="center">LIKE '%value%'</td>
-</tr>
-<tr>
-<td align="center">In</td>
-<td align="center">IN</td>
-</tr>
-<tr>
-<td align="center">NotIn</td>
-<td align="center">NOT IN</td>
-</tr>
-</tbody></table>
-</li>
-<li><p>排序</p>
-<table>
-<thead>
-<tr>
-<th align="center">排序規則</th>
-<th align="center">定義</th>
-<th align="center">命名範例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">OrderBy + 屬性 + Asc</td>
-<td align="center">升序排列</td>
-<td align="center">findByAgeOrderByNameAsc</td>
-</tr>
-<tr>
-<td align="center">OrderBy + 屬性 + Desc</td>
-<td align="center">降序排列</td>
-<td align="center">findByAgeOrderByCreateDateDesc</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-</li>
-<li><p>透過 <code>nativeQurey</code> 執行 <code>簡單的 自定義 SQL</code>。</p>
-<ul>
-<li><p>@Query(value = "SQL語句", nativeQuery = true)</p>
-</li>
-<li><p>SQL語句中，變數要用 <code>:</code> 標示。</p>
-</li>
-<li><p>方法的參數 要使用 <code>@Param("SQL變數")</code> 標示。</p>
-</li>
-</ul>
-<pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"SELECT * FROM clnt "</span> <span class="token operator">+</span>
-               <span class="token string">"WHERE client_id IN :clientIdList"</span><span class="token punctuation">,</span> nativeQuery <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
-<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryClntByClientIdList</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Param</span><span class="token punctuation">(</span><span class="token string">"clientIdList"</span><span class="token punctuation">)</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> clientIdList<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 </li>
 </ol>
-<h2 class="atx" id="建立-單一主鍵-的-repository">建立 單一主鍵 的 repository</h2>
-<p>之前 我們建立了一個 單一主鍵 的 entity <code>Clnt</code>，</p>
-<p>接著 讓我們為其建立 repository。</p>
-<ol>
-<li><p>首先 讓我們 創立 <code>repository</code> 資料夾，並新增一個檔案 <code>ClntRepository.java</code>。</p>
-</li>
-<li><p>開啟 <code>ClntRepository.java</code>，並依照下面範例 新增相關程式。</p>
-</li>
-</ol>
-<ul>
-<li><p><code>Clnt</code> 的主鍵為 <code>clientId</code> 型態為 <code>String</code>。</p>
-</li>
-<li><p><code>JpaRepository</code> 第一個參數 為 entity 類 <code>Clnt</code>。</p>
-</li>
-<li><p><code>JpaRepository</code> 第二個參數 為 主鍵的型態 <code>String</code>。</p>
-</li>
-</ul>
-<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>entity<span class="token punctuation">.</span></span><span class="token class-name">Clnt</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>jpa<span class="token punctuation">.</span>repository<span class="token punctuation">.</span></span><span class="token class-name">JpaRepository</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>jpa<span class="token punctuation">.</span>repository<span class="token punctuation">.</span></span><span class="token class-name">Query</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>repository<span class="token punctuation">.</span>query<span class="token punctuation">.</span></span><span class="token class-name">Param</span><span class="token punctuation">;</span>
+<p>完整的程式碼範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> <span class="token class-name">SexEnum</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Man</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span><span class="token string">"男"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token class-name">Woman</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">,</span><span class="token string">"女"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> code<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> desc<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ClntRepository</span> <span class="token keyword">extends</span> <span class="token class-name">JpaRepository</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+    <span class="token comment">// 建構式: IDE 自動產生</span>
+    <span class="token class-name">SexEnum</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">,</span> <span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"SELECT * FROM clnt "</span> <span class="token operator">+</span>
-                   <span class="token string">"WHERE client_id IN :clientIdList"</span><span class="token punctuation">,</span> nativeQuery <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
-    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryClntByClientIdList</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Param</span><span class="token punctuation">(</span><span class="token string">"clientIdList"</span><span class="token punctuation">)</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> clientIdList<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<h2 class="atx" id="建立-多重主鍵-的-repository">建立 多重主鍵 的 repository</h2>
-<p>之前 我們建立了一個 單一主鍵 的 entity <code>Addr</code>，</p>
-<p>接著 讓我們為其建立 repository。</p>
-<ol>
-<li><p>首先 讓我們 創立 <code>repository</code> 資料夾，並新增一個檔案 <code>AddrRepository.java</code>。</p>
-</li>
-<li><p>開啟 <code>AddrRepository.java</code>，並依照下面範例 新增相關程式。</p>
-</li>
-</ol>
-<ul>
-<li><p><code>Addr</code> 的主鍵為 <code>clientId</code> 和 <code>addrInd</code>，我們設定 <code>主鍵類別</code> 為 <code>Addr.AddrKey</code>。</p>
-</li>
-<li><p><code>JpaRepository</code> 第一個參數 為 entity 類 <code>Clnt</code>。</p>
-</li>
-<li><p><code>JpaRepository</code> 第二個參數 為 多重主鍵的主鍵類別 `Addr.AddrKey``。</p>
-</li>
-</ul>
-<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>entity<span class="token punctuation">.</span></span><span class="token class-name">Addr</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>jpa<span class="token punctuation">.</span>repository<span class="token punctuation">.</span></span><span class="token class-name">JpaRepository</span><span class="token punctuation">;</span>
+    <span class="token comment">// getting 和 setting: IDE 自動產生</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> code<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>code <span class="token operator">=</span> code<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">AddrRepository</span> <span class="token keyword">extends</span> <span class="token class-name">JpaRepository</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">,</span> <span class="token class-name">Addr<span class="token punctuation">.</span>AddrKey</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getDesc</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setDesc</span><span class="token punctuation">(</span><span class="token class-name">String</span> desc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>desc <span class="token operator">=</span> desc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+
 
     <span class="token comment">/**
-     * SELECT * FROM addr
-     * HWERE client_id = :clientId
+     * 根據 代碼 尋找 Enum
+     * @param code 要查詢的代碼
+     * @return 代碼對應的 Enum
      */</span>
-    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">findByClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
+    <span class="token keyword">public</span> <span class="token class-name">SexEnum</span> <span class="token function">getEnumByCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">SexEnum</span> sexEnum <span class="token operator">:</span> <span class="token class-name">SexEnum</span><span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>sexEnum<span class="token punctuation">.</span><span class="token function">getCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> sexEnum<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 根據 代碼 查詢 中文
+     * @param code 要查詢的代碼
+     * @return 對應的中文
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getDescByCode</span><span class="token punctuation">(</span><span class="token class-name">String</span> code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">SexEnum</span> sexEnum <span class="token operator">=</span> <span class="token function">getEnumByCode</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sexEnum <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> sexEnum<span class="token punctuation">.</span><span class="token function">getDesc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>@</code></pre>
 </article>
 </body>
 </html>

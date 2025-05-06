@@ -1,4 +1,4 @@
-package com.example.api.service.Impl;
+package com.example.api.service.impl;
 
 import com.example.api.dto.User;
 import com.example.api.service.SampleService;

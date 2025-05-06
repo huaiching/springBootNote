@@ -10,12 +10,14 @@
 java
 ├─ 📄Application.java           # 啟動主程式
 ├─ 📁config                     # 設定檔
-    ├─ 📄SwaggerDocConfig.java  # swagger doc 的 title 設定檔
+│   ├─ 📄SwaggerDocConfig.java  # swagger doc 的 title 設定檔
 ├─ 📁constants                  # 靜態類別，例如：常數、enum
 ├─ 📁controller                 # 對外 API 接口
 ├─ 📁service                    # 業務邏輯層 的 interface
-│   ├─ 📁Impl                   # service 的實作類別，處理實際商業邏輯
-├─ 📁repository                 # JPA 資料存取層，繼承 JpaRepository 產生 資料
+│   ├─ 📁impl                   # service 的實作類別，處理實際商業邏輯
+├─ 📁repository                 # SQL 處理層 的 interface
+│                                 負責 簡單 SQL 的 設定 與 複雜 SQL 的 interface
+│   ├─ 📁impl                   # 複雜 SQL 的實作類別
 ├─ 📁entity                     # JPA 資料傳輸物件，對應資料庫中的資料表結構庫互動方法
 ├─ 📁dto                        # 一般 資料傳輸物件
 ├─ 📁util                       # 工具類別，例如：時間格式處理、API 回應包裝
@@ -51,12 +53,12 @@ resources
 
 ### 📁service：業務邏輯
 
-放置 `業務邏輯類` 的 資料夾，通常為兩層架構
-
 ```textile
 ├─ 📁service                    # 業務邏輯層 的 interface
 │   ├─ 📁Impl                   # service 的實作類別，處理實際商業邏輯
 ```
+
+放置 `業務邏輯類` 的 資料夾，通常為兩層架構：
 
 - `外層` 透過 `interface` 設定 業務邏輯的 `方法接口`。
 
@@ -64,9 +66,25 @@ resources
   
   - 需要設定 `@Service`。
 
-### 📁repository
+### 📁repository：SQL 處理層
 
-放置 `JPA 資料存取層` 的 資料夾，繼承 `JpaRepository` 就可以有 `entity` 的 `CURD` 方法。
+```textile
+├─ 📁repository             # SQL 處理層 的 interface
+│                             負責 簡單 SQL 的 設定 與 複雜 SQL 的 interface
+│   ├─ 📁impl               # 複雜 SQL 的實作類別
+```
+
+放置 `JPA 資料存取層` 的 資料夾，通常為兩層架構：
+
+- `外層` 透過 `interface` 設定 `SQL` 的 `方法接口`。
+  
+  - `簡單 SQL` 繼承 `JpaRepository` 即可，無須 實作方法。
+  
+  - `複雜 SQL` 透過 `interface` 設定 `方法接口`。
+
+- `內層` 負責 `複雜 SQL` 的 `實作方法`。
+  
+  - 需要設定 `@Repository`。
 
 ### 📁entity：資料傳輸物件(DB相關)
 

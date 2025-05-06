@@ -48,7 +48,7 @@ public class AddrController {
                operationId = "update")
     @PostMapping("/update")
     public ResponseEntity<Void> update(@RequestBody AddrUpdate entityUpdate) {
-        addrService.update(entityUpdate.getAddrOri(), entityUpdate.getAddrNew());
+        addrRepository.update(entityUpdate.getAddrOri(), entityUpdate.getAddrNew());
         return ResponseEntity.ok().build();
     }
 
@@ -89,6 +89,6 @@ public class AddrController {
             operationId = "queryAddress")
     @GetMapping("/queryAddress")
     public ResponseEntity<List<Addr>> queryAddress(@RequestParam String address) {
-        return ResponseEntity.ok(addrService.queryAddress(address));
+        return ResponseEntity.ok(addrRepository.queryAddress(address));
     }
 }

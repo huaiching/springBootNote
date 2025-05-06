@@ -1255,12 +1255,14 @@ pre[class*="language-"] {
 <pre><code class="fenced-code-block language-textile"><span class="token phrase">java
 ├─ 📄Application.java           # 啟動主程式
 ├─ 📁config                     # 設定檔
-    ├─ 📄SwaggerDocConfig.java  # swagger doc 的 title 設定檔
+│   ├─ 📄SwaggerDocConfig.java  # swagger doc 的 title 設定檔
 ├─ 📁constants                  # 靜態類別，例如：常數、enum
 ├─ 📁controller                 # 對外 API 接口
 ├─ 📁service                    # 業務邏輯層 的 interface
-│   ├─ 📁Impl                   # service 的實作類別，處理實際商業邏輯
-├─ 📁repository                 # JPA 資料存取層，繼承 JpaRepository 產生 資料
+│   ├─ 📁impl                   # service 的實作類別，處理實際商業邏輯
+├─ 📁repository                 # SQL 處理層 的 interface
+│                                 負責 簡單 SQL 的 設定 與 複雜 SQL 的 interface
+│   ├─ 📁impl                   # 複雜 SQL 的實作類別
 ├─ 📁entity                     # JPA 資料傳輸物件，對應資料庫中的資料表結構庫互動方法
 ├─ 📁dto                        # 一般 資料傳輸物件
 ├─ 📁util                       # 工具類別，例如：時間格式處理、API 回應包裝
@@ -1288,9 +1290,9 @@ pre[class*="language-"] {
 </li>
 </ul>
 <h3 class="atx" id="📁service：業務邏輯">📁service：業務邏輯</h3>
-<p>放置 <code>業務邏輯類</code> 的 資料夾，通常為兩層架構</p>
 <pre><code class="fenced-code-block language-textile"><span class="token phrase">├─ 📁service                    # 業務邏輯層 的 interface
 │   ├─ 📁Impl                   # service 的實作類別，處理實際商業邏輯</span></code></pre>
+<p>放置 <code>業務邏輯類</code> 的 資料夾，通常為兩層架構：</p>
 <ul>
 <li><p><code>外層</code> 透過 <code>interface</code> 設定 業務邏輯的 <code>方法接口</code>。</p>
 </li>
@@ -1300,8 +1302,26 @@ pre[class*="language-"] {
 </ul>
 </li>
 </ul>
-<h3 class="atx" id="📁repository">📁repository</h3>
-<p>放置 <code>JPA 資料存取層</code> 的 資料夾，繼承 <code>JpaRepository</code> 就可以有 <code>entity</code> 的 <code>CURD</code> 方法。</p>
+<h3 class="atx" id="📁repository：sql-處理層">📁repository：SQL 處理層</h3>
+<pre><code class="fenced-code-block language-textile"><span class="token phrase">├─ 📁repository             # SQL 處理層 的 interface
+│                             負責 簡單 SQL 的 設定 與 複雜 SQL 的 interface
+│   ├─ 📁impl               # 複雜 SQL 的實作類別</span></code></pre>
+<p>放置 <code>JPA 資料存取層</code> 的 資料夾，通常為兩層架構：</p>
+<ul>
+<li><p><code>外層</code> 透過 <code>interface</code> 設定 <code>SQL</code> 的 <code>方法接口</code>。</p>
+<ul>
+<li><p><code>簡單 SQL</code> 繼承 <code>JpaRepository</code> 即可，無須 實作方法。</p>
+</li>
+<li><p><code>複雜 SQL</code> 透過 <code>interface</code> 設定 <code>方法接口</code>。</p>
+</li>
+</ul>
+</li>
+<li><p><code>內層</code> 負責 <code>複雜 SQL</code> 的 <code>實作方法</code>。</p>
+<ul>
+<li>需要設定 <code>@Repository</code>。</li>
+</ul>
+</li>
+</ul>
 <h3 class="atx" id="📁entity：資料傳輸物件db相關">📁entity：資料傳輸物件(DB相關)</h3>
 <p>Spring Boot 裡面的 <code>資料傳輸物件</code> 資料夾。</p>
 <p>放置 <code>JPA 資料表實體類</code>，基本上可以視為 <code>table 檔案結構物件</code>，

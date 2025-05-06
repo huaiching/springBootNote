@@ -1,7 +1,6 @@
 package com.example.api.controller;
 
 import com.example.api.dto.ClntUpdate;
-import com.example.api.entity.Addr;
 import com.example.api.entity.Clnt;
 import com.example.api.repository.ClntRepository;
 import com.example.api.service.ClntService;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 
 @RestController
@@ -48,7 +48,7 @@ public class ClntController {
                operationId = "update")
     @PostMapping("/update")
     public ResponseEntity<Void> update(@RequestBody ClntUpdate entityUpdate) {
-        clntService.update(entityUpdate.getClntOri(), entityUpdate.getClntNew());
+        clntRepository.update(entityUpdate.getClntOri(), entityUpdate.getClntNew());
         return ResponseEntity.ok().build();
     }
 
@@ -56,8 +56,8 @@ public class ClntController {
                description = "根據主鍵查詢 Clnt 資料",
                operationId = "findById")
     @GetMapping("/findById")
-    public ResponseEntity<Clnt> findById(@RequestParam String ClientId) {
-        Clnt entity = clntService.findById(ClientId);
+    public ResponseEntity<Clnt> findById(@RequestParam String clietId) {
+        Clnt entity = clntService.findById(clietId);
         if (entity == null) {
             return ResponseEntity.ok(null); // 回傳 HTTP 200 OK 且 資料為 null
         }
@@ -67,18 +67,9 @@ public class ClntController {
     @Operation(summary = "根據主鍵 刪除 Clnt 資料",
                description = "根據主鍵刪除 Clnt 資料",
                operationId = "deleteById")
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@RequestParam String ClientId) {
-        clntService.deleteById(ClientId);
+    @PostMapping("/delete")
+    public ResponseEntity<Void> delete(@RequestParam String clietId) {
+        clntService.deleteById(clietId);
         return ResponseEntity.ok().build();
-    }
-
-
-    @Operation(summary = "根據 ID清單 查詢 Clnt 資料",
-            description = "根據 ID清單 查詢 Clnt 資料",
-            operationId = "queryClntByClientIdList")
-    @PostMapping("/queryClntByClientIdList")
-    public ResponseEntity<List<Clnt>> queryClntByClientIdList(@RequestBody List<String> clientIdList) {
-        return ResponseEntity.ok(clntRepository.queryClntByClientIdList(clientIdList));
     }
 }

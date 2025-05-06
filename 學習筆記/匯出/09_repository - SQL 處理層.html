@@ -1248,48 +1248,387 @@ pre[class*="language-"] {
   <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
 <body>
-  <article class="markdown-body"><h1 class="atx" id="jpa-執行-複雜sql">JPA 執行 複雜SQL</h1>
-<h2 class="atx" id="說明">說明</h2>
-<p><code>簡單的SQL</code> 可以在 <code>repository</code> 有以下三種方式：</p>
+  <article class="markdown-body"><h1 class="atx" id="repository---sql-處理層">repository - SQL 處理層</h1>
+<p><code>repository</code> 資料夾 是 專門用來 <code>處理 SQL</code> 的地方。</p>
+<p>目前常見的設計方式 與 <code>service</code> 相同為 兩層式設計</p>
 <ul>
-<li><p>透過 繼承 <code>JpaRepository</code> 取得 <code>根據主鍵自動生成的 CRUD</code>。</p>
+<li><p><code>外層</code> 透過 <code>interface</code> 設定 <code>SQL</code> 的 <code>方法接口</code>。</p>
+<ul>
+<li><p><code>簡單 SQL</code> 繼承 <code>JpaRepository</code> 即可，無須 實作方法。</p>
 </li>
-<li><p>根據 <code>命名規則</code> 來 設定 方法名稱。</p>
-</li>
-<li><p>透過 <code>nativeQurey</code> 執行 <code>簡單的 自定義 SQL</code>。</p>
+<li><p><code>複雜 SQL</code> 透過 <code>interface</code> 設定 <code>方法接口</code>。</p>
 </li>
 </ul>
-<p>但是 如果想要執行 <code>複雜的 SQL</code>，
-我們可以透過 JPA 提供的 <code>NamedParameterJdbcTemplate</code> 來簡單執行。</p>
+</li>
+<li><p><code>內層</code> 負責 <code>複雜 SQL</code> 的 <code>實作方法</code>。</p>
 <ul>
+<li>需要設定 <code>@Repository</code>。</li>
+</ul>
+</li>
+</ul>
+<pre><code class="fenced-code-block language-textile"><span class="token phrase">java
+├─ 📄Application.java
+├─ 📁repository
+│   ├─ 📄AddrRepository.java
+│   ├─ 📄AddrCustomRepository.java
+│   ├─ 📁impl
+│      ├─ 📄AddrCustomRepositoryImpl.java</span></code></pre>
+<h2 class="atx" id="簡單-sql-的處理">簡單 SQL 的處理</h2>
+<p>對於 <code>簡單 SQL</code> 我們會透過下面三種方法 取得，<code>entity</code> 的 <code>CRUD</code> 方法。</p>
+<ol>
+<li><p>繼承 <code>JpaRepository</code> 獲得 <code>針對主鍵 的 CRUD</code>。</p>
+<p>會有兩個參數要定義，分別是 <code>entity</code> 和 <code>主鍵型態</code>。</p>
+<ul>
+<li><p><code>單一主鍵</code>：主鍵的屬性型態。</p>
+</li>
+<li><p><code>多重主鍵</code>：<code>@IdClass</code> 設定的 <code>主鍵類別</code>。</p>
+</li>
+</ul>
+<p>透過 <code>JpaRepository</code> 自動生成的 <code>CRUD</code> 方法，常用的有；</p>
+<ul>
+<li><p><code>save</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 進行 <code>新增</code> 或 <code>更新</code> 資料。 (單筆) </p>
+</li>
+<li><p>(無資料 = 新增 / 有資料 = 更新)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> savedEntity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Addr</span> savedEntity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>saveAll</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 進行 <code>新增</code> 或 <code>更新</code> 資料。 (多筆) </p>
+</li>
+<li><p>(無資料 = 新增 / 有資料 = 更新)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">&gt;</span></span> savedEntityList <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">saveAll</span><span class="token punctuation">(</span>entityList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> savedEntityList <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">saveAll</span><span class="token punctuation">(</span>entityList<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>findById</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 查詢 資料 (單筆)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> savedEntity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Addr</span> savedEntity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>findAllById</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 查詢 資料 (多筆)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">Clnt</span> entity <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">orElse</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Addr</span> entity <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">orElse</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>deleteById</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 刪除 資料 (單筆)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java">clntRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+addrRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>deleteAllById</code>：</p>
+<ul>
+<li><p>根據 <code>主鍵</code> 刪除 資料 (多筆)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java">clntRepository<span class="token punctuation">.</span><span class="token function">deleteAllById</span><span class="token punctuation">(</span>idList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+addrRepository<span class="token punctuation">.</span><span class="token function">deleteAllById</span><span class="token punctuation">(</span>idList<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>existsById</code>：</p>
+<ul>
+<li><p>判斷 <code>主鍵</code> 是否有資料。 (true = 有資料 / fakse = 無資料)</p>
+</li>
+<li><p>範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">Boolean</span> clntExists <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">existsById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Boolean</span> addrExists <span class="token operator">=</span> addrRepository<span class="token punctuation">.</span><span class="token function">existsById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>根據 <code>命名規則</code> 產生 <code>CRUD</code> 方法。
+根據下面的規則 組合 方法名稱，<code>JPA</code> 會自動生成 <code>SQL 方法</code> 提供使用。
+＊規則 = <code>關鍵字</code> + <code>屬性條件</code> (至少一個屬性) + <code>排序</code> (選填)</p>
+<pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">findByClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<ul>
+<li><p>關鍵字</p>
+<table>
+<thead>
+<tr>
+<th align="center">命名規則</th>
+<th align="center">定義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>findBy</code></td>
+<td align="center">查詢結果 (多筆)</td>
+</tr>
+<tr>
+<td align="center"><code>countBy</code></td>
+<td align="center">計算符合條件的數量</td>
+</tr>
+<tr>
+<td align="center"><code>existsBy</code></td>
+<td align="center">檢查是否存在</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>屬性條件：<code>欄位名稱</code> + <code>連接符號</code></p>
+<table>
+<thead>
+<tr>
+<th align="center">連接符號</th>
+<th align="center">對應 SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">And</td>
+<td align="center">AND</td>
+</tr>
+<tr>
+<td align="center">Or</td>
+<td align="center">OR</td>
+</tr>
+<tr>
+<td align="center">Between</td>
+<td align="center">BETWEEN</td>
+</tr>
+<tr>
+<td align="center">LessThan</td>
+<td align="center">&lt;</td>
+</tr>
+<tr>
+<td align="center">LessThanEqual</td>
+<td align="center">&lt;=</td>
+</tr>
+<tr>
+<td align="center">GreaterThan</td>
+<td align="center">&gt;</td>
+</tr>
+<tr>
+<td align="center">GreaterThanEqual</td>
+<td align="center">&gt;=</td>
+</tr>
+<tr>
+<td align="center">Like</td>
+<td align="center">LIKE</td>
+</tr>
+<tr>
+<td align="center">NotLike</td>
+<td align="center">NOT LIKE</td>
+</tr>
+<tr>
+<td align="center">StartingWith</td>
+<td align="center">LIKE 'value%'</td>
+</tr>
+<tr>
+<td align="center">EndingWith</td>
+<td align="center">LIKE '%value'</td>
+</tr>
+<tr>
+<td align="center">Containing</td>
+<td align="center">LIKE '%value%'</td>
+</tr>
+<tr>
+<td align="center">In</td>
+<td align="center">IN</td>
+</tr>
+<tr>
+<td align="center">NotIn</td>
+<td align="center">NOT IN</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>排序</p>
+<table>
+<thead>
+<tr>
+<th align="center">排序規則</th>
+<th align="center">定義</th>
+<th align="center">命名範例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OrderBy + 屬性 + Asc</td>
+<td align="center">升序排列</td>
+<td align="center">findByAgeOrderByNameAsc</td>
+</tr>
+<tr>
+<td align="center">OrderBy + 屬性 + Desc</td>
+<td align="center">降序排列</td>
+<td align="center">findByAgeOrderByCreateDateDesc</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>透過 <code>nativeQurey</code> 執行 <code>簡單的 自定義 SQL</code>。</p>
+<ul>
+<li><p>@Query(value = "SQL語句", nativeQuery = true)</p>
+</li>
+<li><p>SQL語句中，變數要用 <code>:</code> 標示。</p>
+</li>
+<li><p>方法的參數 要使用 <code>@Param("SQL變數")</code> 標示。</p>
+</li>
+</ul>
+<pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"SELECT * FROM clnt "</span> <span class="token operator">+</span>
+               <span class="token string">"WHERE client_id IN :clientIdList"</span><span class="token punctuation">,</span> nativeQuery <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryClntByClientIdList</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Param</span><span class="token punctuation">(</span><span class="token string">"clientIdList"</span><span class="token punctuation">)</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> clientIdList<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ol>
+<h3 class="atx" id="建立-單一主鍵-的-repository">建立 單一主鍵 的 repository</h3>
+<p>之前 我們建立了一個 單一主鍵 的 entity <code>Clnt</code>，</p>
+<p>接著 讓我們為其建立 repository。</p>
+<ol>
+<li><p>首先 讓我們 創立 <code>repository</code> 資料夾，並新增一個檔案 <code>ClntRepository.java</code>。</p>
+</li>
+<li><p>開啟 <code>ClntRepository.java</code>，並依照下面範例 新增相關程式。</p>
+</li>
+</ol>
+<ul>
+<li><p><code>Clnt</code> 的主鍵為 <code>clientId</code> 型態為 <code>String</code>。</p>
+</li>
+<li><p><code>JpaRepository</code> 第一個參數 為 entity 類 <code>Clnt</code>。</p>
+</li>
+<li><p><code>JpaRepository</code> 第二個參數 為 主鍵的型態 <code>String</code>。</p>
+</li>
+</ul>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>entity<span class="token punctuation">.</span></span><span class="token class-name">Clnt</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>jpa<span class="token punctuation">.</span>repository<span class="token punctuation">.</span></span><span class="token class-name">JpaRepository</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>jpa<span class="token punctuation">.</span>repository<span class="token punctuation">.</span></span><span class="token class-name">Query</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>repository<span class="token punctuation">.</span>query<span class="token punctuation">.</span></span><span class="token class-name">Param</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ClntRepository</span> <span class="token keyword">extends</span> <span class="token class-name">JpaRepository</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"SELECT * FROM clnt "</span> <span class="token operator">+</span>
+                   <span class="token string">"WHERE client_id IN :clientIdList"</span><span class="token punctuation">,</span> nativeQuery <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Clnt</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryClntByClientIdList</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Param</span><span class="token punctuation">(</span><span class="token string">"clientIdList"</span><span class="token punctuation">)</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> clientIdList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 class="atx" id="建立-多重主鍵-的-repository">建立 多重主鍵 的 repository</h3>
+<p>之前 我們建立了一個 單一主鍵 的 entity <code>Addr</code>，</p>
+<p>接著 讓我們為其建立 repository。</p>
+<ol>
+<li><p>首先 讓我們 創立 <code>repository</code> 資料夾，並新增一個檔案 <code>AddrRepository.java</code>。</p>
+</li>
+<li><p>開啟 <code>AddrRepository.java</code>，並依照下面範例 新增相關程式。</p>
+</li>
+</ol>
+<ul>
+<li><p><code>Addr</code> 的主鍵為 <code>clientId</code> 和 <code>addrInd</code>，我們設定 <code>主鍵類別</code> 為 <code>Addr.AddrKey</code>。</p>
+</li>
+<li><p><code>JpaRepository</code> 第一個參數 為 entity 類 <code>Clnt</code>。</p>
+</li>
+<li><p><code>JpaRepository</code> 第二個參數 為 多重主鍵的主鍵類別 `Addr.AddrKey``。</p>
+</li>
+</ul>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>entity<span class="token punctuation">.</span></span><span class="token class-name">Addr</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>jpa<span class="token punctuation">.</span>repository<span class="token punctuation">.</span></span><span class="token class-name">JpaRepository</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">AddrRepository</span> <span class="token keyword">extends</span> <span class="token class-name">JpaRepository</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">,</span> <span class="token class-name">Addr<span class="token punctuation">.</span>AddrKey</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+
+    <span class="token comment">/**
+     * SELECT * FROM addr
+     * HWERE client_id = :clientId
+     */</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">findByClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 class="atx" id="複雜-sql-的處理">複雜 SQL 的處理</h2>
+<p>對於 <code>複雜 SQL</code>，我們會採用 類似 <code>Service</code> 的設計方式</p>
+<ul>
+<li><p><code>外層</code>：設定 <code>interface</code> 負責 設定 <code>方法接口</code>。</p>
+</li>
+<li><p><code>內層</code>：繼承 <code>interface</code> 負責 <code>實作方法</code>。</p>
+</li>
+</ul>
+<h3 class="atx" id="外層：interface-的設定">外層：interface 的設定</h3>
+<p>一般而言，因為 介面分離原則，<code>複雜SQL</code> 我們會單獨寫一個 <code>interface</code>。</p>
+<p>用上面的 <code>Addr</code> 舉例，</p>
+<ul>
+<li><p><code>簡單SQL</code>：會建立檔案 <code>AddrRepository</code>。</p>
+</li>
+<li><p><code>複雜SQL</code>：會建立檔案 <code>AddrCustomRepository</code>，並且 讓 <code>AddrRepository</code> 繼承。</p>
+<ul>
+<li>因為 <code>AddrRepository</code> 繼承 <code>AddrCustomRepository</code>，
+所以 其他程式 只要透過 <code>AddrRepository</code> 即可使用 <code>複雜的SQL</code> 方法。</li>
+</ul>
+</li>
+</ul>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">AddrCustomRepository</span> <span class="token punctuation">{</span>
+    <span class="token comment">/**
+     * 單筆更新 addr &lt;br/&gt;
+     * @param entityOri 變更前的 addr
+     * @param entityNew 變更後的 addr
+     */</span>
+    <span class="token keyword">void</span> <span class="token function">update</span><span class="token punctuation">(</span><span class="token class-name">Addr</span> entityOri<span class="token punctuation">,</span> <span class="token class-name">Addr</span> entityNew<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * 模糊 進行 地址搜尋
+     * @param address 要搜尋的地址字串
+     * @return 查詢到 Addr 資料清單
+     */</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryAddress</span><span class="token punctuation">(</span><span class="token class-name">String</span> address<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">AddrRepository</span> <span class="token keyword">extends</span> <span class="token class-name">JpaRepository</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">,</span> <span class="token class-name">Addr<span class="token punctuation">.</span>AddrKey</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">,</span> <span class="token class-name">AddrCustomRepository</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">/**
+     * SELECT * FROM addr
+     * HWERE client_id = :clientId
+     */</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">findByClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 class="atx" id="內層：複雜-sql-的實作方法">內層：複雜 SQL 的實作方法</h3>
+<p>想要執行 <code>複雜的 SQL</code>，建議透過 JPA 提供的 <code>NamedParameterJdbcTemplate</code> 來執行。</p>
+<ul>
+<li><p>透過 <code>NamedParameterJdbcTemplate</code> 處理 <code>複雜SQL</code> 好處是 <code>自動轉換 小駝峰</code>。
+DB 欄位為 <code>下底線</code> 時，DTO 欄位允許 <code>下底線</code> <code>小駝峰</code> 且會 自動轉換匹配。</p>
+</li>
 <li><p><code>hibernate</code> 本身有提供 透過 <code>nativeQuery</code> 來執行 <code>複雜SQL</code>，
 但因為 <code>不會自動處理</code> 欄位的命名規則轉換 <code>下底線 無法自動轉換為 小駝峰</code>，
 所以 不推薦 此方法。</p>
 </li>
-<li><p>透過 <code>NamedParameterJdbcTemplate</code> 處理 <code>複雜SQL</code> 好處是 <code>自動轉換 小駝峰</code>。
-DB 欄位為 <code>下底線</code> 時，DTO 欄位允許 <code>下底線</code> <code>小駝峰</code> 且會 自動轉換匹配。 </p>
-</li>
 </ul>
-<p>其流程 共可分成 4 步驟：</p>
+<p>其流程 共可分成 5 步驟：</p>
 <ol>
-<li><p>注入 <code>NamedParameterJdbcTemplate</code></p>
+<li><p>class 打上註解 <code>@Repository</code>。</p>
+</li>
+<li><p>注入 <code>NamedParameterJdbcTemplate</code>。</p>
 <pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@Autowired</span>
 <span class="token keyword">private</span> <span class="token class-name">NamedParameterJdbcTemplate</span> namedParameterJdbcTemplate<span class="token punctuation">;</span></code></pre>
 </li>
-<li><p>撰寫 SQL 語法</p>
+<li><p>撰寫 SQL 語法。</p>
 <pre><code class="fenced-code-block language-java"><span class="token class-name">String</span> sql1 <span class="token operator">=</span> <span class="token string">"SELECT * FROM addr "</span> <span class="token operator">+</span>
-              <span class="token string">"WHERE address LIKE :address"</span><span class="token punctuation">;</span></code></pre>
+            <span class="token string">"WHERE address LIKE :address"</span><span class="token punctuation">;</span></code></pre>
 <pre><code class="fenced-code-block language-java"><span class="token class-name">String</span> sql2 <span class="token operator">=</span> <span class="token string">"UPDATE addr "</span> <span class="token operator">+</span>
-              <span class="token string">"SET client_id = :clientIdNew "</span> <span class="token operator">+</span>
-              <span class="token string">"   ,addr_ind = :addrIndNew "</span> <span class="token operator">+</span>
-              <span class="token string">"   ,address = :addressNew "</span> <span class="token operator">+</span>
-              <span class="token string">"   ,tel = :telNew "</span> <span class="token operator">+</span>
-              <span class="token string">"WHERE client_id = :clientIdOri "</span> <span class="token operator">+</span>
-              <span class="token string">"  AND addr_ind = :addrIndOri "</span> <span class="token operator">+</span> 
-              <span class="token string">"  AND address = :addressOri "</span> <span class="token operator">+</span> 
-              <span class="token string">"  AND tel = :telOri "</span><span class="token punctuation">;</span></code></pre>
+            <span class="token string">"SET client_id = :clientIdNew "</span> <span class="token operator">+</span>
+            <span class="token string">"   ,addr_ind = :addrIndNew "</span> <span class="token operator">+</span>
+            <span class="token string">"   ,address = :addressNew "</span> <span class="token operator">+</span>
+            <span class="token string">"   ,tel = :telNew "</span> <span class="token operator">+</span>
+            <span class="token string">"WHERE client_id = :clientIdOri "</span> <span class="token operator">+</span>
+            <span class="token string">"  AND addr_ind = :addrIndOri "</span> <span class="token operator">+</span> 
+            <span class="token string">"  AND address = :addressOri "</span> <span class="token operator">+</span> 
+            <span class="token string">"  AND tel = :telOri "</span><span class="token punctuation">;</span></code></pre>
 </li>
-<li><p>透過 Map 設定參數</p>
+<li><p>透過 Map 設定參數。</p>
 <pre><code class="fenced-code-block language-java"><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 params1<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"address"</span><span class="token punctuation">,</span> <span class="token string">"%"</span> <span class="token operator">+</span> address <span class="token operator">+</span> <span class="token string">"%"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <pre><code class="fenced-code-block language-java"><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1302,7 +1641,7 @@ params2<span class="token punctuation">.</span><span class="token function">put<
 params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"addressOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 params2<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"telOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getTel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token number">4.</span> </code></pre>
 </li>
-<li><p>執行 SQL</p>
+<li><p>執行 SQL。</p>
 <ul>
 <li><p><code>查詢</code> 透過 <code>namedParameterJdbcTemplate.query</code> 執行。</p>
 <pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> addrList <span class="token operator">=</span> namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql1<span class="token punctuation">,</span> params1<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">BeanPropertyRowMapper</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Addr</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
@@ -1313,38 +1652,31 @@ params2<span class="token punctuation">.</span><span class="token function">put<
 </ul>
 </li>
 </ol>
-<h2 class="atx" id="範例：查詢---複雜sql">範例：查詢 - 複雜SQL</h2>
-<p>替 <code>Addr</code> 設計一個 <code>輸入 clientId 查詢 Addr 資料</code> 的方法。</p>
-<pre><code class="fenced-code-block language-java">    <span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryAddress</span><span class="token punctuation">(</span><span class="token class-name">String</span> address<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// 建立 SQL</span>
-        <span class="token class-name">String</span> sql <span class="token operator">=</span> <span class="token string">"SELECT * FROM addr "</span> <span class="token operator">+</span>
-                <span class="token string">"WHERE address LIKE :address"</span><span class="token punctuation">;</span>
-        <span class="token comment">// 填入 參數</span>
-        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"address"</span><span class="token punctuation">,</span> <span class="token string">"%"</span> <span class="token operator">+</span> address <span class="token operator">+</span> <span class="token string">"%"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 執行 方法</span>
-        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> addrList <span class="token operator">=</span> namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> params<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">BeanPropertyRowMapper</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Addr</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>完整的程式範例</p>
+<pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@Repository</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AddrCustomRepositoryImpl</span> <span class="token keyword">implements</span> <span class="token class-name">AddrCustomRepository</span> <span class="token punctuation">{</span>
 
-        <span class="token keyword">return</span> addrList<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
-<h2 class="atx" id="範例：修改---複雜的sql">範例：修改 - 複雜的SQL</h2>
-<p>替 <code>Addr</code> 設計一個 <code>更新資料</code> 的方法。</p>
-<p>給予 <code>變更前Addr</code> <code>變更後Addr</code> 並將 Addr 資料進行更新。</p>
-<ul>
-<li><code>@Transactional</code>：設定為 <code>交易</code>，當執行失敗時，資料可回朔，</li>
-</ul>
-<pre><code class="fenced-code-block language-java">    <span class="token annotation punctuation">@Transactional</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">NamedParameterJdbcTemplate</span> namedParameterJdbcTemplate<span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * 單筆更新 addr &lt;br/&gt;
+     * @param entityOri 變更前的 addr
+     * @param entityNew 變更後的 addr
+     */</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token annotation punctuation">@Transactional</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">update</span><span class="token punctuation">(</span><span class="token class-name">Addr</span> entityOri<span class="token punctuation">,</span> <span class="token class-name">Addr</span> entityNew<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment">// 建立 SQL</span>
         <span class="token class-name">String</span> sql <span class="token operator">=</span> <span class="token string">"UPDATE addr "</span> <span class="token operator">+</span>
-                     <span class="token string">"SET client_id = :clientIdNew "</span> <span class="token operator">+</span>
-                     <span class="token string">"   ,addr_ind = :addrIndNew "</span> <span class="token operator">+</span>
-                     <span class="token string">"   ,address = :addressNew "</span> <span class="token operator">+</span>
-                     <span class="token string">"   ,tel = :telNew "</span> <span class="token operator">+</span>
-                     <span class="token string">"WHERE client_id = :clientIdOri "</span> <span class="token operator">+</span>
-                     <span class="token string">"  AND addr_ind = :addrIndOri "</span> <span class="token operator">+</span> 
-                     <span class="token string">"  AND address = :addressOri "</span> <span class="token operator">+</span> 
-                     <span class="token string">"  AND tel = :telOri "</span><span class="token punctuation">;</span>
+                <span class="token string">"SET client_id = :clientIdNew "</span> <span class="token operator">+</span>
+                <span class="token string">"   ,addr_ind = :addrIndNew "</span> <span class="token operator">+</span>
+                <span class="token string">"   ,address = :addressNew "</span> <span class="token operator">+</span>
+                <span class="token string">"   ,tel = :telNew "</span> <span class="token operator">+</span>
+                <span class="token string">"WHERE client_id = :clientIdOri "</span> <span class="token operator">+</span>
+                <span class="token string">"  AND addr_ind = :addrIndOri "</span> <span class="token operator">+</span>
+                <span class="token string">"  AND address = :addressOri "</span> <span class="token operator">+</span>
+                <span class="token string">"  AND tel = :telOri "</span><span class="token punctuation">;</span>
         <span class="token comment">// 填入 參數</span>
         <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"clientIdNew"</span><span class="token punctuation">,</span> entityNew<span class="token punctuation">.</span><span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1357,7 +1689,29 @@ params2<span class="token punctuation">.</span><span class="token function">put<
         params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"telOri"</span><span class="token punctuation">,</span> entityOri<span class="token punctuation">.</span><span class="token function">getTel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment">// 執行 方法</span>
         namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> params<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
+    <span class="token punctuation">}</span>
+
+
+    <span class="token comment">/**
+     * 模糊 進行 地址搜尋
+     *
+     * @param address 要搜尋的地址字串
+     * @return 查詢到 Addr 資料清單
+     */</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> <span class="token function">queryAddress</span><span class="token punctuation">(</span><span class="token class-name">String</span> address<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 建立 SQL</span>
+        <span class="token class-name">String</span> sql <span class="token operator">=</span> <span class="token string">"SELECT * FROM addr "</span> <span class="token operator">+</span>
+                <span class="token string">"WHERE address LIKE :address"</span><span class="token punctuation">;</span>
+        <span class="token comment">// 填入 參數</span>
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"address"</span><span class="token punctuation">,</span> <span class="token string">"%"</span> <span class="token operator">+</span> address <span class="token operator">+</span> <span class="token string">"%"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 執行 方法</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> addrList <span class="token operator">=</span> namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> params<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">BeanPropertyRowMapper</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Addr</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> addrList<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
 </article>
 </body>
 </html>

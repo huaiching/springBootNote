@@ -13,7 +13,7 @@ java
 ├─ 📄Application.java
 ├─ 📁service
 │   ├─ 📄SampleService.java
-│   ├─ 📁Impl
+│   ├─ 📁impl
 │      ├─ 📄ServiceServiceImpl.java
 ```
 
@@ -55,7 +55,7 @@ java
    }
    ```
 
-3. 接者 讓我們在 `service` 處，新增資料夾 `Impl`，並新增一個檔案 `SampleServiceImpl.java`。
+3. 接者 讓我們在 `service` 處，新增資料夾 `impl`，並新增一個檔案 `SampleServiceImpl.java`。
 
 4. 開啟 `SampleServiceImpl.java`，並依照下面範例 撰寫 `實作方法`。
    
