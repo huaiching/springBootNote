@@ -7,7 +7,7 @@ Swagger Ui
 H2 Database
 > http://localhost:9010/h2-console
 > 
-> JDBC URL: jdbc:h2:mem:testdb
+> JDBC URL: jdbc:h2:file:./database/mydb
 >
 > User Name: sa
 >
