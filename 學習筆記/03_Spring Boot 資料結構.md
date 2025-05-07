@@ -55,7 +55,7 @@ resources
 
 ```textile
 ├─ 📁service                    # 業務邏輯層 的 interface
-│   ├─ 📁Impl                   # service 的實作類別，處理實際商業邏輯
+│   ├─ 📁impl                   # service 的實作類別，處理實際商業邏輯
 ```
 
 放置 `業務邏輯類` 的 資料夾，通常為兩層架構：
