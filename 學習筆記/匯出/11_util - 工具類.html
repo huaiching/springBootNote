@@ -1260,7 +1260,213 @@ pre[class*="language-"] {
 <li><p>開啟 <code>DateUtil.java</code>，並依照下面範例 新增相關程式。</p>
 </li>
 </ol>
-<pre><code class="fenced-code-block language-java"></code></pre>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DateUtil</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token class-name">String</span> FORMAT_YYYY_MM_DD <span class="token operator">=</span> <span class="token string">"yyyy/MM/dd"</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token class-name">String</span> FORMAT_HH_MM_SS <span class="token operator">=</span> <span class="token string">"HH:mm:ss"</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * 民國年 的 天數增減
+     * @param TwDate 民國年
+     * @param addDate 增減天數
+     * @return 計算後的民國年
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">addDate</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">TwDate</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span> addDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">TwDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> <span class="token class-name">AdDate</span> <span class="token operator">=</span> <span class="token function">twToAdDate</span><span class="token punctuation">(</span><span class="token class-name">TwDate</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">LocalDate</span> localDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token class-name">AdDate</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">plusDays</span><span class="token punctuation">(</span>addDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> calAdDate <span class="token operator">=</span> localDate<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span>calAdDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 的 月份增減
+     * @param TwDate 民國年
+     * @param addMonth 增減月份
+     * @return 計算後的民國年
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">addMonth</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">TwDate</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span> addMonth<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">TwDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> <span class="token class-name">AdDate</span> <span class="token operator">=</span> <span class="token function">twToAdDate</span><span class="token punctuation">(</span><span class="token class-name">TwDate</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">LocalDate</span> localDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token class-name">AdDate</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">plusMonths</span><span class="token punctuation">(</span>addMonth<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> calAdDate <span class="token operator">=</span> localDate<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span>calAdDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 的 年份增減
+     * @param TwDate 民國年
+     * @param addYear 增減年份
+     * @return 計算後的民國年
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">addYear</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">TwDate</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span> addYear<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">TwDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> <span class="token class-name">AdDate</span> <span class="token operator">=</span> <span class="token function">twToAdDate</span><span class="token punctuation">(</span><span class="token class-name">TwDate</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">LocalDate</span> localDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token class-name">AdDate</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">plusYears</span><span class="token punctuation">(</span>addYear<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> calAdDate <span class="token operator">=</span> localDate<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span>calAdDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 轉 西元年
+     * @param TwDate 民國年
+     * @return 西元年
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">twToAdDate</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">TwDate</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">TwDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> <span class="token class-name">AdDate</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token class-name">TwDate</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1911</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token class-name">TwDate</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token class-name">AdDate</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 西元年 轉 民國年
+     * @param AdDate 西元年
+     * @return 民國年
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">AdDate</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">AdDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> <span class="token class-name">TwDate</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token class-name">AdDate</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1911</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token class-name">AdDate</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token class-name">TwDate</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 計算天數差
+     * @param beginDate 起日(民國年)
+     * @param endDate 迄日(民國年)
+     * @return 天數差
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">diffDay</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">LocalDate</span> beginLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>beginDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">LocalDate</span> endLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token class-name">ChronoUnit</span><span class="token punctuation">.</span>DAYS<span class="token punctuation">.</span><span class="token function">between</span><span class="token punctuation">(</span>beginLocalDate<span class="token punctuation">,</span> endLocalDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 計算月份差
+     * @param beginDate 起日(民國年)
+     * @param endDate 迄日(民國年)
+     * @return 月份差
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">diffMonth</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">LocalDate</span> beginLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>beginDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">LocalDate</span> endLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token class-name">ChronoUnit</span><span class="token punctuation">.</span>MONTHS<span class="token punctuation">.</span><span class="token function">between</span><span class="token punctuation">(</span>beginLocalDate<span class="token punctuation">,</span> endLocalDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 計算年份差
+     * @param beginDate 起日(民國年)
+     * @param endDate 迄日(民國年)
+     * @return 年份差
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">diffYear</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">LocalDate</span> beginLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>beginDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">LocalDate</span> endLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token class-name">ChronoUnit</span><span class="token punctuation">.</span>YEARS<span class="token punctuation">.</span><span class="token function">between</span><span class="token punctuation">(</span>beginLocalDate<span class="token punctuation">,</span> endLocalDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 日期比較：起日 &gt; 迄日
+     * @param beginDate 起日
+     * @param endDate 迄日
+     * @return
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Boolean</span> <span class="token function">compareGT</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>beginDate<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 日期比較：起日 &gt;= 迄日
+     * @param beginDate 起日
+     * @param endDate 迄日
+     * @return TRUE / FALSE
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Boolean</span> <span class="token function">compareGE</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>beginDate<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span> <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 日期比較：起日 &lt; 迄日
+     * @param beginDate 起日
+     * @param endDate 迄日
+     * @return TRUE / FALSE
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Boolean</span> <span class="token function">compareLT</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>beginDate<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 民國年 日期比較：起日 &lt;= 迄日
+     * @param beginDate 起日
+     * @param endDate 迄日
+     * @return TRUE / FALSE
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Boolean</span> <span class="token function">compareLG</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>beginDate<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 取得系統日 (民國年)
+     * @return 系統日 (民國年)
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">getToday</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">String</span> adDate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SimpleDateFormat</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span>adDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 取得系統時間
+     * @return 系統時間
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">getTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">SimpleDateFormat</span><span class="token punctuation">(</span>FORMAT_HH_MM_SS<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
 </article>
 </body>
 </html>
