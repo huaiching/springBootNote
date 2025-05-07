@@ -1248,19 +1248,21 @@ pre[class*="language-"] {
   <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
 <body>
-  <article class="markdown-body"><h1 class="atx" id="config---spring-boot-的設定檔">config - Spring Boot 的設定檔</h1>
-<p><code>config</code> 資料夾，我們會在裡面擺放 <code>Spring Boot 啟動時</code> 要執行的 <code>配置類</code> 程式。</p>
-<p>可以理解為 啟動時要自動執行的 <code>初始化檔案</code>。</p>
-<p>要讓 Spring Boot 可以認識 這個檔案是 <code>配置類文件</code>，我們必須為其加上 <code>註解</code>。</p>
+  <article class="markdown-body"><h1 class="atx" id="config---spring-boot-的設定檔案說明"><code>config</code> - Spring Boot 的設定檔案說明</h1>
+<p>在 <code>config</code> 資料夾中，我們通常會放置 Spring Boot 在啟動時需要執行的「<strong>配置類</strong>（Configuration Class）」程式碼。</p>
+<p>這些類別可以被視為「<strong>初始化設定檔案</strong>」，用來設定應用啟動時所需的元件、依賴或第三方工具（如 Swagger、CORS、資料來源等）。</p>
+<p>為了讓 Spring Boot 認得某個類別是設定用途的配置類，我們需要加上特定的註解：</p>
 <ul>
-<li><code>@Configuration</code>：標示 檔案是 配置類文件。</li>
-<li><code>@Bean</code>：告訴 Spring，這個方法返回的對象，幫我放進容器內進行管理。<ul>
-<li>方法名稱 就是 容器中對象的名稱。</li>
-<li>通常用來進行 <code>依賴包的初始化設定</code>。</li>
+<li><code>@Configuration</code>：標示該類別為 Spring 的配置類，啟動時會被載入並執行其中定義的設定。</li>
+<li><code>@Bean</code>：用來告訴 Spring，「這個方法所回傳的物件」要註冊進 Spring 的應用程式容器（Application Context）中進行管理。<ul>
+<li>方法名稱將成為該 Bean 的名稱（可自訂）。</li>
+<li>常用於初始化第三方套件或設定自定義元件。</li>
 </ul>
 </li>
 </ul>
-<p>例如：我們剛才添加的 <code>SwaggerDocConfig</code> 就是一個 <code>配置類文件</code>。</p>
+<hr>
+<h3 class="atx" id="範例：swagger-設定檔">範例：Swagger 設定檔</h3>
+<p>以下為一個使用 Swagger 產生 API 文件的配置類，<code>SwaggerDocConfig</code>：</p>
 <pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>v3<span class="token punctuation">.</span>oas<span class="token punctuation">.</span>annotations<span class="token punctuation">.</span></span><span class="token class-name">OpenAPIDefinition</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>v3<span class="token punctuation">.</span>oas<span class="token punctuation">.</span>models<span class="token punctuation">.</span></span><span class="token class-name">OpenAPI</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">io<span class="token punctuation">.</span>swagger<span class="token punctuation">.</span>v3<span class="token punctuation">.</span>oas<span class="token punctuation">.</span>models<span class="token punctuation">.</span>info<span class="token punctuation">.</span></span><span class="token class-name">Info</span><span class="token punctuation">;</span>
@@ -1270,6 +1272,7 @@ pre[class*="language-"] {
 <span class="token annotation punctuation">@OpenAPIDefinition</span>
 <span class="token annotation punctuation">@Configuration</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SwaggerDocConfig</span> <span class="token punctuation">{</span>
+
     <span class="token annotation punctuation">@Bean</span>
     <span class="token keyword">public</span> <span class="token class-name">OpenAPI</span> <span class="token function">baseOpenAPI</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">OpenAPI</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -1279,6 +1282,15 @@ pre[class*="language-"] {
                 <span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
+<p>在這個範例中：</p>
+<ul>
+<li><p><code>@Configuration</code> 告訴 Spring Boot，這是一個配置類。</p>
+</li>
+<li><p><code>@Bean</code> 宣告 <code>baseOpenAPI()</code> 方法所建立的 <code>OpenAPI</code> 實例，會被註冊到 Spring 容器中。</p>
+</li>
+<li><p><code>@OpenAPIDefinition</code> 是 Swagger 提供的註解，用來標示這是一個 OpenAPI 的設定入口。</p>
+</li>
+</ul>
 </article>
 </body>
 </html>

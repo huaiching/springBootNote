@@ -1,17 +1,21 @@
-# config - Spring Boot 的設定檔
+# `config` - Spring Boot 的設定檔案說明
 
-`config` 資料夾，我們會在裡面擺放 `Spring Boot 啟動時` 要執行的 `配置類` 程式。
+在 `config` 資料夾中，我們通常會放置 Spring Boot 在啟動時需要執行的「**配置類**（Configuration Class）」程式碼。
 
-可以理解為 啟動時要自動執行的 `初始化檔案`。
+這些類別可以被視為「**初始化設定檔案**」，用來設定應用啟動時所需的元件、依賴或第三方工具（如 Swagger、CORS、資料來源等）。
 
-要讓 Spring Boot 可以認識 這個檔案是 `配置類文件`，我們必須為其加上 `註解`。
+為了讓 Spring Boot 認得某個類別是設定用途的配置類，我們需要加上特定的註解：
 
-- `@Configuration`：標示 檔案是 配置類文件。
-- `@Bean`：告訴 Spring，這個方法返回的對象，幫我放進容器內進行管理。
-  - 方法名稱 就是 容器中對象的名稱。
-  - 通常用來進行 `依賴包的初始化設定`。
+- `@Configuration`：標示該類別為 Spring 的配置類，啟動時會被載入並執行其中定義的設定。
+- `@Bean`：用來告訴 Spring，「這個方法所回傳的物件」要註冊進 Spring 的應用程式容器（Application Context）中進行管理。
+  - 方法名稱將成為該 Bean 的名稱（可自訂）。
+  - 常用於初始化第三方套件或設定自定義元件。
 
-例如：我們剛才添加的 `SwaggerDocConfig` 就是一個 `配置類文件`。
+---
+
+### 範例：Swagger 設定檔
+
+以下為一個使用 Swagger 產生 API 文件的配置類，`SwaggerDocConfig`：
 
 ```java
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -23,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition
 @Configuration
 public class SwaggerDocConfig {
+
     @Bean
     public OpenAPI baseOpenAPI() {
         return new OpenAPI()
@@ -33,3 +38,11 @@ public class SwaggerDocConfig {
     }
 }
 ```
+
+在這個範例中：
+
+- `@Configuration` 告訴 Spring Boot，這是一個配置類。
+
+- `@Bean` 宣告 `baseOpenAPI()` 方法所建立的 `OpenAPI` 實例，會被註冊到 Spring 容器中。
+
+- `@OpenAPIDefinition` 是 Swagger 提供的註解，用來標示這是一個 OpenAPI 的設定入口。

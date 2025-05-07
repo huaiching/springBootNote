@@ -1,10 +1,13 @@
 # controller - API 對外接口
 
-`controller` 負責擺放 `API對外接口` 的資料夾。
+`controller` 資料夾負責擺放 `API 的對外接口` 程式碼。
 
-在這裡面，我們會設定 `API 的請求與回應`。
+在這裡，我們會設計 `API 的請求與回應處理`，並將 邏輯處理 交給 `service` 負責，
+讓 controller 專注於處理請求格式與回傳格式。
 
-目前 較常見的設計模式 會將 `路由處理` 和 `邏輯處理` 做適當切割，讓 controller 專注於處理請求格式與回傳格式。
+---
+
+
 
 ## 建立 controller
 

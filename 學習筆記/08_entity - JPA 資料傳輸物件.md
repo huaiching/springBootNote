@@ -2,9 +2,9 @@
 
 `entity` 資料夾 是負責擺放 `JPA` 的 `資料傳輸物件`。
 
-基本上 可以視為 `dto` 的延伸，但是需要加上 `JPA` 的特殊規定。
+基本上 可以視為 `dto` 的延伸，但它有 `JPA` 特有的規範與特性。
 
-- `方法名`：`class` 的名稱 與 `TABLE NAME` 相同。
+- `類別名稱`：`class` 的名稱 與 `TABLE NAME` 相同。
 
 - `屬性`：必須針對 `TABLE` 進行設計 且 `TABLE` 必須要有 `Primary Key`。
   如果 TABLE 中沒有 `Primary Key`，你也必須 決定 `那些組合起來是 Primary Key`。
@@ -31,12 +31,14 @@
     - `Double`：對應資料庫的 `float`。
     
     - `LocalDateTime`：對應資料庫的 `datetime`。
-    
-    - `建構式`：必須要有 `無參數建構式`。 (透過 IDE 生成)
-    
-    - `getting` 和 `setting`：透過 IDE 生成
-    
-    - `equals` 和 `hashCode`：必須針對 `主鍵` 建立。 (透過 IDE 生成)
+  
+  - `建構式`：必須要有 `無參數建構式`。 (透過 IDE 生成)
+  
+  - `getting` 和 `setting`：透過 IDE 生成
+  
+  - `equals` 和 `hashCode`：必須針對 `主鍵` 建立。 (透過 IDE 生成)
+
+---
 
 ## 建立 單一主鍵 entity
 
@@ -57,7 +59,7 @@ CREATE TABLE IF NOT EXISTS clnt (
 
 接著 讓我們 實際來建立 單一主鍵的 entity
 
-1. 首先 讓我們 創立 `entity` 資料夾，並新增一個檔案 `Clnt.java`。
+1. 首先 讓我們 創立 `entity` 資料夾，並新增檔案 `Clnt.java`。
 
 2. 開啟 `Clnt.java`，並依照下面範例 新增相關程式。
    
@@ -153,6 +155,8 @@ public class Clnt implements Serializable {
     }
 }
 ```
+
+---
 
 ## 建立 多重主鍵 entity
 

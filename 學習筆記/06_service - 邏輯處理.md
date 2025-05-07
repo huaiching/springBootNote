@@ -1,12 +1,11 @@
 # service - 邏輯處理
 
-`service` 負責擺放 `邏輯相關程式` 的地方。
+`service` 資料夾負責存放與邏輯處理相關的程式碼。
 
-目前 較常見的設計模式 會將 `邏輯方法` 和 `邏輯方法的實作` 分開撰寫
+在現代軟體設計中，我們常將「邏輯方法」與其「實作」分開撰寫。這種做法有助於維護與擴展，並促進程式碼的解耦。
 
-- `外層`：撰寫 `interface` 負責定義 `邏輯方法`。
-
-- `內層`：繼承 `外層` 的 `interface` 並定義 `實作方法`。
+- **外層**：創建 `interface` 來定義邏輯方法。
+- **內層**：實作 `interface` 並提供具體的邏輯實現。
 
 ```textile
 java
@@ -16,6 +15,8 @@ java
 │   ├─ 📁impl
 │      ├─ 📄ServiceServiceImpl.java
 ```
+
+---
 
 ## 建立 Service
 
@@ -30,7 +31,9 @@ java
 
 2. 開啟 `User.java`，並依照下面範例 新增相關程式。
    
-   - 這裡我們 建立 兩種方法，允許 `傳遞整個物件` 或 `個別給 ID 和 名稱`。
+   - 這裡我們 建立 兩種方法：
+     - 傳遞整個 `User` 物件，並產出 使用者資訊 文字訊息。
+     - 傳遞 `userId` 和 `userName`，並產出 使用者資訊 文字訊息。
    
    ```java
    import com.example.api.dto.User;
@@ -55,13 +58,13 @@ java
    }
    ```
 
-3. 接者 讓我們在 `service` 處，新增資料夾 `impl`，並新增一個檔案 `SampleServiceImpl.java`。
+3. **建立 `impl` 資料夾**，並在其中新增一個檔案 `SampleServiceImpl.java`。
 
 4. 開啟 `SampleServiceImpl.java`，並依照下面範例 撰寫 `實作方法`。
    
-   - 必須要 `繼承` 剛才的 `SampleService`，因為這裡我們要寫 `實作方法`。
+   - 需要 `implements` 來實作 `SampleService` 介面中的方法。
    
-   - `@Service`：標示 檔案是 邏輯處理文件。
+   - 使用 `@Service` 註解來標示此類別為邏輯處理的實作類。
    
    ```java
    import com.example.api.dto.User;
