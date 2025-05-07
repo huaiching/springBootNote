@@ -1250,9 +1250,9 @@ pre[class*="language-"] {
 <body>
   <article class="markdown-body"><h1 class="atx" id="entity---jpa-的-資料傳輸物件">entity - JPA 的 資料傳輸物件</h1>
 <p><code>entity</code> 資料夾 是負責擺放 <code>JPA</code> 的 <code>資料傳輸物件</code>。</p>
-<p>基本上 可以視為 <code>dto</code> 的延伸，但是需要加上 <code>JPA</code> 的特殊規定。</p>
+<p>基本上 可以視為 <code>dto</code> 的延伸，但它有 <code>JPA</code> 特有的規範與特性。</p>
 <ul>
-<li><p><code>方法名</code>：<code>class</code> 的名稱 與 <code>TABLE NAME</code> 相同。</p>
+<li><p><code>類別名稱</code>：<code>class</code> 的名稱 與 <code>TABLE NAME</code> 相同。</p>
 </li>
 <li><p><code>屬性</code>：必須針對 <code>TABLE</code> 進行設計 且 <code>TABLE</code> 必須要有 <code>Primary Key</code>。
 如果 TABLE 中沒有 <code>Primary Key</code>，你也必須 決定 <code>那些組合起來是 Primary Key</code>。
@@ -1281,6 +1281,8 @@ pre[class*="language-"] {
 </li>
 <li><p><code>LocalDateTime</code>：對應資料庫的 <code>datetime</code>。</p>
 </li>
+</ul>
+</li>
 <li><p><code>建構式</code>：必須要有 <code>無參數建構式</code>。 (透過 IDE 生成)</p>
 </li>
 <li><p><code>getting</code> 和 <code>setting</code>：透過 IDE 生成</p>
@@ -1290,8 +1292,7 @@ pre[class*="language-"] {
 </ul>
 </li>
 </ul>
-</li>
-</ul>
+<hr>
 <h2 class="atx" id="建立-單一主鍵-entity">建立 單一主鍵 entity</h2>
 <p>之前 我們建立了一個 單一主鍵的 table <code>clnt</code>，</p>
 <p>雖然這個 table 沒有 <code>primary key</code>
@@ -1305,7 +1306,7 @@ pre[class*="language-"] {
 <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>接著 讓我們 實際來建立 單一主鍵的 entity</p>
 <ol>
-<li><p>首先 讓我們 創立 <code>entity</code> 資料夾，並新增一個檔案 <code>Clnt.java</code>。</p>
+<li><p>首先 讓我們 創立 <code>entity</code> 資料夾，並新增檔案 <code>Clnt.java</code>。</p>
 </li>
 <li><p>開啟 <code>Clnt.java</code>，並依照下面範例 新增相關程式。</p>
 <ul>
@@ -1407,6 +1408,7 @@ pre[class*="language-"] {
         <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">hash</span><span class="token punctuation">(</span>clinetId<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
+<hr>
 <h2 class="atx" id="建立-多重主鍵-entity">建立 多重主鍵 entity</h2>
 <p>之前 我們建立了一個 多重主鍵的 table <code>addr</code>，</p>
 <p>雖然這個 table 沒有 <code>primary key</code>

@@ -1249,9 +1249,10 @@ pre[class*="language-"] {
 </head>
 <body>
   <article class="markdown-body"><h1 class="atx" id="controller---api-對外接口">controller - API 對外接口</h1>
-<p><code>controller</code> 負責擺放 <code>API對外接口</code> 的資料夾。</p>
-<p>在這裡面，我們會設定 <code>API 的請求與回應</code>。</p>
-<p>目前 較常見的設計模式 會將 <code>路由處理</code> 和 <code>邏輯處理</code> 做適當切割，讓 controller 專注於處理請求格式與回傳格式。</p>
+<p><code>controller</code> 資料夾負責擺放 <code>API 的對外接口</code> 程式碼。</p>
+<p>在這裡，我們會設計 <code>API 的請求與回應處理</code>，並將 邏輯處理 交給 <code>service</code> 負責，
+讓 controller 專注於處理請求格式與回傳格式。</p>
+<hr>
 <h2 class="atx" id="建立-controller">建立 controller</h2>
 <p>接下來，讓我們為 剛才設計的 <code>service</code> 設計 <code>API 對外接口</code>。</p>
 <ol>

@@ -7,8 +7,6 @@
 
 ---
 
-
-
 ## 建立 controller
 
 接下來，讓我們為 剛才設計的 `service` 設計 `API 對外接口`。

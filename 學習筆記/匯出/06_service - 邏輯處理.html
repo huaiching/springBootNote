@@ -1249,13 +1249,11 @@ pre[class*="language-"] {
 </head>
 <body>
   <article class="markdown-body"><h1 class="atx" id="service---邏輯處理">service - 邏輯處理</h1>
-<p><code>service</code> 負責擺放 <code>邏輯相關程式</code> 的地方。</p>
-<p>目前 較常見的設計模式 會將 <code>邏輯方法</code> 和 <code>邏輯方法的實作</code> 分開撰寫</p>
+<p><code>service</code> 資料夾負責存放與邏輯處理相關的程式碼。</p>
+<p>在現代軟體設計中，我們常將「邏輯方法」與其「實作」分開撰寫。這種做法有助於維護與擴展，並促進程式碼的解耦。</p>
 <ul>
-<li><p><code>外層</code>：撰寫 <code>interface</code> 負責定義 <code>邏輯方法</code>。</p>
-</li>
-<li><p><code>內層</code>：繼承 <code>外層</code> 的 <code>interface</code> 並定義 <code>實作方法</code>。</p>
-</li>
+<li><strong>外層</strong>：創建 <code>interface</code> 來定義邏輯方法。</li>
+<li><strong>內層</strong>：實作 <code>interface</code> 並提供具體的邏輯實現。</li>
 </ul>
 <pre><code class="fenced-code-block language-textile"><span class="token phrase">java
 ├─ 📄Application.java
@@ -1263,6 +1261,7 @@ pre[class*="language-"] {
 │   ├─ 📄SampleService.java
 │   ├─ 📁impl
 │      ├─ 📄ServiceServiceImpl.java</span></code></pre>
+<hr>
 <h2 class="atx" id="建立-service">建立 Service</h2>
 <p>接下來，讓我們為 <code>User</code> 設計一個 邏輯處理。</p>
 <pre><code class="fenced-code-block language-textile"><span class="token phrase">目標：
@@ -1272,7 +1271,11 @@ pre[class*="language-"] {
 </li>
 <li><p>開啟 <code>User.java</code>，並依照下面範例 新增相關程式。</p>
 <ul>
-<li>這裡我們 建立 兩種方法，允許 <code>傳遞整個物件</code> 或 <code>個別給 ID 和 名稱</code>。</li>
+<li>這裡我們 建立 兩種方法：<ul>
+<li>傳遞整個 <code>User</code> 物件，並產出 使用者資訊 文字訊息。</li>
+<li>傳遞 <code>userId</code> 和 <code>userName</code>，並產出 使用者資訊 文字訊息。</li>
+</ul>
+</li>
 </ul>
 <pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">User</span><span class="token punctuation">;</span>
 
@@ -1295,13 +1298,13 @@ pre[class*="language-"] {
 
 <span class="token punctuation">}</span></code></pre>
 </li>
-<li><p>接者 讓我們在 <code>service</code> 處，新增資料夾 <code>impl</code>，並新增一個檔案 <code>SampleServiceImpl.java</code>。</p>
+<li><p><strong>建立 <code>impl</code> 資料夾</strong>，並在其中新增一個檔案 <code>SampleServiceImpl.java</code>。</p>
 </li>
 <li><p>開啟 <code>SampleServiceImpl.java</code>，並依照下面範例 撰寫 <code>實作方法</code>。</p>
 <ul>
-<li><p>必須要 <code>繼承</code> 剛才的 <code>SampleService</code>，因為這裡我們要寫 <code>實作方法</code>。</p>
+<li><p>需要 <code>implements</code> 來實作 <code>SampleService</code> 介面中的方法。</p>
 </li>
-<li><p><code>@Service</code>：標示 檔案是 邏輯處理文件。</p>
+<li><p>使用 <code>@Service</code> 註解來標示此類別為邏輯處理的實作類。</p>
 </li>
 </ul>
 <pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>dto<span class="token punctuation">.</span></span><span class="token class-name">User</span><span class="token punctuation">;</span>
