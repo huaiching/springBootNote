@@ -2,6 +2,12 @@
 
 H2 資料庫 是一個 可以透過 Spring Initializr 進行安裝 的 輕量級資料庫。
 
+---
+
+
+
+
+
 ## 設定 配置文件
 
 開啟 `application.properties` 文件 進行以下設定

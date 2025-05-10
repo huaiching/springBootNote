@@ -1,5 +1,13 @@
-package com.example.api.util;
+# 報表 - ResponseEntity 工具
 
+這個 ResponseEntity 是針對 檔案下載 API 進行設計，
+檔名 放置於 `Header` 的 `content-disposition` 傳輸給前端使用。
+
+---
+
+## 工具
+
+```java
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -32,3 +40,4 @@ public class ExportReponseUtil {
                 .body(resource);
     }
 }
+```
