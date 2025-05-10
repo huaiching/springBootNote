@@ -134,7 +134,7 @@ public enum SexEnum {
      * @param code 要查詢的代碼
      * @return 代碼對應的 Enum
      */
-    public SexEnum getEnumByCode(String code) {
+    public static SexEnum getEnumByCode(String code) {
         for (SexEnum sexEnum : SexEnum.values()) {
             if (sexEnum.getCode().equals(code)) {
                 return sexEnum;

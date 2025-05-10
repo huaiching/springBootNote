@@ -37,7 +37,7 @@ public enum SexEnum {
      * @param code 要查詢的代碼
      * @return 代碼對應的 Enum
      */
-    public SexEnum getEnumByCode(String code) {
+    public static SexEnum getEnumByCode(String code) {
         for (SexEnum sexEnum : SexEnum.values()) {
             if (sexEnum.getCode().equals(code)) {
                 return sexEnum;
@@ -51,7 +51,7 @@ public enum SexEnum {
      * @param code 要查詢的代碼
      * @return 對應的中文
      */
-    public String getDescByCode(String code) {
+    public static String getDescByCode(String code) {
         SexEnum sexEnum = getEnumByCode(code);
         if (sexEnum != null) {
             return sexEnum.getDesc();
