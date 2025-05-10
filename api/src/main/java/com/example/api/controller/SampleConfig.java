@@ -2,6 +2,7 @@ package com.example.api.controller;
 
 import com.example.api.dto.User;
 import com.example.api.service.SampleService;
+import com.example.api.util.ExportTxtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,19 @@ public class SampleConfig {
     @GetMapping("/showUserGetVariable/{userId}/{userName}")
     public ResponseEntity<String> showUserGetVariable(@PathVariable Long userId, @PathVariable String userName){
         String msg = sampleService.showUser(userId, userName);
+        return ResponseEntity.ok(msg);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test(@RequestParam String original, @RequestParam int start, @RequestParam int end){
+        String msg = ExportTxtUtil.substring(original, start, end);
+        return ResponseEntity.ok(msg);
+    }
+
+
+    @GetMapping("/test2")
+    public ResponseEntity<String> test2(@RequestParam String originalString, @RequestParam String insertString, @RequestParam int startBytePos){
+        String msg = ExportTxtUtil.overwrite(originalString, insertString, startBytePos);
         return ResponseEntity.ok(msg);
     }
 }
