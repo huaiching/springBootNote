@@ -1,9 +1,7 @@
 package com.example.api.controller;
 
-import com.example.api.entity.Clnt;
 import com.example.api.service.ExportService;
 import com.example.api.util.ExportReponseUtil;
-import com.example.api.util.ExportWordUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

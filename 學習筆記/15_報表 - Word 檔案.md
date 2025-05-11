@@ -213,6 +213,8 @@ public class ExportWordUtil {
   
   - 再配合 樣版檔變數，設定 context。
   
+  - 最後透過 工具(util) 執行。
+  
   ```java
   @Service
   public class ExportServiceImpl implements ExportService {

@@ -6,7 +6,7 @@
   使用套件 `fr.opensagres.poi.xwpf.converter.pdf`
 
 - PDF 檔案合併：
-  使用套件 `openPDF`
+  使用套件 `openPDF` 或 `itextpdf`
 
 ```xml
         <!-- fr.opensagres.poi.xwpf.converter.pdf -->
@@ -22,6 +22,13 @@
             <artifactId>openpdf</artifactId>
             <version>1.0.5</version>
         </dependency>
+        
+		<!-- itextpdf -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.13.2</version>
+		</dependency>
 ```
 
 ## 工具
@@ -109,3 +116,69 @@ public class ExportPdfUtil {
     }
 }
 ```
+
+## 範例 - Word 轉成 PDF
+
+先透過 poi-tl 產生 word 檔，在將其轉換為 PDF。
+
+- Service
+  
+  ```java
+  @Service
+  public class ExportServiceImpl implements ExportService {
+      @Autowired
+      private ClntRepository clntRepository;
+  
+      /**
+       * 單筆列印客戶證號明細表
+       *
+       * @param clientId 客戶證號
+       * @return
+       */
+      @Override
+      public byte[] wordTest(String clientId) {
+          Clnt clnt = clntRepository.findById(clientId).get();
+  
+          Map<String, Object> context = new HashMap<>();
+          context.put("names", clnt.getNames());
+          context.put("clientId", clnt.getClientId());
+          context.put("sex", SexEnum.getDescByCode(clnt.getSex()));
+  
+          return ExportWordUtil.generateWord("/templates/sample.docx", context);
+      }
+  
+      /**
+       * 列印單筆客戶證號明細表 並轉成 PDF
+       *
+       * @param clientId 客戶證號
+       * @return
+       */
+      @Override
+      public byte[] wordToPdf(String clientId) {
+          var wordFile = wordTest(clientId);
+          return ExportPdfUtil.wordToPDF(wordFile);
+      }
+  }
+  ```
+
+- Controller
+  
+  ```java
+  @RestController
+  @Tag(name = "PDF 報表匯出測試")
+  @RequestMapping("/export/pdf")
+  public class ExportPDFController {
+      @Autowired
+      private ExportService exportService;
+  
+      @Operation(summary = "Word 轉成 PDF",
+              description = "Word 轉成 PDF",
+              operationId = "wordToPDF")
+      @GetMapping("/wordToPDF")
+      public ResponseEntity<Resource> wordToPDF(@RequestParam String clientId) {
+  
+          var file = exportService.wordToPdf(clientId);
+          return ExportReponseUtil.responseEntity("客戶證號明細表.pdf", file);
+      }
+  }
+  ```

@@ -8,4 +8,19 @@ public interface ExportService {
      * @return
      */
     byte[] wordTest(String clientId);
+
+
+    /**
+     * 列印單筆客戶證號明細表 並轉成 PDF
+     * @param clientId 客戶證號
+     * @return
+     */
+    byte[] wordToPdf(String clientId);
+
+    /**
+     * Excel 的 Grid 動態資料
+     * @param clientId 客戶證號
+     * @return
+     */
+    byte[] excelGrid(String clientId);
 }

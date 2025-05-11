@@ -4,12 +4,14 @@ import com.example.api.constants.SexEnum;
 import com.example.api.entity.Clnt;
 import com.example.api.repository.ClntRepository;
 import com.example.api.service.ExportService;
+import com.example.api.util.ExportExcelUtil;
+import com.example.api.util.ExportPdfUtil;
 import com.example.api.util.ExportWordUtil;
+import org.jxls.common.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ExportServiceImpl implements ExportService {
@@ -32,5 +34,49 @@ public class ExportServiceImpl implements ExportService {
         context.put("sex", SexEnum.getDescByCode(clnt.getSex()));
 
         return ExportWordUtil.generateWord("/templates/sample.docx", context);
+    }
+
+    /**
+     * 列印單筆客戶證號明細表 並轉成 PDF
+     *
+     * @param clientId 客戶證號
+     * @return
+     */
+    @Override
+    public byte[] wordToPdf(String clientId) {
+        var wordFile = wordTest(clientId);
+        return ExportPdfUtil.wordToPDF(wordFile);
+    }
+
+    /**
+     * Excel 的 Grid 動態資料
+     *
+     * @param clientId 客戶證號
+     * @return
+     */
+    @Override
+    public byte[] excelGrid(String clientId) {
+        List<Clnt> clntList = clntRepository.findAllById(Arrays.asList(clientId));
+        // 設定 headers
+        List<String> headers = Arrays.asList("姓名", "客戶證號", "性別");
+        // 設定 數據集合
+        // 1. 要用兩層 List 進行封裝
+        // 2. add 的順序 = 資料顯示的順序
+        List<List<Object>> dataList = new ArrayList<>();
+        for (Clnt clnt : clntList) {
+            List<Object> data = new ArrayList<>();
+            data.add(clnt.getNames());
+            data.add(clnt.getClientId());
+            data.add(SexEnum.getDescByCode(clnt.getSex()));
+            dataList.add(data);
+        }
+
+        // 設定 資料內容
+        Context context = new Context();
+        context.putVar("title", "Grid 測試表格");
+        context.putVar("headers", headers);
+        context.putVar("dataList", dataList);
+
+        return ExportExcelUtil.generateExcel("/templates/sampleGrid.xlsx", context);
     }
 }
