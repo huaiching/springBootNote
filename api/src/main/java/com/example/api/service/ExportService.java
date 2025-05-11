@@ -19,8 +19,8 @@ public interface ExportService {
 
     /**
      * Excel 的 Grid 動態資料
-     * @param clientId 客戶證號
+     *
      * @return
      */
-    byte[] excelGrid(String clientId);
+    byte[] excelGrid();
 }

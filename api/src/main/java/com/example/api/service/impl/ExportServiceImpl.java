@@ -51,12 +51,11 @@ public class ExportServiceImpl implements ExportService {
     /**
      * Excel 的 Grid 動態資料
      *
-     * @param clientId 客戶證號
      * @return
      */
     @Override
-    public byte[] excelGrid(String clientId) {
-        List<Clnt> clntList = clntRepository.findAllById(Arrays.asList(clientId));
+    public byte[] excelGrid() {
+        List<Clnt> clntList = clntRepository.findAll();
         // 設定 headers
         List<String> headers = Arrays.asList("姓名", "客戶證號", "性別");
         // 設定 數據集合

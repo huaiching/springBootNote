@@ -23,8 +23,8 @@ public class ExportExcelController {
             description = "Excel 報表測試: Grid 動態表格",
             operationId = "excelGrid")
     @GetMapping("/excelGrid")
-    public ResponseEntity<Resource> excelGrid(@RequestParam String clientId) {
-        var file = exportService.excelGrid(clientId);
+    public ResponseEntity<Resource> excelGrid() {
+        var file = exportService.excelGrid();
         return ExportReponseUtil.responseEntity("Grid測試表格.xlsx", file);
     }
 }
