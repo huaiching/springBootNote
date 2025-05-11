@@ -63,14 +63,32 @@
 
 ## 工具
 
+此工具為 JXLS 產生 Excel 檔案的語法，共提供兩種方法：
+
+- 參數為 `Context` 的方法，針對 一組資料 的套印方法。
+
+- 參數為 `Map<String, Context>` 的方法，針對 多組資料的套印方法。
+  ***此方法可用 groupBy 功能取代***
+  
+  - **key**：該組的 分頁名稱
+  
+  - **value**：該組的 資料內容
+
 ```java
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jxls.common.Context;
 import org.jxls.util.JxlsHelper;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.CollectionUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Excel 匯出工具 (使用 JXLS 2)
@@ -80,14 +98,14 @@ public class ExportExcelUtil {
     /**
      * 產生 Excel 檔案
      *
-     * @param modelFile 樣板檔案路徑（相對於 classpath，例如 "templates/sample_template.xlsx"）
+     * @param modelFile 樣版檔案路徑（相對於 classpath，例如 "templates/sample_template.xlsx"）
      * @param context   JXLS Context，包含資料模型與變數（例如 context.putVar("users", userList)）
      * @return 產出的 Excel 檔案資料流（byte[]）
      */
     public static byte[] generateExcel(String modelFile, Context context) {
         // 參數驗證
         if (StringUtils.isEmpty(modelFile)) {
-            throw new RuntimeException("樣板路徑 不可空白!!");
+            throw new RuntimeException("樣版路徑 不可空白!!");
         }
         if (context == null) {
             throw new RuntimeException("資料內容 不可空白!!");
@@ -95,13 +113,13 @@ public class ExportExcelUtil {
 
         // 產生檔案
         try (
-                // 讀取 classpath 下的樣板 Excel 檔案
+                // 讀取 classpath 下的樣版 Excel 檔案
                 InputStream inputStream = new ClassPathResource(modelFile).getInputStream();
 
                 // 建立輸出流，用來儲存產生的 Excel 內容
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
         ) {
-            // 處理 Excel 樣板，產生新的 Excel 並寫入 outputStream
+            // 處理 Excel 樣版，產生新的 Excel 並寫入 outputStream
             JxlsHelper.getInstance()
                     .setEvaluateFormulas(true) // 啟用 Excel 公式自動計算
                     .processTemplate(inputStream, outputStream, context);
@@ -110,8 +128,140 @@ public class ExportExcelUtil {
             return outputStream.toByteArray();
 
         } catch (Exception e) {
-            throw new RuntimeException("Excel 產生失敗，樣板路徑: " + modelFile, e);
+            throw new RuntimeException("Excel 產生失敗，樣版路徑: " + modelFile, e);
         }
+    }
+
+    /**
+     * 產生 Excel 檔案 (多組資料 + 單一資料表)
+     *
+     * @param modelFile 樣版檔案路徑（相對於 classpath，例如 "templates/sample_template.xlsx"）
+     * @param dataList 資料內容 清單 (Map key = 分頁名稱 / Map value = context)
+     * @return
+     */
+    public static byte[] generateExcel(String modelFile, Map<String, Context> dataList) {
+        // 參數驗證
+        if (StringUtils.isEmpty(modelFile)) {
+            throw new RuntimeException("樣版路徑 不可空白!!");
+        }
+        if (CollectionUtils.isEmpty(dataList)) {
+            throw new RuntimeException("資料內容 不可空白!!");
+        }
+
+        try (
+                Workbook mergedWorkbook = new XSSFWorkbook();
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
+        ) {
+
+            int i = 0;
+            for (Map.Entry<String, Context> data : dataList.entrySet()) {
+                // 取得資料
+                String sheetName = data.getKey();
+                Context context = data.getValue();
+                // 產生檔案
+                byte[]  file = generateExcel(modelFile, context);
+                // 合併資料
+                try (InputStream inputStream = new ByteArrayInputStream(file);
+                     Workbook workbook = WorkbookFactory.create(inputStream)) {
+
+                    // 取得第一個工作表
+                    Sheet originalSheet = workbook.getSheetAt(0);
+
+                    // 建立新工作表
+                    sheetName = sheetName != null ? sheetName : "Sheet" + (i + 1);
+                    Sheet newSheet = mergedWorkbook.createSheet(sheetName);
+
+                    // 複製工作表內容
+                    copySheet(mergedWorkbook, originalSheet, newSheet);
+                }
+                // 計數
+                i++;
+            }
+
+            mergedWorkbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("Excel 產生失敗，樣版路徑: " + modelFile, e);
+        }
+    }
+
+    /**
+     * 複製工作表內容 (包含合併儲存格)
+     */
+    private static void copySheet(Workbook mergedWorkbook, Sheet originalSheet, Sheet newSheet) {
+        // 1. 先處理合併儲存格區域
+        copyMergedRegions(originalSheet, newSheet);
+
+        // 2. 複製欄寬設定
+        for (int i = 0; i < originalSheet.getRow(0).getLastCellNum(); i++) {
+            newSheet.setColumnWidth(i, originalSheet.getColumnWidth(i));
+        }
+
+        // 3. 複製每一行
+        for (int i = 0; i <= originalSheet.getLastRowNum(); i++) {
+            Row originalRow = originalSheet.getRow(i);
+            if (originalRow == null) {
+                continue;
+            }
+
+            Row newRow = newSheet.createRow(i);
+
+            // 4. 複製每個儲存格
+            for (int j = 0; j < originalRow.getLastCellNum(); j++) {
+                Cell originalCell = originalRow.getCell(j);
+                if (originalCell == null) {
+                    continue;
+                }
+
+                Cell newCell = newRow.createCell(j);
+                copyCellValue(originalCell, newCell);
+                copyCellStyle(mergedWorkbook, originalCell, newCell);
+            }
+        }
+    }
+
+    /**
+     * 複製合併儲存格區域
+     */
+    private static void copyMergedRegions(Sheet originalSheet, Sheet newSheet) {
+        // 取得原始工作表的所有合併區域
+        List<CellRangeAddress> mergedRegions = originalSheet.getMergedRegions();
+
+        // 將每個合併區域複製到新工作表
+        for (CellRangeAddress mergedRegion : mergedRegions) {
+            newSheet.addMergedRegion(mergedRegion);
+        }
+    }
+
+    /**
+     * 複製儲存格值
+     */
+    private static void copyCellValue(Cell originalCell, Cell newCell) {
+        switch (originalCell.getCellType()) {
+            case NUMERIC:
+                newCell.setCellValue(originalCell.getNumericCellValue());
+                break;
+            case BOOLEAN:
+                newCell.setCellValue(originalCell.getBooleanCellValue());
+                break;
+            case FORMULA:
+                newCell.setCellFormula(originalCell.getCellFormula());
+                break;
+            case BLANK:
+                newCell.setBlank();
+                break;
+            default:
+                newCell.setCellValue(originalCell.getStringCellValue());
+        }
+    }
+
+    /**
+     * 複製儲存格樣式
+     */
+    private static void copyCellStyle(Workbook mergedWorkbook, Cell originalCell, Cell newCell) {
+        CellStyle newCellStyle = mergedWorkbook.createCellStyle();
+        newCellStyle.cloneStyleFrom(originalCell.getCellStyle());
+        newCell.setCellStyle(newCellStyle);
     }
 }
 ```
@@ -190,14 +340,14 @@ public class ExportExcelUtil {
 - Controller
   
   ```java
-      @Operation(summary = "Excel 報表測試: Each 遞迴表格",
-              description = "Excel 報表測試: Each 遞迴表格",
-              operationId = "excelEach")
-      @GetMapping("/excelEach")
-      public ResponseEntity<Resource> excelEach(@RequestParam String clientId) {
-          var file = exportService.excelEach(clientId);
-          return ExportReponseUtil.responseEntity("Grid測試表格.xlsx", file);
-      }
+    @Operation(summary = "Excel 報表測試: Each 遞迴表格",
+            description = "Excel 報表測試: Each 遞迴表格",
+            operationId = "excelEach")
+    @GetMapping("/excelEach")
+    public ResponseEntity<Resource> excelEach(@RequestParam String clientId) {
+        var file = exportService.excelEach(clientId);
+        return ExportReponseUtil.responseEntity("Each測試表格.xlsx", file);
+    }
   ```
 
 - 成果

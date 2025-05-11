@@ -25,7 +25,16 @@ public class ExportExcelController {
     @GetMapping("/excelEach")
     public ResponseEntity<Resource> excelEach(@RequestParam String clientId) {
         var file = exportService.excelEach(clientId);
-        return ExportReponseUtil.responseEntity("Grid測試表格.xlsx", file);
+        return ExportReponseUtil.responseEntity("Each測試表格.xlsx", file);
+    }
+
+    @Operation(summary = "Excel 報表測試: Each 遞迴表格 多資料",
+            description = "Excel 報表測試: Each 遞迴表格 多資料",
+            operationId = "excelEachAll")
+    @GetMapping("/excelEachAll")
+    public ResponseEntity<Resource> excelEachAll() {
+        var file = exportService.excelEachAll();
+        return ExportReponseUtil.responseEntity("Each測試表格(多檔).xlsx", file);
     }
 
     @Operation(summary = "Excel 報表測試: Grid 動態表格",

@@ -73,6 +73,30 @@ public class ExportServiceImpl implements ExportService {
     }
 
     /**
+     * Excel 的 Each 遞迴資料
+     *
+     * @return
+     */
+    @Override
+    public byte[] excelEachAll() {
+        List<Clnt> clntList = clntRepository.findAll();
+        Map<String, Context> dataMap = new HashMap<>();
+        for (Clnt clnt : clntList) {
+            List<Addr> addrList = addrRepository.findByClientId(clnt.getClientId());
+            System.out.println(clnt.getClientId());
+            // 設定 資料內容
+            Context context = new Context();
+            context.putVar("clientId", clnt.getClientId());
+            context.putVar("names", clnt.getNames());
+            context.putVar("addr", addrList);
+
+            dataMap.put(clnt.getNames(), context);
+        }
+
+        return ExportExcelUtil.generateExcel("/templates/sampleEach.xlsx", dataMap);
+    }
+
+    /**
      * Excel 的 Grid 動態資料
      *
      * @return

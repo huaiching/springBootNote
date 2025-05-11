@@ -26,6 +26,13 @@ public interface ExportService {
     byte[] excelEach(String clientId);
 
     /**
+     * Excel 的 Each 遞迴資料
+     *
+     * @return
+     */
+    byte[] excelEachAll();
+
+    /**
      * Excel 的 Grid 動態資料
      *
      * @return
