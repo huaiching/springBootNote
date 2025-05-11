@@ -63,18 +63,24 @@
 
 ## 工具
 
-此工具為 JXLS 產生 Excel 檔案的語法，共提供兩種方法：
-
-- 參數為 `Context` 的方法，針對 一組資料 的套印方法。
-
-- 參數為 `Map<String, Context>` 的方法，針對 多組資料的套印方法。
-  ***此方法可用 groupBy 功能取代***
+- `generateExcel`
+  產生 Excel 檔案
   
-  - **key**：該組的 分頁名稱
+  - 參數為 `Context` 的方法，針對 一組資料 的套印方法。
   
-  - **value**：該組的 資料內容
+  - 參數為 `Map<String, Context>` 的方法，針對 多組資料的套印方法。
+    ***此方法可用 groupBy 功能取代***
+    
+    - **key**：該組的 分頁名稱
+    
+    - **value**：該組的 資料內容
+
+- `mergeExcel`
+  Excel 檔案合併 (針對一個工作表的檔案)
 
 ```java
+package com.example.api.util;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -133,7 +139,7 @@ public class ExportExcelUtil {
     }
 
     /**
-     * 產生 Excel 檔案 (多組資料 + 單一資料表)
+     * 產生 Excel 檔案 (多檔 + 單一資料表)
      *
      * @param modelFile 樣版檔案路徑（相對於 classpath，例如 "templates/sample_template.xlsx"）
      * @param dataList 資料內容 清單 (Map key = 分頁名稱 / Map value = context)
@@ -182,6 +188,53 @@ public class ExportExcelUtil {
             return outputStream.toByteArray();
         } catch (Exception e) {
             throw new RuntimeException("Excel 產生失敗，樣版路徑: " + modelFile, e);
+        }
+    }
+
+    /**
+     * Excel 檔案合併 (針對一個工作表的檔案)
+     *
+     * @param fileList 資料內容 清單 (Map key = 檔案名稱 / Map value = 檔案資料流)
+     * @return
+     */
+    public static byte[] mergeExcel(Map<String, byte[]> fileList) {
+        // 參數驗證
+        if (CollectionUtils.isEmpty(fileList)) {
+            throw new RuntimeException("檔案清單 不可空白!!");
+        }
+
+        try (
+                Workbook mergedWorkbook = new XSSFWorkbook();
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
+        ) {
+
+            int i = 0;
+            for (Map.Entry<String, byte[]> data : fileList.entrySet()) {
+                // 取得資料
+                String fileName = data.getKey();
+                byte[] fileData = data.getValue();
+                // 合併資料
+                try (InputStream inputStream = new ByteArrayInputStream(fileData);
+                     Workbook workbook = WorkbookFactory.create(inputStream)) {
+
+                    // 取得第一個工作表
+                    Sheet originalSheet = workbook.getSheetAt(0);
+
+                    // 建立新工作表
+                    fileName = fileName != null ? fileName : "Sheet" + (i + 1);
+                    Sheet newSheet = mergedWorkbook.createSheet(fileName);
+
+                    // 複製工作表內容
+                    copySheet(mergedWorkbook, originalSheet, newSheet);
+                }
+                // 計數
+                i++;
+            }
+
+            mergedWorkbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("Excel 產生失敗", e);
         }
     }
 

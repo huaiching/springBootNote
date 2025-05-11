@@ -73,7 +73,7 @@ public class ExportServiceImpl implements ExportService {
     }
 
     /**
-     * Excel 的 Each 遞迴資料
+     * Excel 的 Each 遞迴資料 (多筆資料)
      *
      * @return
      */

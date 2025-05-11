@@ -111,6 +111,53 @@ public class ExportExcelUtil {
     }
 
     /**
+     * Excel 檔案合併 (針對一個工作表的檔案)
+     *
+     * @param fileList 資料內容 清單 (Map key = 檔案名稱 / Map value = 檔案資料流)
+     * @return
+     */
+    public static byte[] mergeExcel(Map<String, byte[]> fileList) {
+        // 參數驗證
+        if (CollectionUtils.isEmpty(fileList)) {
+            throw new RuntimeException("檔案清單 不可空白!!");
+        }
+
+        try (
+                Workbook mergedWorkbook = new XSSFWorkbook();
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
+        ) {
+
+            int i = 0;
+            for (Map.Entry<String, byte[]> data : fileList.entrySet()) {
+                // 取得資料
+                String fileName = data.getKey();
+                byte[] fileData = data.getValue();
+                // 合併資料
+                try (InputStream inputStream = new ByteArrayInputStream(fileData);
+                     Workbook workbook = WorkbookFactory.create(inputStream)) {
+
+                    // 取得第一個工作表
+                    Sheet originalSheet = workbook.getSheetAt(0);
+
+                    // 建立新工作表
+                    fileName = fileName != null ? fileName : "Sheet" + (i + 1);
+                    Sheet newSheet = mergedWorkbook.createSheet(fileName);
+
+                    // 複製工作表內容
+                    copySheet(mergedWorkbook, originalSheet, newSheet);
+                }
+                // 計數
+                i++;
+            }
+
+            mergedWorkbook.write(outputStream);
+            return outputStream.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("Excel 產生失敗", e);
+        }
+    }
+
+    /**
      * 複製工作表內容 (包含合併儲存格)
      */
     private static void copySheet(Workbook mergedWorkbook, Sheet originalSheet, Sheet newSheet) {

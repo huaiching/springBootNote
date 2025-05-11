@@ -26,7 +26,7 @@ public interface ExportService {
     byte[] excelEach(String clientId);
 
     /**
-     * Excel 的 Each 遞迴資料
+     * Excel 的 Each 遞迴資料 (多筆資料)
      *
      * @return
      */
