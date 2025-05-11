@@ -26,14 +26,14 @@ public class ExportWordUtil {
     /**
      * 產生 Word 檔案
      *
-     * @param modelFile 樣板路徑（例如："templates/document_template.docx"，位於 classpath）
-     * @param context   資料內容（Map 對應樣板中 {{key}} 欄位）
+     * @param modelFile 樣版路徑（例如："templates/document_template.docx"，位於 classpath）
+     * @param context   資料內容（Map 對應樣版中 {{key}} 欄位）
      * @return 產出的 Word 檔案資料流（byte[]）
      */
     public static byte[] generateWord(String modelFile, Map<String, Object> context) {
         // 參數驗證
         if (StringUtils.isEmpty(modelFile)) {
-            throw new RuntimeException("樣板路徑 不可空白!!");
+            throw new RuntimeException("樣版路徑 不可空白!!");
         }
         if (context == null) {
             throw new RuntimeException("資料內容 不可空白!!");
@@ -44,7 +44,7 @@ public class ExportWordUtil {
                 InputStream inputStream = new ClassPathResource(modelFile).getInputStream();
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
         ) {
-            // 載入樣板並填入資料
+            // 載入樣版並填入資料
             XWPFTemplate template = XWPFTemplate.compile(inputStream).render(context);
 
             // 將結果寫入 outputStream 並關閉資源
@@ -53,7 +53,7 @@ public class ExportWordUtil {
             return outputStream.toByteArray();
 
         } catch (Exception e) {
-            throw new RuntimeException("Word 產生失敗，樣板路徑：" + modelFile, e);
+            throw new RuntimeException("Word 產生失敗，樣版路徑：" + modelFile, e);
         }
     }
 
@@ -61,14 +61,14 @@ public class ExportWordUtil {
     /**
      * 產生 Word 檔案 (合併列印)
      *
-     * @param modelFile 樣板路徑（例如："templates/document_template.docx"，位於 classpath）
-     * @param contextList   資料內容 清單（Map 對應樣板中 {{key}} 欄位）
+     * @param modelFile 樣版路徑（例如："templates/document_template.docx"，位於 classpath）
+     * @param contextList   資料內容 清單（Map 對應樣版中 {{key}} 欄位）
      * @return 產出的 Word 檔案資料流（byte[]）
      */
     public static byte[] generateWord(String modelFile, List<Map<String, Object>> contextList) {
         // 參數驗證
         if (StringUtils.isEmpty(modelFile)) {
-            throw new RuntimeException("樣板路徑 不可空白!!");
+            throw new RuntimeException("樣版路徑 不可空白!!");
         }
         if (CollectionUtils.isEmpty(contextList)) {
             throw new RuntimeException("資料內容 不可空白!!");
@@ -101,7 +101,7 @@ public class ExportWordUtil {
                 mainWord.close();
             }
         } catch (IOException e) {
-            throw new RuntimeException("Word 產生失敗，樣板路徑：" + modelFile, e);
+            throw new RuntimeException("Word 產生失敗，樣版路徑：" + modelFile, e);
         }
     }
 
