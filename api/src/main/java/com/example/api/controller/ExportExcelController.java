@@ -19,6 +19,15 @@ public class ExportExcelController {
     @Autowired
     private ExportService exportService;
 
+    @Operation(summary = "Excel 報表測試: Each 遞迴表格",
+            description = "Excel 報表測試: Each 遞迴表格",
+            operationId = "excelEach")
+    @GetMapping("/excelEach")
+    public ResponseEntity<Resource> excelEach(@RequestParam String clientId) {
+        var file = exportService.excelEach(clientId);
+        return ExportReponseUtil.responseEntity("Grid測試表格.xlsx", file);
+    }
+
     @Operation(summary = "Excel 報表測試: Grid 動態表格",
             description = "Excel 報表測試: Grid 動態表格",
             operationId = "excelGrid")

@@ -18,6 +18,14 @@ public interface ExportService {
     byte[] wordToPdf(String clientId);
 
     /**
+     * Excel 的 Each 遞迴資料
+     * @param clientId 客戶證號
+     *
+     * @return
+     */
+    byte[] excelEach(String clientId);
+
+    /**
      * Excel 的 Grid 動態資料
      *
      * @return

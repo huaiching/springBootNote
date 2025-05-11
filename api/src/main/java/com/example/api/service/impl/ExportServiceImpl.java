@@ -1,7 +1,9 @@
 package com.example.api.service.impl;
 
 import com.example.api.constants.SexEnum;
+import com.example.api.entity.Addr;
 import com.example.api.entity.Clnt;
+import com.example.api.repository.AddrRepository;
 import com.example.api.repository.ClntRepository;
 import com.example.api.service.ExportService;
 import com.example.api.util.ExportExcelUtil;
@@ -17,6 +19,8 @@ import java.util.*;
 public class ExportServiceImpl implements ExportService {
     @Autowired
     private ClntRepository clntRepository;
+    @Autowired
+    private AddrRepository addrRepository;
 
     /**
      * 單筆列印客戶證號明細表
@@ -46,6 +50,26 @@ public class ExportServiceImpl implements ExportService {
     public byte[] wordToPdf(String clientId) {
         var wordFile = wordTest(clientId);
         return ExportPdfUtil.wordToPDF(wordFile);
+    }
+
+    /**
+     * Excel 的 Each 遞迴資料
+     * @param clientId 客戶證號
+     *
+     * @return
+     */
+    @Override
+    public byte[] excelEach(String clientId) {
+        Clnt clnt = clntRepository.findById(clientId).get();
+        List<Addr> addrList = addrRepository.findByClientId(clientId);
+
+        // 設定 資料內容
+        Context context = new Context();
+        context.putVar("clientId", clnt.getClientId());
+        context.putVar("names", clnt.getNames());
+        context.putVar("addr", addrList);
+
+        return ExportExcelUtil.generateExcel("/templates/sampleEach.xlsx", context);
     }
 
     /**
