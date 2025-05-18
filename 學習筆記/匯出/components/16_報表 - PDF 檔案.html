@@ -1248,225 +1248,180 @@ pre[class*="language-"] {
   <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
 <body>
-  <article class="markdown-body"><h1 class="atx" id="util---工具類">util - 工具類</h1>
-<p><code>util</code> 資料夾 擺放 <code>工具類</code> 的程式。</p>
-<h2 class="atx" id="建立-日期處理程式-dateutil">建立 日期處理程式 DateUtil</h2>
-<p>讓我們透過實際演示，來示範工具類程式的撰寫。</p>
-<pre><code class="fenced-code-block language-textile"><span class="token phrase">需求：
-撰寫一個負責 日期處理 的工具類程式，提供其他程式使用。</span></code></pre>
-<ol>
-<li><p>首先 讓我們 創立 <code>util</code> 資料夾，並新增一個檔案 <code>DateUtil.java</code>。</p>
+  <article class="markdown-body"><h1 class="atx" id="報表---pdf-檔案">報表 - PDF 檔案</h1>
+<h2 class="atx" id="安裝依賴">安裝依賴</h2>
+<ul>
+<li><p>Word 轉 PDF：
+使用套件 <code>fr.opensagres.poi.xwpf.converter.pdf</code></p>
 </li>
-<li><p>開啟 <code>DateUtil.java</code>，並依照下面範例 新增相關程式。</p>
+<li><p>PDF 檔案合併：
+使用套件 <code>openPDF</code> 或 <code>itextpdf</code></p>
 </li>
-</ol>
-<pre><code class="fenced-code-block language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DateUtil</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token class-name">String</span> FORMAT_YYYY_MM_DD <span class="token operator">=</span> <span class="token string">"yyyy/MM/dd"</span><span class="token punctuation">;</span>
-    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token class-name">String</span> FORMAT_HH_MM_SS <span class="token operator">=</span> <span class="token string">"HH:mm:ss"</span><span class="token punctuation">;</span>
+</ul>
+<pre><code class="fenced-code-block language-xml">        <span class="token comment">&lt;!-- fr.opensagres.poi.xwpf.converter.pdf --&gt;</span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>fr.opensagres.xdocreport<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>fr.opensagres.poi.xwpf.converter.pdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>2.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+
+        <span class="token comment">&lt;!-- OpenPDF --&gt;</span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>com.github.librepdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>openpdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>1.0.5<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+
+        <span class="token comment">&lt;!-- itextpdf --&gt;</span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>com.itextpdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>itextpdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>5.5.13.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span></code></pre>
+<h2 class="atx" id="工具">工具</h2>
+<ul>
+<li><p>wordToPDF
+功能：Word 轉為 PDF
+輸入：要轉換的 Word 檔
+輸出：轉換後的 PDF 檔</p>
+</li>
+<li><p>mergePDF
+功能：將 多個 PDF 檔 合併為 一個 PDF 檔
+輸入：要合併的 PDF 檔 清單
+輸出：合併後的 PDF 清單</p>
+</li>
+</ul>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span></span><span class="token class-name">Document</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfCopy</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfImportedPage</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfReader</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">fr<span class="token punctuation">.</span>opensagres<span class="token punctuation">.</span>poi<span class="token punctuation">.</span>xwpf<span class="token punctuation">.</span>converter<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfConverter</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">fr<span class="token punctuation">.</span>opensagres<span class="token punctuation">.</span>poi<span class="token punctuation">.</span>xwpf<span class="token punctuation">.</span>converter<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfOptions</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>poi<span class="token punctuation">.</span>xwpf<span class="token punctuation">.</span>usermodel<span class="token punctuation">.</span></span><span class="token class-name">XWPFDocument</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">ByteArrayInputStream</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * PDF 匯出工具
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExportPdfUtil</span> <span class="token punctuation">{</span>
 
     <span class="token comment">/**
-     * 民國年 的 天數增減
-     * @param TwDate 民國年
-     * @param addDate 增減天數
-     * @return 計算後的民國年
+     * word 轉 PDF
+     * (fr.opensagres.poi.xwpf.converter.pdf)
+     *
+     * @param wordFile word 檔
+     * @return 產出的 PDF 檔案資料流（byte[]）
      */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">addDate</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">TwDate</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span> addDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">TwDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">String</span> <span class="token class-name">AdDate</span> <span class="token operator">=</span> <span class="token function">twToAdDate</span><span class="token punctuation">(</span><span class="token class-name">TwDate</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">LocalDate</span> localDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token class-name">AdDate</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">plusDays</span><span class="token punctuation">(</span>addDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">String</span> calAdDate <span class="token operator">=</span> localDate<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span>calAdDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 的 月份增減
-     * @param TwDate 民國年
-     * @param addMonth 增減月份
-     * @return 計算後的民國年
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">addMonth</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">TwDate</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span> addMonth<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">TwDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">String</span> <span class="token class-name">AdDate</span> <span class="token operator">=</span> <span class="token function">twToAdDate</span><span class="token punctuation">(</span><span class="token class-name">TwDate</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">LocalDate</span> localDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token class-name">AdDate</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">plusMonths</span><span class="token punctuation">(</span>addMonth<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">String</span> calAdDate <span class="token operator">=</span> localDate<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span>calAdDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 的 年份增減
-     * @param TwDate 民國年
-     * @param addYear 增減年份
-     * @return 計算後的民國年
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">addYear</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">TwDate</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span> addYear<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">TwDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">String</span> <span class="token class-name">AdDate</span> <span class="token operator">=</span> <span class="token function">twToAdDate</span><span class="token punctuation">(</span><span class="token class-name">TwDate</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">LocalDate</span> localDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token class-name">AdDate</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">plusYears</span><span class="token punctuation">(</span>addYear<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">String</span> calAdDate <span class="token operator">=</span> localDate<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span>calAdDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 轉 西元年
-     * @param TwDate 民國年
-     * @return 西元年
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">twToAdDate</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">TwDate</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">TwDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">String</span> <span class="token class-name">AdDate</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token class-name">TwDate</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1911</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token class-name">TwDate</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token class-name">AdDate</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 西元年 轉 民國年
-     * @param AdDate 西元年
-     * @return 民國年
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span><span class="token class-name">String</span> <span class="token class-name">AdDate</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">AdDate</span> <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">String</span> <span class="token class-name">TwDate</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token class-name">AdDate</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1911</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token class-name">AdDate</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token class-name">TwDate</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 計算天數差
-     * @param beginDate 起日(民國年)
-     * @param endDate 迄日(民國年)
-     * @return 天數差
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">diffDay</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">LocalDate</span> beginLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>beginDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">LocalDate</span> endLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token class-name">ChronoUnit</span><span class="token punctuation">.</span>DAYS<span class="token punctuation">.</span><span class="token function">between</span><span class="token punctuation">(</span>beginLocalDate<span class="token punctuation">,</span> endLocalDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 計算月份差
-     * @param beginDate 起日(民國年)
-     * @param endDate 迄日(民國年)
-     * @return 月份差
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">diffMonth</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">LocalDate</span> beginLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>beginDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">LocalDate</span> endLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token class-name">ChronoUnit</span><span class="token punctuation">.</span>MONTHS<span class="token punctuation">.</span><span class="token function">between</span><span class="token punctuation">(</span>beginLocalDate<span class="token punctuation">,</span> endLocalDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 計算年份差
-     * @param beginDate 起日(民國年)
-     * @param endDate 迄日(民國年)
-     * @return 年份差
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">diffYear</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-        <span class="token class-name">DateTimeFormatter</span> formatter <span class="token operator">=</span> <span class="token class-name">DateTimeFormatter</span><span class="token punctuation">.</span><span class="token function">ofPattern</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">LocalDate</span> beginLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>beginDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">LocalDate</span> endLocalDate <span class="token operator">=</span> <span class="token class-name">LocalDate</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">twToAdDate</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span><span class="token punctuation">,</span> formatter<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token class-name">ChronoUnit</span><span class="token punctuation">.</span>YEARS<span class="token punctuation">.</span><span class="token function">between</span><span class="token punctuation">(</span>beginLocalDate<span class="token punctuation">,</span> endLocalDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 日期比較：起日 &gt; 迄日
-     * @param beginDate 起日
-     * @param endDate 迄日
-     * @return
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Boolean</span> <span class="token function">compareGT</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>beginDate<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">wordToPDF</span><span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> wordFile<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">XWPFDocument</span> document <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XWPFDocument</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ByteArrayInputStream</span><span class="token punctuation">(</span>wordFile<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">PdfOptions</span> options <span class="token operator">=</span> <span class="token class-name">PdfOptions</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">PdfConverter</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">convert</span><span class="token punctuation">(</span>document<span class="token punctuation">,</span> outputStream<span class="token punctuation">,</span> options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"word 轉 PDF 失敗: "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
     <span class="token comment">/**
-     * 民國年 日期比較：起日 &gt;= 迄日
-     * @param beginDate 起日
-     * @param endDate 迄日
-     * @return TRUE / FALSE
+     * PDF 檔案合併 (iText / openPDF)
+     * @param pdfFlieList 要合併的 PDF 清單
+     * @return PDF 資料流
      */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Boolean</span> <span class="token function">compareGE</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>beginDate<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span> <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">mergePDF</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token operator">&lt;</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">&gt;</span> pdfFlieList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 創建 PDF 合併相關變數</span>
+            <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span></span>Document</span> document <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Document</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span>PdfCopy</span> pdfCopy <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PdfCopy</span><span class="token punctuation">(</span>document<span class="token punctuation">,</span> outputStream<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            document<span class="token punctuation">.</span><span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// PDF 合併</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> pdfFlie <span class="token operator">:</span> pdfFlieList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment">// 讀取文件</span>
+                <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span>PdfReader</span> pdfReader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PdfReader</span><span class="token punctuation">(</span>pdfFlie<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">// 取得頁數</span>
+                <span class="token keyword">int</span> pdfPages <span class="token operator">=</span> pdfReader<span class="token punctuation">.</span><span class="token function">getNumberOfPages</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">// 添加至輸出文檔</span>
+                <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> pdfPage <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> pdfPage <span class="token operator">&lt;=</span> pdfPages<span class="token punctuation">;</span> pdfPage<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token class-name">PdfImportedPage</span> importedPage <span class="token operator">=</span> pdfCopy<span class="token punctuation">.</span><span class="token function">getImportedPage</span><span class="token punctuation">(</span>pdfReader<span class="token punctuation">,</span> pdfPage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    pdfCopy<span class="token punctuation">.</span><span class="token function">addPage</span><span class="token punctuation">(</span>importedPage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token comment">// 關閉 PdfReader</span>
+                pdfReader<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token comment">// 關閉 Document</span>
+            document<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"PDF 合併失敗: "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 日期比較：起日 &lt; 迄日
-     * @param beginDate 起日
-     * @param endDate 迄日
-     * @return TRUE / FALSE
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Boolean</span> <span class="token function">compareLT</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>beginDate<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 民國年 日期比較：起日 &lt;= 迄日
-     * @param beginDate 起日
-     * @param endDate 迄日
-     * @return TRUE / FALSE
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Boolean</span> <span class="token function">compareLG</span><span class="token punctuation">(</span><span class="token class-name">String</span> beginDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>beginDate<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>endDate<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Boolean</span><span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 取得系統日 (民國年)
-     * @return 系統日 (民國年)
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">getToday</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token class-name">String</span> adDate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SimpleDateFormat</span><span class="token punctuation">(</span>FORMAT_YYYY_MM_DD<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token function">adToTwDate</span><span class="token punctuation">(</span>adDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 取得系統時間
-     * @return 系統時間
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">getTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">SimpleDateFormat</span><span class="token punctuation">(</span>FORMAT_HH_MM_SS<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
+<h2 class="atx" id="範例---word-轉成-pdf">範例 - Word 轉成 PDF</h2>
+<p>先透過 poi-tl 產生 word 檔，在將其轉換為 PDF。</p>
+<ul>
+<li><p>Service</p>
+<pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExportServiceImpl</span> <span class="token keyword">implements</span> <span class="token class-name">ExportService</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">ClntRepository</span> clntRepository<span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * 單筆列印客戶證號明細表
+     *
+     * @param clientId 客戶證號
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">wordTest</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Clnt</span> clnt <span class="token operator">=</span> clntRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>clientId<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        context<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"names"</span><span class="token punctuation">,</span> clnt<span class="token punctuation">.</span><span class="token function">getNames</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        context<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"clientId"</span><span class="token punctuation">,</span> clnt<span class="token punctuation">.</span><span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        context<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"sex"</span><span class="token punctuation">,</span> <span class="token class-name">SexEnum</span><span class="token punctuation">.</span><span class="token function">getDescByCode</span><span class="token punctuation">(</span>clnt<span class="token punctuation">.</span><span class="token function">getSex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token class-name">ExportWordUtil</span><span class="token punctuation">.</span><span class="token function">generateWord</span><span class="token punctuation">(</span><span class="token string">"/templates/sample.docx"</span><span class="token punctuation">,</span> context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/**
+     * 列印單筆客戶證號明細表 並轉成 PDF
+     *
+     * @param clientId 客戶證號
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">wordToPdf</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">var</span> wordFile <span class="token operator">=</span> <span class="token function">wordTest</span><span class="token punctuation">(</span>clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">ExportPdfUtil</span><span class="token punctuation">.</span><span class="token function">wordToPDF</span><span class="token punctuation">(</span>wordFile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>Controller</p>
+<pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@Tag</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"PDF 報表匯出測試"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/export/pdf"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExportPDFController</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">ExportService</span> exportService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Operation</span><span class="token punctuation">(</span>summary <span class="token operator">=</span> <span class="token string">"Word 轉成 PDF"</span><span class="token punctuation">,</span>
+            description <span class="token operator">=</span> <span class="token string">"Word 轉成 PDF"</span><span class="token punctuation">,</span>
+            operationId <span class="token operator">=</span> <span class="token string">"wordToPDF"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/wordToPDF"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Resource</span><span class="token punctuation">&gt;</span></span> <span class="token function">wordToPDF</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span> <span class="token class-name">String</span> clientId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">var</span> file <span class="token operator">=</span> exportService<span class="token punctuation">.</span><span class="token function">wordToPdf</span><span class="token punctuation">(</span>clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">ExportReponseUtil</span><span class="token punctuation">.</span><span class="token function">responseEntity</span><span class="token punctuation">(</span><span class="token string">"客戶證號明細表.pdf"</span><span class="token punctuation">,</span> file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
 </article>
 </body>
 </html>

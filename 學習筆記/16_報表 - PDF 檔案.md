@@ -22,13 +22,13 @@
             <artifactId>openpdf</artifactId>
             <version>1.0.5</version>
         </dependency>
-        
-		<!-- itextpdf -->
-		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>itextpdf</artifactId>
-			<version>5.5.13.2</version>
-		</dependency>
+
+        <!-- itextpdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.2</version>
+        </dependency>
 ```
 
 ## 工具
