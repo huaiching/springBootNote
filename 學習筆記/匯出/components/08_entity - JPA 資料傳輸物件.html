@@ -1299,7 +1299,7 @@ pre[class*="language-"] {
 但是我們知道 可以使用 <code>client_id</code>。</p>
 <pre><code class="fenced-code-block language-sql"><span class="token comment">-- 客戶資料檔</span>
 <span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">IF</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> clnt <span class="token punctuation">(</span> 
-    clinet_id   <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 客戶證號</span>
+    client_id   <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 客戶證號</span>
     names       <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">40</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 客戶姓名</span>
     sex         <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>    <span class="token comment">-- 客戶性別</span>
     age         <span class="token keyword">INTEGER</span>     <span class="token comment">-- 客戶年齡</span>
@@ -1328,22 +1328,30 @@ pre[class*="language-"] {
 <li><code>@Schema</code>：Swagger 的 <code>註解</code>。</li>
 </ul>
 </li>
-<li><code>無參數建構式</code>：可透過 IDE 建立。</li>
+<li><code>無參數建構式</code>：自行設定。</li>
 <li><code>getting</code> 和 <code>setting</code>：可透過 IDE 建立。</li>
-<li>主鍵的 <code>equals</code> 和 <code>hashCode</code>：可透過 IDE 建立。</li>
+<li><code>equals</code> 和 <code>hashCode</code>：可透過 IDE 建立。 (僅建立 <code>主鍵</code>)</li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
+<ul>
+<li><p>因為 CHAR 的資料 會回傳 尾部空白</p>
+<p>可以在 getting 中，透過 三元表達式 執行 <code>trim()</code> 來去除 尾部空白</p>
+<p>如：下面範例的 <code>getClientId()</code>。</p>
+</li>
+</ul>
 <pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@Entity</span>
 <span class="token annotation punctuation">@Table</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"clnt"</span><span class="token punctuation">)</span>
 <span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span>description <span class="token operator">=</span> <span class="token string">"客戶資料檔"</span><span class="token punctuation">)</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Clnt</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1L</span><span class="token punctuation">;</span>
+
     <span class="token annotation punctuation">@Id</span>
     <span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span>description <span class="token operator">=</span> <span class="token string">"客戶證號"</span><span class="token punctuation">)</span>
-    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"clinet_id"</span><span class="token punctuation">)</span>
-    <span class="token keyword">private</span> <span class="token class-name">String</span> clinetId<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"client_id"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> clientId<span class="token punctuation">;</span>
 
     <span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span>description <span class="token operator">=</span> <span class="token string">"客戶姓名"</span><span class="token punctuation">)</span>
     <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"names"</span><span class="token punctuation">)</span>
@@ -1362,12 +1370,12 @@ pre[class*="language-"] {
     <span class="token punctuation">}</span>
 
     <span class="token comment">// getting 和 setting</span>
-    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getClinetId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> clinetId<span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> clinetId<span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> clientId <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> clientId<span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setClinetId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clinetId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>clinetId <span class="token operator">=</span> clinetId<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setClinetId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>clientId <span class="token operator">=</span> clientId<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
     <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getNames</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1400,12 +1408,12 @@ pre[class*="language-"] {
         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> o<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>o <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> o<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
         <span class="token class-name">Clnt</span> that <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Clnt</span><span class="token punctuation">)</span> o<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>clinetId<span class="token punctuation">,</span> that<span class="token punctuation">.</span>clinetId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>clientId<span class="token punctuation">,</span> that<span class="token punctuation">.</span>clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
     <span class="token annotation punctuation">@Override</span>
     <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">hash</span><span class="token punctuation">(</span>clinetId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">hash</span><span class="token punctuation">(</span>clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <hr>
@@ -1415,7 +1423,7 @@ pre[class*="language-"] {
 但是我們知道 可以使用 <code>client_id</code> + <code>addr_ind</code>。</p>
 <pre><code class="fenced-code-block language-sql"><span class="token comment">-- 客戶地址檔</span>
 <span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">IF</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> addr <span class="token punctuation">(</span>
-    clinet_id   <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 客戶姓名</span>
+    client_id   <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 客戶姓名</span>
     addr_ind    <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>    <span class="token comment">-- 地址指示</span>
     address     <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">72</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 地址</span>
     tel         <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span>    <span class="token comment">-- 電話</span>
@@ -1449,10 +1457,10 @@ pre[class*="language-"] {
 </li>
 <li><code>無參數建構式</code>：可透過 IDE 建立。</li>
 <li><code>getting</code> 和 <code>setting</code>：可透過 IDE 建立。</li>
-<li>主鍵的 <code>equals</code> 和 <code>hashCode</code>：可透過 IDE 建立。</li>
+<li><code>equals</code> 和 <code>hashCode</code>：可透過 IDE 建立。(僅建立 <code>主鍵</code>)</li>
 <li>建立 <code>主鍵類別</code> 的 內部class <code>AddrKey</code>。<ul>
 <li><code>屬性</code> 為 <code>所有主鍵</code></li>
-<li><code>無參數建構式</code>：可透過 IDE 建立。</li>
+<li><code>無參數建構式</code>：自行建立。</li>
 <li><code>getting</code> 和 <code>setting</code>：可透過 IDE 建立。</li>
 <li><code>equals</code> 和 <code>hashCode</code>：可透過 IDE 建立。 (所有屬性)</li>
 </ul>
@@ -1467,10 +1475,12 @@ pre[class*="language-"] {
 <span class="token annotation punctuation">@IdClass</span><span class="token punctuation">(</span><span class="token class-name">Addr<span class="token punctuation">.</span>AddrKey</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
 <span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span>description <span class="token operator">=</span> <span class="token string">"客戶地址檔"</span><span class="token punctuation">)</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Addr</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1L</span><span class="token punctuation">;</span>
+
     <span class="token annotation punctuation">@Id</span>
     <span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span>description <span class="token operator">=</span> <span class="token string">"客戶姓名"</span><span class="token punctuation">)</span>
-    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"clinet_id"</span><span class="token punctuation">)</span>
-    <span class="token keyword">private</span> <span class="token class-name">String</span> clinetId<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"client_id"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> clientId<span class="token punctuation">;</span>
 
     <span class="token annotation punctuation">@Id</span>
     <span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span>description <span class="token operator">=</span> <span class="token string">"地址指示"</span><span class="token punctuation">)</span>
@@ -1490,12 +1500,12 @@ pre[class*="language-"] {
     <span class="token punctuation">}</span>
 
     <span class="token comment">// getting 和 setting: IDE 生成</span>
-    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getClinetId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> clinetId<span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> clinetId<span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> clientId<span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> clientId<span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setClinetId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clinetId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>clinetId <span class="token operator">=</span> clinetId<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>clientId <span class="token operator">=</span> clientId<span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
     <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getAddrInd</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1528,30 +1538,30 @@ pre[class*="language-"] {
         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> o<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>o <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> o<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
         <span class="token class-name">Addr</span> that <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Addr</span><span class="token punctuation">)</span> o<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>clinetId<span class="token punctuation">,</span> that<span class="token punctuation">.</span>clinetId<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>addrInd<span class="token punctuation">,</span> that<span class="token punctuation">.</span>addrInd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>clientId<span class="token punctuation">,</span> that<span class="token punctuation">.</span>clientId<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>addrInd<span class="token punctuation">,</span> that<span class="token punctuation">.</span>addrInd<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
     <span class="token annotation punctuation">@Override</span>
     <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">hash</span><span class="token punctuation">(</span>clinetId<span class="token punctuation">,</span> addrInd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">hash</span><span class="token punctuation">(</span>clientId<span class="token punctuation">,</span> addrInd<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
     <span class="token comment">// 主鍵 實體類</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">AddrKey</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">{</span>
         <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1L</span><span class="token punctuation">;</span>
 
-        <span class="token keyword">private</span> <span class="token class-name">String</span> clinetId<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> clientId<span class="token punctuation">;</span>
         <span class="token keyword">private</span> <span class="token class-name">String</span> addrInd<span class="token punctuation">;</span>
 
         <span class="token keyword">public</span> <span class="token class-name">AddrKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token punctuation">}</span>
 
-        <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getClinetId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> clinetId<span class="token punctuation">;</span>
+        <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> clientId<span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setClinetId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clinetId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">this</span><span class="token punctuation">.</span>clinetId <span class="token operator">=</span> clinetId<span class="token punctuation">;</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setClientId</span><span class="token punctuation">(</span><span class="token class-name">String</span> clientId<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>clientId <span class="token operator">=</span> clientId<span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
         <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getAddrInd</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1567,12 +1577,12 @@ pre[class*="language-"] {
             <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> o<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>o <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> o<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
             <span class="token class-name">AddrKey</span> that <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">AddrKey</span><span class="token punctuation">)</span> o<span class="token punctuation">;</span>
-            <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>clinetId<span class="token punctuation">,</span> that<span class="token punctuation">.</span>clinetId<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>addrInd<span class="token punctuation">,</span> that<span class="token punctuation">.</span>addrInd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>clientId<span class="token punctuation">,</span> that<span class="token punctuation">.</span>clientId<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>addrInd<span class="token punctuation">,</span> that<span class="token punctuation">.</span>addrInd<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
         <span class="token annotation punctuation">@Override</span>
         <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">hash</span><span class="token punctuation">(</span>clinetId<span class="token punctuation">,</span> addrInd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token class-name">Objects</span><span class="token punctuation">.</span><span class="token function">hash</span><span class="token punctuation">(</span>clientId<span class="token punctuation">,</span> addrInd<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>

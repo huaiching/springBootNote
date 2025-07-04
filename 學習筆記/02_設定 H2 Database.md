@@ -57,7 +57,7 @@ H2 資料庫 是一個 可以透過 Spring Initializr 進行安裝 的 輕量級
      
      -- 客戶地址檔
      CREATE TABLE IF NOT EXISTS addr (
-         clinet_id   CHAR(10),   -- 客戶姓名
+         client_id   CHAR(10),   -- 客戶姓名
          addr_ind    CHAR(1),    -- 地址指示
          address     CHAR(72),   -- 地址
          tel         CHAR(11)    -- 電話
@@ -65,6 +65,8 @@ H2 資料庫 是一個 可以透過 Spring Initializr 進行安裝 的 輕量級
      ```
    
    - 進行下面這個設定，當專案啟動時，會訪問 `schema.sql` 並執行內部 SQL 指令。
+     
+     ※ 非必要，也可選擇自行於 控制介面 執行 create table。
    
    ```properties
    spring.sql.init.mode=always

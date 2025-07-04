@@ -59,6 +59,8 @@
        | `@RequestBody`  | 使用 `Json` 接收參數    | `@PostMapping`                               | `@PostMapping("/showUserPostBody")`                       |
        | `@RequestParam` | 從 URL 中獲取參數       | `@GetMapping` `@PutMapping` `@DeleteMapping` | `@GetMapping("/showUserGetParam")`                        |
        | `@PathVariable` | 在 URL 設定 變數 來獲取參數 | `@GetMapping` `@PutMapping` `@DeleteMapping` | `@GetMapping("/showUserGetVariable/{userId}/{userName}")` |
+     
+     ※ 建議使用 @PostMapping + @RequestBody，透過 `Json` 的方式 來進行資料交換。
    
    ```java
    @RestController

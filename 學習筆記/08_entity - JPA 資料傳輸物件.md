@@ -50,7 +50,7 @@
 ```sql
 -- 客戶資料檔
 CREATE TABLE IF NOT EXISTS clnt ( 
-    clinet_id   CHAR(10),   -- 客戶證號
+    client_id   CHAR(10),   -- 客戶證號
     names       CHAR(40),   -- 客戶姓名
     sex         CHAR(1),    -- 客戶性別
     age         INTEGER     -- 客戶年齡
@@ -77,19 +77,26 @@ CREATE TABLE IF NOT EXISTS clnt (
        - `@Id`：設定 主鍵 欄位，主鍵為 `clientId`，所以只設定在 `clientId` 上。
        - `@Column`：設定 該欄位 對應的 `TABLE 欄位`。
        - `@Schema`：Swagger 的 `註解`。
-     - `無參數建構式`：可透過 IDE 建立。
+     - `無參數建構式`：自行設定。
      - `getting` 和 `setting`：可透過 IDE 建立。
-     - 主鍵的 `equals` 和 `hashCode`：可透過 IDE 建立。
+     - `equals` 和 `hashCode`：可透過 IDE 建立。 (僅建立 `主鍵`)
+- 因為 CHAR 的資料 會回傳 尾部空白
+  
+  可以在 getting 中，透過 三元表達式 執行 `trim()` 來去除 尾部空白
+  
+  如：下面範例的 `getClientId()`。
 
 ```java
 @Entity
 @Table(name = "clnt")
 @Schema(description = "客戶資料檔")
 public class Clnt implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @Schema(description = "客戶證號")
-    @Column(name = "clinet_id")
-    private String clinetId;
+    @Column(name = "client_id")
+    private String clientId;
 
     @Schema(description = "客戶姓名")
     @Column(name = "names")
@@ -108,12 +115,12 @@ public class Clnt implements Serializable {
     }
 
     // getting 和 setting
-    public String getClinetId() {
-        return clinetId!= null ? clinetId.trim() : null;
+    public String getClientId() {
+        return clientId != null ? clientId.trim() : null;
     }
 
-    public void setClinetId(String clinetId) {
-        this.clinetId = clinetId;
+    public void setClinetId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getNames() {
@@ -146,12 +153,12 @@ public class Clnt implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Clnt that = (Clnt) o;
-        return Objects.equals(clinetId, that.clinetId);
+        return Objects.equals(clientId, that.clientId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clinetId);
+        return Objects.hash(clientId);
     }
 }
 ```
@@ -168,7 +175,7 @@ public class Clnt implements Serializable {
 ```sql
 -- 客戶地址檔
 CREATE TABLE IF NOT EXISTS addr (
-    clinet_id   CHAR(10),   -- 客戶姓名
+    client_id   CHAR(10),   -- 客戶姓名
     addr_ind    CHAR(1),    -- 地址指示
     address     CHAR(72),   -- 地址
     tel         CHAR(11)    -- 電話
@@ -200,10 +207,10 @@ CREATE TABLE IF NOT EXISTS addr (
        - `@Schema`：Swagger 的 `註解`。
      - `無參數建構式`：可透過 IDE 建立。
      - `getting` 和 `setting`：可透過 IDE 建立。
-     - 主鍵的 `equals` 和 `hashCode`：可透過 IDE 建立。
+     - `equals` 和 `hashCode`：可透過 IDE 建立。(僅建立 `主鍵`)
      - 建立 `主鍵類別` 的 內部class `AddrKey`。
        - `屬性` 為 `所有主鍵`
-       - `無參數建構式`：可透過 IDE 建立。
+       - `無參數建構式`：自行建立。
        - `getting` 和 `setting`：可透過 IDE 建立。
        - `equals` 和 `hashCode`：可透過 IDE 建立。 (所有屬性)
 
@@ -213,10 +220,12 @@ CREATE TABLE IF NOT EXISTS addr (
 @IdClass(Addr.AddrKey.class)
 @Schema(description = "客戶地址檔")
 public class Addr implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @Schema(description = "客戶姓名")
-    @Column(name = "clinet_id")
-    private String clinetId;
+    @Column(name = "client_id")
+    private String clientId;
 
     @Id
     @Schema(description = "地址指示")
@@ -236,12 +245,12 @@ public class Addr implements Serializable {
     }
 
     // getting 和 setting: IDE 生成
-    public String getClinetId() {
-        return clinetId!= null ? clinetId.trim() : null;
+    public String getClientId() {
+        return clientId!= null ? clientId.trim() : null;
     }
 
-    public void setClinetId(String clinetId) {
-        this.clinetId = clinetId;
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getAddrInd() {
@@ -274,30 +283,30 @@ public class Addr implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Addr that = (Addr) o;
-        return Objects.equals(clinetId, that.clinetId) && Objects.equals(addrInd, that.addrInd);
+        return Objects.equals(clientId, that.clientId) && Objects.equals(addrInd, that.addrInd);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clinetId, addrInd);
+        return Objects.hash(clientId, addrInd);
     }
 
     // 主鍵 實體類
     public static class AddrKey implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        private String clinetId;
+        private String clientId;
         private String addrInd;
 
         public AddrKey() {
         }
 
-        public String getClinetId() {
-            return clinetId;
+        public String getClientId() {
+            return clientId;
         }
 
-        public void setClinetId(String clinetId) {
-            this.clinetId = clinetId;
+        public void setClientId(String clientId) {
+            this.clientId = clientId;
         }
 
         public String getAddrInd() {
@@ -313,12 +322,12 @@ public class Addr implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             AddrKey that = (AddrKey) o;
-            return Objects.equals(clinetId, that.clinetId) && Objects.equals(addrInd, that.addrInd);
+            return Objects.equals(clientId, that.clientId) && Objects.equals(addrInd, that.addrInd);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(clinetId, addrInd);
+            return Objects.hash(clientId, addrInd);
         }
     }
 }

@@ -1294,13 +1294,14 @@ pre[class*="language-"] {
 
 <span class="token comment">-- 客戶地址檔</span>
 <span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token keyword">IF</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> addr <span class="token punctuation">(</span>
-    clinet_id   <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 客戶姓名</span>
+    client_id   <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 客戶姓名</span>
     addr_ind    <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>    <span class="token comment">-- 地址指示</span>
     address     <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">72</span><span class="token punctuation">)</span><span class="token punctuation">,</span>   <span class="token comment">-- 地址</span>
     tel         <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span>    <span class="token comment">-- 電話</span>
 <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 </li>
 <li><p>進行下面這個設定，當專案啟動時，會訪問 <code>schema.sql</code> 並執行內部 SQL 指令。</p>
+<p>※ 非必要，也可選擇自行於 控制介面 執行 create table。</p>
 </li>
 </ul>
 <pre><code class="fenced-code-block language-properties"><span class="token attr-name">spring.sql.init.mode</span><span class="token punctuation">=</span><span class="token attr-value">always</span>

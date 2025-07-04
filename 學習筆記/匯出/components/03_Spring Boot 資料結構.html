@@ -1261,7 +1261,7 @@ pre[class*="language-"] {
 ├─ 📁service                    # 業務邏輯層 的 interface
 │   ├─ 📁impl                   # service 的實作類別，處理實際商業邏輯
 ├─ 📁repository                 # SQL 處理層 的 interface
-│                                 負責 簡單 SQL 的 設定 與 複雜 SQL 的 interface
+│   │                             負責 簡單 SQL 的 設定 與 複雜 SQL 的 interface
 │   ├─ 📁impl                   # 複雜 SQL 的實作類別
 ├─ 📁entity                     # JPA 資料傳輸物件，對應資料庫中的資料表結構庫互動方法
 ├─ 📁dto                        # 一般 資料傳輸物件
@@ -1305,7 +1305,7 @@ pre[class*="language-"] {
 </ul>
 <h3 class="atx" id="📁repository：sql-處理層">📁repository：SQL 處理層</h3>
 <pre><code class="fenced-code-block language-textile"><span class="token phrase">├─ 📁repository             # SQL 處理層 的 interface
-│                             負責 簡單 SQL 的 設定 與 複雜 SQL 的 interface
+│   │                         負責 簡單 SQL 的 設定 與 複雜 SQL 的 interface
 │   ├─ 📁impl               # 複雜 SQL 的實作類別</span></code></pre>
 <p>放置 <code>JPA 資料存取層</code> 的 資料夾，通常為兩層架構：</p>
 <ul>
