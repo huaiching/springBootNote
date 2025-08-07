@@ -327,6 +327,11 @@ public interface AddrRepository extends JpaRepository<Addr, Addr.AddrKey>, AddrC
                "  AND address = :addressOri " + 
                "  AND tel = :telOri ";
    ```
+   
+   ```java
+   String sql3 = "SELECT COUNT(*) FROM addr " +
+               "WHERE address LIKE :address";
+   ```
 
 4. 透過 Map 設定參數。
    
@@ -349,10 +354,22 @@ public interface AddrRepository extends JpaRepository<Addr, Addr.AddrKey>, AddrC
 
 5. 執行 SQL。
    
-   - `查詢` 透過 `namedParameterJdbcTemplate.query` 執行。
+   - `查詢 - 多筆資料` 透過 `namedParameterJdbcTemplate.query` 執行。
+     
+     - `無資料` 資料 會是 `null`。
      
      ```java
      List<Addr> addrList = namedParameterJdbcTemplate.query(sql1, params1, new BeanPropertyRowMapper<>(Addr.class));
+     ```
+   
+   - `查詢 - 一筆資料` 透過 `namedParameterJdbcTemplate.queryForObject` 執行。
+     
+     此類會用來執行 `COUNT` 這類 `僅有一筆 且 一定有一筆` 的資料。
+     
+     - 資料 `多筆` 或 `無資料` 都會拋出錯誤，
+     
+     ```java
+     Integer count = namedParameterJdbcTemplate.queryForObject(sql3, params, Integer.class);
      ```
    
    - `增刪修` 透過 `namedParameterJdbcTemplate.update` 執行。
