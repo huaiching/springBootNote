@@ -68,6 +68,12 @@ public class AddrCustomRepositoryImpl implements AddrCustomRepository {
         // 執行 方法
         List<Addr> addrList = namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Addr.class));
 
+        String sql3 = "SELECT COUNT(*) FROM addr " +
+                "WHERE address LIKE :address";
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql3, params, Integer.class);
+
         return addrList;
     }
+
+
 }

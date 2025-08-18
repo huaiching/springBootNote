@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/sample")
 @Tag(name = "範例", description = "範例 API 接口")
-public class SampleConfig {
+public class SampleController {
 
     @Autowired
     private SampleService sampleService;

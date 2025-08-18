@@ -1,12 +1,8 @@
 package com.example.api.util;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.pdf.PdfCopy;
-import com.lowagie.text.pdf.PdfImportedPage;
-import com.lowagie.text.pdf.PdfReader;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.docx4j.Docx4J;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,53 +14,47 @@ import java.util.List;
 public class ExportPdfUtil {
 
     /**
-     * word 轉 PDF
-     * (fr.opensagres.poi.xwpf.converter.pdf)
-     *
-     * @param wordFile word 檔
-     * @return 產出的 PDF 檔案資料流（byte[]）
+     * 使用 docx4j 將 Word (docx) 轉 PDF
+     * @param wordFile Word 檔案的 byte[]
+     * @return PDF 檔案的 byte[]
      */
     public static byte[] wordToPDF(byte[] wordFile) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            XWPFDocument document = new XWPFDocument(new ByteArrayInputStream(wordFile));
-            PdfOptions options = PdfOptions.create();
-            PdfConverter.getInstance().convert(document, outputStream, options);
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(wordFile);
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+
+            // 讀取 docx
+            WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(bais);
+
+            // 轉 PDF (使用 FO renderer)
+            Docx4J.toPDF(wordMLPackage, baos);
+
+            return baos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException("word 轉 PDF 失敗: ", e);
+            throw new RuntimeException("Word 轉 PDF 失敗 (docx4j): ", e);
         }
-        return outputStream.toByteArray();
     }
 
     /**
-     * PDF 檔案合併 (iText / openPDF)
-     * @param pdfFlieList 要合併的 PDF 清單
+     * PDF 檔案合併 (Apache PDFBox)
+     *
+     * @param pdfFileList 要合併的 PDF 清單
      * @return PDF 資料流
      */
-    public static byte[] mergePDF(List<byte[]> pdfFlieList) {
+    public static byte[] mergePDF(List<byte[]> pdfFileList) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
         try {
-            // 創建 PDF 合併相關變數
-            com.lowagie.text.Document document = new Document();
-            com.lowagie.text.pdf.PdfCopy pdfCopy = new PdfCopy(document, outputStream);
-            document.open();
-            // PDF 合併
-            for (byte[] pdfFlie : pdfFlieList) {
-                // 讀取文件
-                com.lowagie.text.pdf.PdfReader pdfReader = new PdfReader(pdfFlie);
-                // 取得頁數
-                int pdfPages = pdfReader.getNumberOfPages();
-                // 添加至輸出文檔
-                for (int pdfPage = 1; pdfPage <= pdfPages; pdfPage++) {
-                    PdfImportedPage importedPage = pdfCopy.getImportedPage(pdfReader, pdfPage);
-                    pdfCopy.addPage(importedPage);
-                }
-                // 關閉 PdfReader
-                pdfReader.close();
+            PDFMergerUtility merger = new PDFMergerUtility();
+            // 設定輸出流
+            merger.setDestinationStream(outputStream);
+
+            // 加入每個 PDF
+            for (byte[] pdfFile : pdfFileList) {
+                merger.addSource(new ByteArrayInputStream(pdfFile));
             }
-            // 關閉 Document
-            document.close();
+
+            // 合併
+            merger.mergeDocuments(null); // null = 使用預設 MemoryUsageSetting
+
         } catch (Exception e) {
             throw new RuntimeException("PDF 合併失敗: ", e);
         }
