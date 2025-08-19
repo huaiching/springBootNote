@@ -111,12 +111,12 @@
 		</dependency>
 
 
-<!--		&lt;!&ndash; fr.opensagres.poi.xwpf.converter.pdf &ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>fr.opensagres.xdocreport</groupId>-->
-<!--			<artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>-->
-<!--			<version>2.0.3</version>-->
-<!--		</dependency>-->
+		<!-- fr.opensagres.poi.xwpf.converter.pdf -->
+		<dependency>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
+			<version>2.0.3</version>
+		</dependency>
 
 <!--		&lt;!&ndash; OpenPDF：處理 PDF 合併、加密等，替代 iText &ndash;&gt;-->
 <!--		<dependency>-->
@@ -137,25 +137,6 @@
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>2.0.30</version>
-		</dependency>
-
-        <!-- docx4j -->
-		<dependency>
-			<groupId>org.docx4j</groupId>
-			<artifactId>docx4j</artifactId>
-			<version>6.1.2</version>
-			<exclusions>
-				<!-- 移除 docx4j 可能帶進來的 reload4j -->
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-reload4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.docx4j</groupId>
-			<artifactId>docx4j-export-fo</artifactId>
-			<version>8.3.10</version>
 		</dependency>
 
 	</dependencies>

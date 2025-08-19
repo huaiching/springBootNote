@@ -1,8 +1,9 @@
 package com.example.api.util;
 
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
-import org.docx4j.Docx4J;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,26 +13,22 @@ import java.util.List;
  * PDF 匯出工具
  */
 public class ExportPdfUtil {
-
     /**
-     * 使用 docx4j 將 Word (docx) 轉 PDF
-     * @param wordFile Word 檔案的 byte[]
-     * @return PDF 檔案的 byte[]
+     * word 轉 PDF
+     * (fr.opensagres.poi.xwpf.converter.pdf)
+     * @param wordFile word 檔
+     * @return 產出的 PDF 檔案資料流（byte[]）
      */
     public static byte[] wordToPDF(byte[] wordFile) {
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(wordFile);
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-
-            // 讀取 docx
-            WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(bais);
-
-            // 轉 PDF (使用 FO renderer)
-            Docx4J.toPDF(wordMLPackage, baos);
-
-            return baos.toByteArray();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            XWPFDocument document = new XWPFDocument(new ByteArrayInputStream(wordFile));
+            PdfOptions options = PdfOptions.create();
+            PdfConverter.getInstance().convert(document, outputStream, options);
         } catch (Exception e) {
-            throw new RuntimeException("Word 轉 PDF 失敗 (docx4j): ", e);
+            throw new RuntimeException("word 轉 PDF 失敗: ", e);
         }
+        return outputStream.toByteArray();
     }
 
     /**
