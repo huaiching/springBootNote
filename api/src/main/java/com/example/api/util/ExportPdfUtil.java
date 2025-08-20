@@ -1,18 +1,56 @@
 package com.example.api.util;
 
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * PDF 匯出工具
  */
 public class ExportPdfUtil {
+
+    /**
+     * html 轉 PDF
+     * @param templateEngine Thymeleaf 的 TemplateEngine，用於解析 HTML 樣板
+     * @param modelFile 樣板名稱 (resources/templates/{templateName}.html)
+     * @param dataList 樣板變數
+     * @return
+     */
+    public static byte[] htmlToPdf(TemplateEngine templateEngine, String modelFile, Map<String, Object> dataList) {
+        // 設定變數
+        Context context = new Context();
+        context.setVariables(dataList);
+
+        // 生成 HTML
+        String html = templateEngine.process(modelFile, context);
+
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            // HTML 轉 PDF
+            PdfRendererBuilder builder = new PdfRendererBuilder();
+            builder.useFastMode();
+            builder.withHtmlContent(html, null);
+            // 設定中文字型
+            File fontFile = new File("src/main/resources/templates/fonts/kaiu.ttf");
+            builder.useFont(fontFile, "標楷體");
+            // 資料輸出
+            builder.toStream(os);
+            builder.run();
+            return os.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("PDF 生成失敗", e);
+        }
+    }
+
     /**
      * word 轉 PDF
      * (fr.opensagres.poi.xwpf.converter.pdf)

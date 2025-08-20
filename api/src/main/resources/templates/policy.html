@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>保單 PDF</title>
+    <style>
+      body {
+        font-family: "標楷體", sans-serif; /* 中文使用標楷體 */
+        font-size: 12px; /* 字體大小 */
+      }
+
+      /* 頁面設定：表頭、頁尾 */
+      @page {
+        size: A4;
+        margin: 40pt 30pt 60pt 30pt; /* 頁面留白設定 */
+        @top-center {
+          /* 頁面頂端的顯示設定: 顯示 header */
+          content: element(header);
+        }
+        @bottom-center {
+          /* 頁面底部的顯示設定: 顯示 頁碼 */
+          font-family: "標楷體", sans-serif; /* 中文使用標楷體 */
+          content: "第 " counter(page) " 頁 / 共 " counter(pages) " 頁";
+        }
+      }
+
+      /* 表頭樣式 */
+      header {
+        display: block;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      /* 標題樣式 */
+      h2 {
+        margin-top: 20px; /* 標題與上一個元素的間距 */
+        border-bottom: 1px solid #000; /* 標題下方黑色實線分隔 */
+        padding-bottom: 4px; /* 標題底部內距，讓分隔線不要貼文字 */
+      }
+
+      /* 表格整體樣式 */
+      table {
+        width: 100%; /* 表格寬度填滿容器 */
+        border-collapse: collapse; /* 合併邊框，避免雙線效果 */
+        margin-top: 10px; /* 表格與上方元素間距 */
+      }
+
+      /* 表頭與表格內容儲存格 */
+      th,
+      td {
+        border: none; /* 取消邊框 */
+        padding: 6px; /* 儲存格內間距 */
+        text-align: left; /* 文字靠左 */
+      }
+
+      /* 可選：表頭加底色，讓 PDF 更易讀 */
+      th {
+        background-color: #f0f0f0; /* 淺灰底色 */
+      }
+
+      /* header-info 使用 flex 排版，一行左右對齊 */
+      .header-info {
+        display: flex;
+        justify-content: space-between; /* 左右兩端對齊 */
+        width: 100%; /* 確保寬度填滿頁面 */
+        font-family: "標楷體", sans-serif;
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 表頭 -->
+    <header class="header">保單 PDF</header>
+
+    <!-- 表頭下方固定文字 -->
+    <table
+      style="
+        width: 100%;
+        font-family: '標楷體', sans-serif;
+        font-size: 12px;
+        margin-bottom: 10px;
+      "
+    >
+      <tr>
+        <td style="text-align: left">報表代碼：text001</td>
+        <td style="text-align: right">【機密資料】</td>
+      </tr>
+    </table>
+
+    <h2>要保人基本資訊</h2>
+    <p>姓　　名: <span th:text="${applicant.name}"></span></p>
+    <p>身分證號: <span th:text="${applicant.id}"></span></p>
+    <p>電　　話: <span th:text="${applicant.phone}"></span></p>
+
+    <h2>保單資訊</h2>
+    <p>保單號碼: <span th:text="${policy.number}"></span></p>
+    <p>投保日期: <span th:text="${policy.date}"></span></p>
+
+    <h2>保障資訊</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>保障項目</th>
+          <th>保額</th>
+          <th>保費</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="c : ${coverages}">
+          <td th:text="${c.item}"></td>
+          <td th:text="${c.amount}"></td>
+          <td th:text="${c.premium}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
