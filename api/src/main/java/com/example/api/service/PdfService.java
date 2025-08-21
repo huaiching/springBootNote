@@ -1,12 +1,15 @@
 package com.example.api.service;
 
+import com.example.api.dto.CoveragesDTO;
+import com.example.api.dto.PolicyDTO;
 import com.example.api.util.ExportPdfUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
-import java.util.HashMap;
+import org.thymeleaf.context.Context;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PdfService {
@@ -16,27 +19,33 @@ public class PdfService {
 
     public byte[] generatePolicyPdf() {
         // 模擬資料
-        Map<String, Object> data = new HashMap<>();
+        PolicyDTO policyDTO = new PolicyDTO();
+        policyDTO.setPolicyNo("100000000012");
+        policyDTO.setPoStsCode("42 繳費中");
+        policyDTO.setO1Name("貂蟬");
+        policyDTO.setI1Name("呂布");
+        policyDTO.setPoIssueDate("114/01/01");
 
-        data.put("applicant", Map.of(
-                "name", "王小明",
-                "id", "A123456789",
-                "phone", "0912-345678"
-        ));
+        List<CoveragesDTO> coList = new ArrayList<>();
+        for (int i = 1 ; i <= 50 ; i++) {
+            CoveragesDTO coveragesDTO = new CoveragesDTO();
+            coveragesDTO.setCoverageNo(i);
+            coveragesDTO.setPlanCode("A"+i);
+            coveragesDTO.setRateScale("0");
+            coveragesDTO.setFaceAmt(1000000.00);
+            coList.add(coveragesDTO);
+        }
+        policyDTO.setCoList(coList);
 
-        data.put("policy", Map.of(
-                "number", "POL123456",
-                "date", "2025-08-20"
-        ));
+        Context context = new Context();
+        context.setVariable("policyNo", policyDTO.getPolicyNo());
+        context.setVariable("poStsCode", policyDTO.getPoStsCode());
+        context.setVariable("o1Name", policyDTO.getO1Name());
+        context.setVariable("i1Name", policyDTO.getI1Name());
+        context.setVariable("poIssueDate", policyDTO.getPoIssueDate());
+        context.setVariable("coverages", policyDTO.getCoList());
 
-        List<Map<String, Object>> coverages = List.of(
-                Map.of("item", "意外險", "amount", "100萬", "premium", "2000"),
-                Map.of("item", "醫療險", "amount", "50萬", "premium", "1500"),
-                Map.of("item", "壽險", "amount", "200萬", "premium", "3000")
-        );
-        data.put("coverages", coverages);
-
-        return ExportPdfUtil.htmlToPdf(templateEngine, "policy", data);
+        return ExportPdfUtil.htmlToPdf(templateEngine, "policy.html", context);
     }
 
 }

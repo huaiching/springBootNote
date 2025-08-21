@@ -22,15 +22,11 @@ public class ExportPdfUtil {
     /**
      * html 轉 PDF
      * @param templateEngine Thymeleaf 的 TemplateEngine，用於解析 HTML 樣板
-     * @param modelFile 樣板名稱 (resources/templates/{templateName}.html)
-     * @param dataList 樣板變數
+     * @param modelFile 樣版路徑 (resources/templates/{templateName}.html)
+     * @param context 資料內容
      * @return
      */
-    public static byte[] htmlToPdf(TemplateEngine templateEngine, String modelFile, Map<String, Object> dataList) {
-        // 設定變數
-        Context context = new Context();
-        context.setVariables(dataList);
-
+    public static byte[] htmlToPdf(TemplateEngine templateEngine, String modelFile, Context context) {
         // 生成 HTML
         String html = templateEngine.process(modelFile, context);
 

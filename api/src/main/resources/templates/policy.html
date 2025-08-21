@@ -1,114 +1,139 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <title>保單 PDF</title>
-    <style>
-      body {
-        font-family: "標楷體", sans-serif; /* 中文使用標楷體 */
-        font-size: 12px; /* 字體大小 */
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    /* 設置頁面整體樣式 */
+    body {
+      font-family: "標楷體", "Noto Serif CJK TC", sans-serif; /* 主要字體為標楷體，備用字體為 Noto Serif CJK TC */
+      font-size: 14px; /* 預設字體大小 */
+    }
+
+    /* 頁面佈局設定 */
+    @page {
+      size: A4; /* 紙張大小為 A4 */
+      margin: 30pt 30pt 30pt 30pt; /* 頁面邊距：上下左右 30pt */
+      @top-center {
+        content: element(header); /* 頁眉顯示 header 元素內容 */
+        margin-bottom: 10pt; /* 頁眉與正文間距 */
       }
-
-      /* 頁面設定：表頭、頁尾 */
-      @page {
-        size: A4;
-        margin: 40pt 30pt 60pt 30pt; /* 頁面留白設定 */
-        @top-center {
-          /* 頁面頂端的顯示設定: 顯示 header */
-          content: element(header);
-        }
-        @bottom-center {
-          /* 頁面底部的顯示設定: 顯示 頁碼 */
-          font-family: "標楷體", sans-serif; /* 中文使用標楷體 */
-          content: "第 " counter(page) " 頁 / 共 " counter(pages) " 頁";
-        }
+      @bottom-center {
+        font-family: "標楷體"; /* 頁腳字體 */
+        content: "第 " counter(page) " 頁 / 共 " counter(pages) " 頁"; /* 頁腳顯示頁碼 */
       }
+    }
 
-      /* 表頭樣式 */
-      header {
-        display: block;
-        text-align: center;
-        font-weight: bold;
-        font-size: 14px;
-      }
+    /* 頁眉樣式 */
+    header {
+      display: block; /* 頁眉為塊級元素 */
+      text-align: center; /* 文字居中 */
+      font-weight: bold; /* 文字加粗 */
+      font-size: 16px; /* 頁眉字體大小 */
+    }
+    
+    /* 報表資訊表格樣式 */
+    .headerInfo {
+      width: 100%; /* 表格寬度填滿容器 */
+      font-size: 14px; /* 字體大小 */
+      margin-bottom: 10px; /* 與下方元素間距 */
+    }
 
-      /* 標題樣式 */
-      h2 {
-        margin-top: 20px; /* 標題與上一個元素的間距 */
-        border-bottom: 1px solid #000; /* 標題下方黑色實線分隔 */
-        padding-bottom: 4px; /* 標題底部內距，讓分隔線不要貼文字 */
-      }
+    /* 分隔線樣式 */
+    hr {
+      border: 0.1px solid #000;
+    }
 
-      /* 表格整體樣式 */
-      table {
-        width: 100%; /* 表格寬度填滿容器 */
-        border-collapse: collapse; /* 合併邊框，避免雙線效果 */
-        margin-top: 10px; /* 表格與上方元素間距 */
-      }
+    /* 表格整體樣式 */
+    table {
+      width: 100%; /* 表格寬度填滿容器 */
+      border-collapse: collapse; /* 合併邊框，避免雙線效果 */
+      -fs-table-paginate: paginate; /* 啟用表格分頁功能 */
+      -fs-page-break-min-height: 1.5cm; /* 確保分頁時有足夠空間 */
+    }
 
-      /* 表頭與表格內容儲存格 */
-      th,
-      td {
-        border: none; /* 取消邊框 */
-        padding: 6px; /* 儲存格內間距 */
-        text-align: left; /* 文字靠左 */
-      }
+    /* 表格儲存格樣式 */
+    th, td {
+      border: 0.1mm solid; /* 儲存格邊框為 0.1mm 實線 */
+      padding: 6px; /* 儲存格內間距 */
+      text-align: center; /* 文字居中 */
+      font-size: 14px; /* 字體大小 */
+      line-height: 1.2; /* 統一行高，確保對齊 */
+    }
 
-      /* 可選：表頭加底色，讓 PDF 更易讀 */
-      th {
-        background-color: #f0f0f0; /* 淺灰底色 */
-      }
+    /* 表頭儲存格樣式 */
+    th {
+      background-color: #f0f0f0; /* 表頭背景色為淺灰色 */
+    }
 
-      /* 避免文字斷開 */
-      tr {
-        page-break-inside: avoid;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- 表頭 -->
-    <header class="header">保單 PDF</header>
+    /* 表頭分頁設置 */
+    thead {
+      display: table-header-group; /* 確保表頭在每頁重複顯示 */
+    }
 
-    <!-- 表頭下方固定文字 -->
-    <table
-      style="
-        width: 100%;
-        font-family: '標楷體', sans-serif;
-        font-size: 12px;
-        margin-bottom: 10px;
-      "
-    >
-      <tr>
-        <td style="text-align: left">報表代碼：text001</td>
-        <td style="text-align: right">【機密資料】</td>
-      </tr>
-    </table>
+    /* 表格內容行分頁設置 */
+    tbody tr {
+      page-break-inside: avoid; /* 避免行內分頁 */
+      break-inside: avoid; /* 現代分頁控制，確保行完整性 */
+    }
+    
+    /* 強制換頁設定 */
+    .new-pages {
+      page-break-before: always;
+    }
+    
+  </style>
+</head>
+<body>
+<header class="header">
+  <div>三商美邦人壽保險股份有限公司</div>
+  <div>保單資料表</div>
+</header>
 
-    <h2>要保人基本資訊</h2>
-    <p>姓　　名: <span th:text="${applicant.name}"></span></p>
-    <p>身分證號: <span th:text="${applicant.id}"></span></p>
-    <p>電　　話: <span th:text="${applicant.phone}"></span></p>
+<table class="headerInfo">
+  <tr style="border: none">
+    <td style="border: none; text-align: left">報表代碼：text001</td>
+    <td style="border: none; text-align: right">【機密資料】</td>
+  </tr>
+  <tr style="border: none">
+    <td style="border: none; text-align: left">列印單位：90251</td>
+  </tr>
+</table>
 
-    <h2>保單資訊</h2>
-    <p>保單號碼: <span th:text="${policy.number}"></span></p>
-    <p>投保日期: <span th:text="${policy.date}"></span></p>
+<hr/>
 
-    <h2>保障資訊</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>保障項目</th>
-          <th>保額</th>
-          <th>保費</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="c : ${coverages}">
-          <td th:text="${c.item}"></td>
-          <td style="text-align: right" th:text="${#numbers.formatDecimal(c.amount, 0, 'COMMA', 2, 'POINT')}"/>
-          <td style="text-align: right" th:text="${#numbers.formatDecimal(c.premium, 0, 'NONE', 2, 'POINT')}"/>
-        </tr>
-      </tbody>
-    </table>
-  </body>
+<h2>保單資料</h2>
+<p>保單號碼　: <span th:text="${policyNo}"></span></p>
+<p>保單狀態　: <span th:text="${poStsCode}"></span></p>
+<p>要保人姓名: <span th:text="${o1Name}"></span></p>
+<p>被保人姓名: <span th:text="${i1Name}"></span></p>
+<p>保單生效日: <span th:text="${poIssueDate}"></span></p>
+
+<hr/>
+
+<h2>保障資料</h2>
+<table>
+  <thead>
+  <tr>
+    <th>保障序號</th>
+    <th>險種代碼</th>
+    <th>險種版數</th>
+    <th>保額</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="c : ${coverages}">
+    <td style="width: 8%; text-align: center;" th:text="${c.coverageNo}"></td>
+    <td style="width: 8%; text-align: center;" th:text="${c.planCode}"></td>
+    <td style="width: 8%; text-align: center;" th:text="${c.rateScale}"></td>
+    <td style="width: 10%; text-align: right;" th:text="${#numbers.formatDecimal(c.faceAmt, 0, 'COMMA', 2, 'POINT')}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="new-pages">
+  <p>備註：</p>
+  <p>此為練習用範例，相關資料均為假資料。</p>
+</div>
+
+</body>
 </html>
