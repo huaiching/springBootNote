@@ -11,7 +11,7 @@
 
     /* 頁面佈局設定 */
     @page {
-      size: A4; /* 紙張大小為 A4 */
+      size: A4; /* 紙張樣式：A4 = 直式 A4 ; A4 landscape = 橫式 A4 */
       margin: 30pt 30pt 30pt 30pt; /* 頁面邊距：上下左右 30pt */
       @top-center {
         content: element(header); /* 頁眉顯示 header 元素內容 */
@@ -84,56 +84,54 @@
   </style>
 </head>
 <body>
-<header class="header">
-  <div>三商美邦人壽保險股份有限公司</div>
-  <div>保單資料表</div>
-</header>
-
-<table class="headerInfo">
-  <tr style="border: none">
-    <td style="border: none; text-align: left">報表代碼：text001</td>
-    <td style="border: none; text-align: right">【機密資料】</td>
-  </tr>
-  <tr style="border: none">
-    <td style="border: none; text-align: left">列印單位：90251</td>
-  </tr>
-</table>
-
-<hr/>
-
-<h2>保單資料</h2>
-<p>保單號碼　: <span th:text="${policyNo}"></span></p>
-<p>保單狀態　: <span th:text="${poStsCode}"></span></p>
-<p>要保人姓名: <span th:text="${o1Name}"></span></p>
-<p>被保人姓名: <span th:text="${i1Name}"></span></p>
-<p>保單生效日: <span th:text="${poIssueDate}"></span></p>
-
-<hr/>
-
-<h2>保障資料</h2>
-<table>
-  <thead>
-  <tr>
-    <th>保障序號</th>
-    <th>險種代碼</th>
-    <th>險種版數</th>
-    <th>保額</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="c : ${coverages}">
-    <td style="width: 8%; text-align: center;" th:text="${c.coverageNo}"></td>
-    <td style="width: 8%; text-align: center;" th:text="${c.planCode}"></td>
-    <td style="width: 8%; text-align: center;" th:text="${c.rateScale}"></td>
-    <td style="width: 10%; text-align: right;" th:text="${#numbers.formatDecimal(c.faceAmt, 0, 'COMMA', 2, 'POINT')}"></td>
-  </tr>
-  </tbody>
-</table>
-
-<div class="new-pages">
+  <header class="header">
+    <div>三商美邦人壽保險股份有限公司</div>
+    <div>保單資料表</div>
+  </header>
+  
+  <table class="headerInfo">
+    <tr style="border: none">
+      <td style="border: none; text-align: left">報表代碼：text001</td>
+      <td style="border: none; text-align: right">【機密資料】</td>
+    </tr>
+    <tr style="border: none">
+      <td style="border: none; text-align: left">列印單位：90251</td>
+    </tr>
+  </table>
+  
+  <hr/>
+  
+  <h2>保單資料</h2>
+  <p>保單號碼　: <span th:text="${policyNo}"></span></p>
+  <p>保單狀態　: <span th:text="${poStsCode}"></span></p>
+  <p>要保人姓名: <span th:text="${o1Name}"></span></p>
+  <p>被保人姓名: <span th:text="${i1Name}"></span></p>
+  <p>保單生效日: <span th:text="${poIssueDate}"></span></p>
+  
+  <hr/>
+  
+  <h2>保障資料</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>保障序號</th>
+      <th>險種代碼</th>
+      <th>險種版數</th>
+      <th>保額</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${coverages}">
+      <td style="width: 8%; text-align: center;" th:text="${c.coverageNo}"></td>
+      <td style="width: 8%; text-align: center;" th:text="${c.planCode}"></td>
+      <td style="width: 8%; text-align: center;" th:text="${c.rateScale}"></td>
+      <td style="width: 10%; text-align: right;" th:text="${#numbers.formatDecimal(c.faceAmt, 0, 'COMMA', 2, 'POINT')}"></td>
+    </tr>
+    </tbody>
+  </table>
+  
+  <div class="new-pages"/>
   <p>備註：</p>
   <p>此為練習用範例，相關資料均為假資料。</p>
-</div>
-
 </body>
 </html>
