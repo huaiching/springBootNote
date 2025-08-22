@@ -1627,8 +1627,6 @@ DB 欄位為 <code>下底線</code> 時，DTO 欄位允許 <code>下底線</code
             <span class="token string">"  AND addr_ind = :addrIndOri "</span> <span class="token operator">+</span> 
             <span class="token string">"  AND address = :addressOri "</span> <span class="token operator">+</span> 
             <span class="token string">"  AND tel = :telOri "</span><span class="token punctuation">;</span></code></pre>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">String</span> sql3 <span class="token operator">=</span> <span class="token string">"SELECT COUNT(*) FROM addr "</span> <span class="token operator">+</span>
-            <span class="token string">"WHERE address LIKE :address"</span><span class="token punctuation">;</span></code></pre>
 </li>
 <li><p>透過 Map 設定參數。</p>
 <pre><code class="fenced-code-block language-java"><span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> params1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1645,18 +1643,8 @@ params2<span class="token punctuation">.</span><span class="token function">put<
 </li>
 <li><p>執行 SQL。</p>
 <ul>
-<li><p><code>查詢 - 多筆資料</code> 透過 <code>namedParameterJdbcTemplate.query</code> 執行。</p>
-<ul>
-<li><code>無資料</code> 資料 會是 <code>null</code>。</li>
-</ul>
+<li><p><code>查詢</code> 透過 <code>namedParameterJdbcTemplate.query</code> 執行。</p>
 <pre><code class="fenced-code-block language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Addr</span><span class="token punctuation">&gt;</span></span> addrList <span class="token operator">=</span> namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql1<span class="token punctuation">,</span> params1<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">BeanPropertyRowMapper</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token class-name">Addr</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-</li>
-<li><p><code>查詢 - 一筆資料</code> 透過 <code>namedParameterJdbcTemplate.queryForObject</code> 執行。</p>
-<p>此類會用來執行 <code>COUNT</code> 這類 <code>僅有一筆 且 一定有一筆</code> 的資料。</p>
-<ul>
-<li>資料 <code>多筆</code> 或 <code>無資料</code> 都會拋出錯誤，</li>
-</ul>
-<pre><code class="fenced-code-block language-java"><span class="token class-name">Integer</span> count <span class="token operator">=</span> namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">queryForObject</span><span class="token punctuation">(</span>sql3<span class="token punctuation">,</span> params<span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 </li>
 <li><p><code>增刪修</code> 透過 <code>namedParameterJdbcTemplate.update</code> 執行。</p>
 <pre><code class="fenced-code-block language-java">namedParameterJdbcTemplate<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>sql2<span class="token punctuation">,</span> params2<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>

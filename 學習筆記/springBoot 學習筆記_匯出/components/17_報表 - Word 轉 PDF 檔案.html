@@ -1248,70 +1248,41 @@ pre[class*="language-"] {
   <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
 <body>
-  <article class="markdown-body"><h1 class="atx" id="報表---pdf-檔案">報表 - PDF 檔案</h1>
+  <article class="markdown-body"><h1 class="atx" id="報表---word-轉-pdf-檔案">報表 - Word 轉 PDF 檔案</h1>
 <h2 class="atx" id="安裝依賴">安裝依賴</h2>
 <ul>
-<li><p>Word 轉 PDF：
-使用套件 <code>fr.opensagres.poi.xwpf.converter.pdf</code></p>
-</li>
-<li><p>PDF 檔案合併：
-使用套件 <code>openPDF</code> 或 <code>itextpdf</code></p>
-</li>
+<li>Word 轉 PDF：
+使用套件 <code>fr.opensagres.poi.xwpf.converter.pdf</code></li>
 </ul>
 <pre><code class="fenced-code-block language-xml">        <span class="token comment">&lt;!-- fr.opensagres.poi.xwpf.converter.pdf --&gt;</span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>fr.opensagres.xdocreport<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>fr.opensagres.poi.xwpf.converter.pdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
             <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>2.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
-
-        <span class="token comment">&lt;!-- OpenPDF --&gt;</span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>com.github.librepdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>openpdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>1.0.5<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
-
-        <span class="token comment">&lt;!-- itextpdf --&gt;</span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>com.itextpdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>itextpdf<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">&gt;</span></span>5.5.13.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">&gt;</span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span></code></pre>
 <h2 class="atx" id="工具">工具</h2>
 <ul>
-<li><p>wordToPDF
+<li>wordToPDF
 功能：Word 轉為 PDF
 輸入：要轉換的 Word 檔
-輸出：轉換後的 PDF 檔</p>
-</li>
-<li><p>mergePDF
-功能：將 多個 PDF 檔 合併為 一個 PDF 檔
-輸入：要合併的 PDF 檔 清單
-輸出：合併後的 PDF 清單</p>
-</li>
+輸出：轉換後的 PDF 檔</li>
 </ul>
-<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span></span><span class="token class-name">Document</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfCopy</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfImportedPage</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfReader</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">fr<span class="token punctuation">.</span>opensagres<span class="token punctuation">.</span>poi<span class="token punctuation">.</span>xwpf<span class="token punctuation">.</span>converter<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfConverter</span><span class="token punctuation">;</span>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">fr<span class="token punctuation">.</span>opensagres<span class="token punctuation">.</span>poi<span class="token punctuation">.</span>xwpf<span class="token punctuation">.</span>converter<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfConverter</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">fr<span class="token punctuation">.</span>opensagres<span class="token punctuation">.</span>poi<span class="token punctuation">.</span>xwpf<span class="token punctuation">.</span>converter<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span><span class="token class-name">PdfOptions</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>poi<span class="token punctuation">.</span>xwpf<span class="token punctuation">.</span>usermodel<span class="token punctuation">.</span></span><span class="token class-name">XWPFDocument</span><span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">ByteArrayInputStream</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
 
 <span class="token comment">/**
  * PDF 匯出工具
  */</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExportPdfUtil</span> <span class="token punctuation">{</span>
 
+
     <span class="token comment">/**
      * word 轉 PDF
      * (fr.opensagres.poi.xwpf.converter.pdf)
-     *
      * @param wordFile word 檔
      * @return 產出的 PDF 檔案資料流（byte[]）
      */</span>
@@ -1323,41 +1294,6 @@ pre[class*="language-"] {
             <span class="token class-name">PdfConverter</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">convert</span><span class="token punctuation">(</span>document<span class="token punctuation">,</span> outputStream<span class="token punctuation">,</span> options<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"word 轉 PDF 失敗: "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * PDF 檔案合併 (iText / openPDF)
-     * @param pdfFlieList 要合併的 PDF 清單
-     * @return PDF 資料流
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">mergePDF</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token operator">&lt;</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">&gt;</span> pdfFlieList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">try</span> <span class="token punctuation">{</span>
-            <span class="token comment">// 創建 PDF 合併相關變數</span>
-            <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span></span>Document</span> document <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Document</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span>PdfCopy</span> pdfCopy <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PdfCopy</span><span class="token punctuation">(</span>document<span class="token punctuation">,</span> outputStream<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            document<span class="token punctuation">.</span><span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token comment">// PDF 合併</span>
-            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> pdfFlie <span class="token operator">:</span> pdfFlieList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token comment">// 讀取文件</span>
-                <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>lowagie<span class="token punctuation">.</span>text<span class="token punctuation">.</span>pdf<span class="token punctuation">.</span></span>PdfReader</span> pdfReader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PdfReader</span><span class="token punctuation">(</span>pdfFlie<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token comment">// 取得頁數</span>
-                <span class="token keyword">int</span> pdfPages <span class="token operator">=</span> pdfReader<span class="token punctuation">.</span><span class="token function">getNumberOfPages</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token comment">// 添加至輸出文檔</span>
-                <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> pdfPage <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> pdfPage <span class="token operator">&lt;=</span> pdfPages<span class="token punctuation">;</span> pdfPage<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                    <span class="token class-name">PdfImportedPage</span> importedPage <span class="token operator">=</span> pdfCopy<span class="token punctuation">.</span><span class="token function">getImportedPage</span><span class="token punctuation">(</span>pdfReader<span class="token punctuation">,</span> pdfPage<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                    pdfCopy<span class="token punctuation">.</span><span class="token function">addPage</span><span class="token punctuation">(</span>importedPage<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token punctuation">}</span>
-                <span class="token comment">// 關閉 PdfReader</span>
-                pdfReader<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            <span class="token comment">// 關閉 Document</span>
-            document<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"PDF 合併失敗: "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
         <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>

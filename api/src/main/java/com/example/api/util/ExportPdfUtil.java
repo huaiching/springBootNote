@@ -36,8 +36,10 @@ public class ExportPdfUtil {
             builder.useFastMode();
             builder.withHtmlContent(html, null);
             // 設定中文字型
-            File fontFile = new File("src/main/resources/templates/fonts/kaiu.ttf");
-            builder.useFont(fontFile, "標楷體");
+            File fontFile1 = new File("src/main/resources/templates/fonts/kaiu.ttf");
+            builder.useFont(fontFile1, "標楷體");
+            File fontFile2 = new File("src/main/resources/templates/fonts/3of9Barcode.ttf");
+            builder.useFont(fontFile2, "條碼");
             // 資料輸出
             builder.toStream(os);
             builder.run();
