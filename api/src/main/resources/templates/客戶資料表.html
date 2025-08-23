@@ -58,39 +58,6 @@
       border: 0.1px solid #000;
     }
 
-    /* 表格整體樣式 */
-    table {
-      width: 100%; /* 表格寬度填滿容器 */
-      border-collapse: collapse; /* 合併邊框，避免雙線效果 */
-      -fs-table-paginate: paginate; /* 啟用表格分頁功能 */
-      -fs-page-break-min-height: 1.5cm; /* 確保分頁時有足夠空間 */
-    }
-
-    /* 表格儲存格樣式 */
-    th, td {
-      border: 0.1mm solid; /* 儲存格邊框為 0.1mm 實線 */
-      padding: 6px; /* 儲存格內間距 */
-      text-align: center; /* 文字居中 */
-      font-size: 14px; /* 字體大小 */
-      line-height: 1.2; /* 統一行高，確保對齊 */
-    }
-
-    /* 表頭儲存格樣式 */
-    th {
-      background-color: #f0f0f0; /* 表頭背景色為淺灰色 */
-    }
-
-    /* 表頭分頁設置 */
-    thead {
-      display: table-header-group; /* 確保表頭在每頁重複顯示 */
-    }
-
-    /* 表格內容行分頁設置 */
-    tbody tr {
-      page-break-inside: avoid; /* 避免行內分頁 */
-      break-inside: avoid; /* 現代分頁控制，確保行完整性 */
-    }
-
     /* 強制換頁設定 */
     .pageChange {
       page-break-before: always;
@@ -108,6 +75,55 @@
       font-family: "條碼";
       font-size: 30px;
       text-align: right;
+    }
+
+    /* 表格整體樣式 */
+    table {
+      width: 100%; /* 表格寬度填滿容器 */
+      border-collapse: collapse; /* 合併邊框，避免雙線效果 */
+      -fs-table-paginate: paginate; /* 啟用表格分頁功能 */
+      -fs-page-break-min-height: 1.5cm; /* 確保分頁時有足夠空間 */
+    }
+
+    /* 表格通用樣式 */
+    th, td {
+      border: 0.1mm solid; /* 儲存格邊框為 0.1mm 實線 */
+      padding: 6px; /* 儲存格內間距 */
+      text-align: center; /* 文字居中 */
+      font-size: 14px; /* 字體大小 */
+      line-height: 1.2; /* 統一行高，確保對齊 */
+    }
+
+    /* 表格顏色樣式 - 表頭顏色 */
+    th {
+      background-color: #66bce1; /* 表頭背景色為淺藍色 */
+    }
+    /* 表格顏色樣式 - 表身顏色 */
+    .color1 td {
+      background-color: #c6dee8;
+    }
+    /* 表格顏色樣式 - 奇數行顏色 */
+    .color2 tr:nth-child(odd) {
+      background-color: #f2f2f2; /* 奇數行淺灰 */
+    }
+
+    /* 重點文字顏色樣式 */
+    .highlight {
+      color: red; /* 文字顏色 */
+      background-color: #f5f5f5; /* 背景色 */
+      font-weight: bold; /* 加粗 */
+      padding: 2px 4px; /* 內間距 */
+    }
+
+    /* 表頭分頁設置 */
+    thead {
+      display: table-header-group; /* 確保表頭在每頁重複顯示 */
+    }
+
+    /* 表格內容行分頁設置 */
+    tbody tr {
+      page-break-inside: avoid; /* 避免行內分頁 */
+      break-inside: avoid; /* 現代分頁控制，確保行完整性 */
     }
   </style>
 </head>
@@ -157,8 +173,8 @@
       <th style="width: 2%;">電話</th>
     </tr>
   </thead>
-  <tbody th:each="a : ${addrList}">
-    <tr>
+  <tbody class="color2">
+    <tr th:each="a : ${addrList}">
       <td style="width: 1%; text-align: center;" th:text="${a.addrInd}"></td>
       <td style="width: 4%; text-align: center;" th:text="${a.address}"></td>
       <td style="width: 2%; text-align: center;" th:text="${a.tel}"></td>
@@ -205,7 +221,7 @@
     </tr>
   </thead>
   <tbody th:each="b : ${policyList}">
-    <tr th:with="c=${b.poInfo}">
+    <tr class="color1" th:with="c=${b.poInfo}">
       <td colspan="2" th:text="${c.policyNo}"></td>
       <td colspan="1" th:text="${c.poStsCode}"></td>
       <td colspan="2" th:text="${c.poIssueDate}"></td>
@@ -232,6 +248,6 @@
 
 <div class="pageChange"/>
 <p>備註：</p>
-<p>此為練習用範例，相關資料均為假資料。</p>
+<p>此為<span class="highlight">練習用範例</span>，相關資料均為假資料。</p>
 </body>
 </html>

@@ -28,7 +28,7 @@ public class PdfService {
         Integer age = 25;
         // 聯絡資料
         List<AddrDTO> addrList = new ArrayList<>();
-        for (int i = 0 ; i < 10 ; i++) {
+        for (int i = 1 ; i <= 10 ; i++) {
             AddrDTO addr = new AddrDTO();
             addr.setAddrInd(String.valueOf(i));
             addr.setAddress("台北市內湖區石潭路58號"+i+"樓");
