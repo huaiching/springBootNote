@@ -168,16 +168,16 @@
   </colgroup>
   <thead>
     <tr>
-      <th style="width: 1%;">地址指示</th>
-      <th style="width: 4%;">地址</th>
-      <th style="width: 2%;">電話</th>
+      <th>地址指示</th>
+      <th>地址</th>
+      <th>電話</th>
     </tr>
   </thead>
   <tbody class="color2">
     <tr th:each="a : ${addrList}">
-      <td style="width: 1%; text-align: center;" th:text="${a.addrInd}"></td>
-      <td style="width: 4%; text-align: center;" th:text="${a.address}"></td>
-      <td style="width: 2%; text-align: center;" th:text="${a.tel}"></td>
+      <td th:text="${a.addrInd}"></td>
+      <td th:text="${a.address}"></td>
+      <td th:text="${a.tel}"></td>
     </tr>
   </tbody>
 </table>
@@ -236,8 +236,7 @@
       <td colspan="1" th:text="${d.clientIdent}"></td>
       <td colspan="2" th:text="${d.planCode}"></td>
       <td colspan="1" th:text="${d.rateScale}"></td>
-      <td colspan="2" style="
-      text-align: right;" th:text="${#numbers.formatDecimal(d.faceAmt, 0, 'COMMA', 2, 'POINT')}"></td>
+      <td colspan="2" style="text-align: right;" th:text="${#numbers.formatDecimal(d.faceAmt, 0, 'COMMA', 2, 'POINT')}"></td>
       <td colspan="2" th:text="${d.coIssueDate}"></td>
       <td colspan="2" th:text="${d.coChangeDate}"></td>
     </tr>
@@ -246,7 +245,7 @@
 
 <br/>
 
-<div class="pageChange"/>
+<div class="pageChange"></div>
 <p>備註：</p>
 <p>此為<span class="highlight">練習用範例</span>，相關資料均為假資料。</p>
 </body>

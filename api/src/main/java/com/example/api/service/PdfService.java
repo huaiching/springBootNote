@@ -1,6 +1,5 @@
 package com.example.api.service;
 
-import com.example.api.dto.CoveragesDTO;
 import com.example.api.dto.htmltopdf.AddrDTO;
 import com.example.api.dto.htmltopdf.CoInfoDTO;
 import com.example.api.dto.htmltopdf.PoInfoDTO;
