@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * PDF 匯出工具
  */
-public class ExportPdfUtil {
+public class HtmlToPDFUtil {
 
     /**
      * html 轉 PDF
@@ -71,6 +71,28 @@ public class ExportPdfUtil {
         }
     }
 }
+```
+
+## 資料結構
+
+```textile
+java
+├─ 📁constants                  
+├─ 📁controller               
+│   ├─ 📄 API 呼叫入口.java
+├─ 📁service        
+│   ├─ 📄 報表邏輯處理(生成資料數據).java
+├─ 📁dto                        
+│   ├─ 📄 資料傳輸物件.java
+├─ 📁util                       
+│   ├─ 📄 HtmlToPDFUtil.java    # html 轉 PDF 的檔案生成工具
+
+resources
+├─ 📁 templates
+│   ├─ 📄 樣板檔.html
+│   ├─ 📁 fonts
+│      ├─ kaiu.ttf               # 字型檔: 標楷體
+│      ├─ 3of9Barcode.ttf        # 字型檔: 條碼
 ```
 
 ## 使用方式
@@ -276,11 +298,31 @@ hr {
 <div class="pageChange"></div>
 ```
 
-### 6. Thymeleaf 動態數據處理
+### 6. 重點文字
+
+重點文字，可以透過 CSS 樣式 來調整 `文字顏色` 和 `底色`。
+
+```css
+/* 重點文字顏色樣式 */
+.highlight {
+  color: red; /* 文字顏色 */
+  background-color: #f5f5f5; /* 背景色 */
+  font-weight: bold; /* 加粗 */
+  padding: 2px 4px; /* 內間距 */
+}
+```
+
+使用範例：
+
+```html
+<span class="highlight">重點文字</span>
+```
+
+### 7. 動態數據處理
 
 變數使用 `${變數名稱}` 標示，下面會簡單介紹如何使用。
 
-#### 6.1 單值數據
+#### 7.1 單值數據
 
 ```html
 <div>姓名：<span th:text="${names}"></span></div>
@@ -288,7 +330,7 @@ hr {
 
 - **說明**：`th:text="${policyNo}"` 顯示後端傳入的 `policyNo` 值。
 
-#### 6.2 表格數據循環
+#### 7.2 表格數據循環
 
 - 當有 陣列資料 需要顯示，可以透過 `<table>` 來呈現資料。
 
@@ -337,9 +379,16 @@ hr {
   }
   ```
 
-##### 6.2.1. 單行的表格
+##### 7.2.1. 單行的表格
 
 - 透過 CSS 設定 奇數行 為 淺灰色底，使其比較好閱讀。
+  
+  ```css
+  /* 表格顏色樣式 - 奇數行顏色 */
+  .color2 tr:nth-child(odd) {
+    background-color: #f2f2f2; /* 奇數行淺灰 */
+  }
+  ```
 
 - `<colgroup>`：表格的 欄位數量 與 占比。
   
@@ -358,43 +407,43 @@ hr {
   - `<td th:text="${a.addrInd}"></td>`：顯示 `a` 物件的 `addrInd` 屬性數據。
     
     > 有需要可以透過 `style="text-align: right;"` 調整 文字位置。
+  
+  ```html
+  <table>
+    <colgroup>
+      <col style="width: 14%;"/>
+      <col style="width: 56%;"/>
+      <col style="width: 28%;"/>
+    </colgroup>
+    <thead>
+      <tr>
+        <th>地址指示</th>
+        <th>地址</th>
+        <th>電話</th>
+      </tr>
+    </thead>
+    <tbody class="color2">
+      <tr th:each="a : ${addrList}">
+        <td th:text="${a.addrInd}"></td>
+        <td th:text="${a.address}"></td>
+        <td th:text="${a.tel}"></td>
+      </tr>
+    </tbody>
+  </table>
+  ```
 
-```css
-/* 表格顏色樣式 - 奇數行顏色 */
-.color2 tr:nth-child(odd) {
-  background-color: #f2f2f2; /* 奇數行淺灰 */
-}
-```
-
-```html
-<table>
-  <colgroup>
-    <col style="width: 14%;"/>
-    <col style="width: 56%;"/>
-    <col style="width: 28%;"/>
-  </colgroup>
-  <thead>
-    <tr>
-      <th>地址指示</th>
-      <th>地址</th>
-      <th>電話</th>
-    </tr>
-  </thead>
-  <tbody class="color2">
-    <tr th:each="a : ${addrList}">
-      <td th:text="${a.addrInd}"></td>
-      <td th:text="${a.address}"></td>
-      <td th:text="${a.tel}"></td>
-    </tr>
-  </tbody>
-</table>
-```
-
-##### 6.2.2. 多行的表格
+##### 7.2.2. 多行的表格
 
 如果 每一筆 的數據過多，單行 無法呈現，可以使用此方法。
 
 - 為了 資料好辨識，透過 CSS 修改 每筆資料 第一行 的底色。
+  
+  ```css
+  /* 表格顏色樣式 - 表身顏色 */
+  .color1 td {
+    background-color: #c6dee8;
+  }
+  ```
 
 - `<colgroup>`：表格的 欄位數量 與 占比。
   
@@ -450,84 +499,77 @@ hr {
     - **參數 4 (2)**：小數點後位數，保留 2 位。
     - **參數 5 ('POINT')**：小數點符號，使用點號（.）；`NONE` 為 不需要。
     - **範例輸出**：`1234567.89` 格式化為 `1,234,567.89`。
-
-```css
-/* 表格顏色樣式 - 表身顏色 */
-.color1 td {
-  background-color: #c6dee8;
-}
-```
-
-```html
-<table>
-  <colgroup>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-    <col style="width: 9%;"/>
-  </colgroup>
-  <thead>
-    <tr>
-      <th colspan="2">保單號碼</th>
-      <th colspan="1">狀態</th>
-      <th colspan="2">生效日期</th>
-      <th colspan="2">繳費日期</th>
-      <th colspan="1">理賠</th>
-      <th colspan="1">批註</th>
-      <th colspan="1">告知</th>
-      <th colspan="1">弱體</th>
-    </tr>
-    <tr>
-      <th colspan="1"></th>
-      <th colspan="1">關係</th>
-      <th colspan="2">險種</th>
-      <th colspan="1">版數</th>
-      <th colspan="2">保額</th>
-      <th colspan="2">生效日期</th>
-      <th colspan="2">變更生效日</th>
-    </tr>
-  </thead>
-  <tbody th:each="b : ${policyList}">
-    <tr class="color1" th:with="c=${b.poInfo}">
-      <td colspan="2" th:text="${c.policyNo}"></td>
-      <td colspan="1" th:text="${c.poStsCode}"></td>
-      <td colspan="2" th:text="${c.poIssueDate}"></td>
-      <td colspan="2" th:text="${c.paidToDate}"></td>
-      <td colspan="1" th:text="${c.claimInd}"></td>
-      <td colspan="1" th:text="${c.remarkInd}"></td>
-      <td colspan="1" th:text="${c.informInd}"></td>
-      <td colspan="1" th:text="${c.weakInd}"></td>
-    </tr>
-    <tr th:each="d : ${b.coInfoList}">
-      <td colspan="1"></td>
-      <td colspan="1" th:text="${d.clientIdent}"></td>
-      <td colspan="2" th:text="${d.planCode}"></td>
-      <td colspan="1" th:text="${d.rateScale}"></td>
-      <td colspan="2" style="text-align: right;" th:text="${#numbers.formatDecimal(d.faceAmt, 0, 'COMMA', 2, 'POINT')}"></td>
-      <td colspan="2" th:text="${d.coIssueDate}"></td>
-      <td colspan="2" th:text="${d.coChangeDate}"></td>
-    </tr>
-  </tbody>
-</table>
-```
-
-範例的數據，對應 JAVA 數據為
-
-```java
-public class PolicyDTO {
-    private PoInfoDTO poInfo;
-    private List<CoInfoDTO> coInfoList;
-
-    ... setting 和 getting
-}
-```
+  
+  ```html
+  <table>
+    <colgroup>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+      <col style="width: 9%;"/>
+    </colgroup>
+    <thead>
+      <tr>
+        <th colspan="2">保單號碼</th>
+        <th colspan="1">狀態</th>
+        <th colspan="2">生效日期</th>
+        <th colspan="2">繳費日期</th>
+        <th colspan="1">理賠</th>
+        <th colspan="1">批註</th>
+        <th colspan="1">告知</th>
+        <th colspan="1">弱體</th>
+      </tr>
+      <tr>
+        <th colspan="1"></th>
+        <th colspan="1">關係</th>
+        <th colspan="2">險種</th>
+        <th colspan="1">版數</th>
+        <th colspan="2">保額</th>
+        <th colspan="2">生效日期</th>
+        <th colspan="2">變更生效日</th>
+      </tr>
+    </thead>
+    <tbody th:each="b : ${policyList}">
+      <tr class="color1" th:with="c=${b.poInfo}">
+        <td colspan="2" th:text="${c.policyNo}"></td>
+        <td colspan="1" th:text="${c.poStsCode}"></td>
+        <td colspan="2" th:text="${c.poIssueDate}"></td>
+        <td colspan="2" th:text="${c.paidToDate}"></td>
+        <td colspan="1" th:text="${c.claimInd}"></td>
+        <td colspan="1" th:text="${c.remarkInd}"></td>
+        <td colspan="1" th:text="${c.informInd}"></td>
+        <td colspan="1" th:text="${c.weakInd}"></td>
+      </tr>
+      <tr th:each="d : ${b.coInfoList}">
+        <td colspan="1"></td>
+        <td colspan="1" th:text="${d.clientIdent}"></td>
+        <td colspan="2" th:text="${d.planCode}"></td>
+        <td colspan="1" th:text="${d.rateScale}"></td>
+        <td colspan="2" style="text-align: right;" th:text="${#numbers.formatDecimal(d.faceAmt, 0, 'COMMA', 2, 'POINT')}"></td>
+        <td colspan="2" th:text="${d.coIssueDate}"></td>
+        <td colspan="2" th:text="${d.coChangeDate}"></td>
+      </tr>
+    </tbody>
+  </table>
+  ```
+  
+  範例的數據，對應 JAVA 數據為
+  
+  ```java
+  public class PolicyDTO {
+      private PoInfoDTO poInfo;
+      private List<CoInfoDTO> coInfoList;
+  
+      ... setting 和 getting
+  }
+  ```
 
 ## JAVA 設定
 
@@ -816,7 +858,7 @@ public class PolicyDTO {
   import com.example.api.dto.htmltopdf.CoInfoDTO;
   import com.example.api.dto.htmltopdf.PoInfoDTO;
   import com.example.api.dto.htmltopdf.PolicyDTO;
-  import com.example.api.util.ExportPdfUtil;
+  import com.example.api.util.HtmlToPDFUtil;
   import org.springframework.beans.factory.annotation.Autowired;
   import org.springframework.stereotype.Service;
   import org.thymeleaf.TemplateEngine;
@@ -885,7 +927,7 @@ public class PolicyDTO {
           context.setVariable("addrList", addrList);
           context.setVariable("policyList", policyList);
   
-          return ExportPdfUtil.htmlToPdf(templateEngine, "客戶資料表.html", context);
+          return HtmlToPDFUtil.htmlToPdf(templateEngine, "客戶資料表.html", context);
       }
   }
   ```

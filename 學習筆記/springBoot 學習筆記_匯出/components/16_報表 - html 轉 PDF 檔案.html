@@ -1280,7 +1280,7 @@ pre[class*="language-"] {
 <span class="token comment">/**
  * PDF 匯出工具
  */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExportPdfUtil</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HtmlToPDFUtil</span> <span class="token punctuation">{</span>
 
     <span class="token comment">/**
      * html 轉 PDF
@@ -1316,6 +1316,24 @@ pre[class*="language-"] {
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
+<h2 class="atx" id="資料結構">資料結構</h2>
+<pre><code class="fenced-code-block language-textile"><span class="token phrase">java
+├─ 📁constants                  
+├─ 📁controller               
+│   ├─ 📄 API 呼叫入口.java
+├─ 📁service        
+│   ├─ 📄 報表邏輯處理(生成資料數據).java
+├─ 📁dto                        
+│   ├─ 📄 資料傳輸物件.java
+├─ 📁util                       
+│   ├─ 📄 HtmlToPDFUtil.java    # html 轉 PDF 的檔案生成工具</span>
+
+<span class="token phrase">resources
+├─ 📁 templates
+│   ├─ 📄 樣板檔.html
+│   ├─ 📁 fonts
+│      ├─ kaiu.ttf               # 字型檔: 標楷體
+│      ├─ 3of9Barcode.ttf        # 字型檔: 條碼</span></code></pre>
 <h2 class="atx" id="使用方式">使用方式</h2>
 <p>程式開發流程，可以分成以下幾個步驟：</p>
 <ol>
@@ -1493,14 +1511,25 @@ pre[class*="language-"] {
   <span class="token property">page-break-before</span><span class="token punctuation">:</span> always<span class="token punctuation">;</span> <span class="token comment">/* 在元素前強制換頁 */</span>
 <span class="token punctuation">}</span></code></pre>
 <pre><code class="fenced-code-block language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pageChange<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span></code></pre>
-<h3 class="atx" id="6-thymeleaf-動態數據處理">6. Thymeleaf 動態數據處理</h3>
+<h3 class="atx" id="6-重點文字">6. 重點文字</h3>
+<p>重點文字，可以透過 CSS 樣式 來調整 <code>文字顏色</code> 和 <code>底色</code>。</p>
+<pre><code class="fenced-code-block language-css"><span class="token comment">/* 重點文字顏色樣式 */</span>
+<span class="token selector">.highlight</span> <span class="token punctuation">{</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> red<span class="token punctuation">;</span> <span class="token comment">/* 文字顏色 */</span>
+  <span class="token property">background-color</span><span class="token punctuation">:</span> #f5f5f5<span class="token punctuation">;</span> <span class="token comment">/* 背景色 */</span>
+  <span class="token property">font-weight</span><span class="token punctuation">:</span> bold<span class="token punctuation">;</span> <span class="token comment">/* 加粗 */</span>
+  <span class="token property">padding</span><span class="token punctuation">:</span> 2px 4px<span class="token punctuation">;</span> <span class="token comment">/* 內間距 */</span>
+<span class="token punctuation">}</span></code></pre>
+<p>使用範例：</p>
+<pre><code class="fenced-code-block language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>highlight<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>重點文字<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span></code></pre>
+<h3 class="atx" id="7-動態數據處理">7. 動態數據處理</h3>
 <p>變數使用 <code>${變數名稱}</code> 標示，下面會簡單介紹如何使用。</p>
-<h4 class="atx" id="61-單值數據">6.1 單值數據</h4>
+<h4 class="atx" id="71-單值數據">7.1 單值數據</h4>
 <pre><code class="fenced-code-block language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>姓名：<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name"><span class="token namespace">th:</span>text</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>${names}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span></code></pre>
 <ul>
 <li><strong>說明</strong>：<code>th:text="${policyNo}"</code> 顯示後端傳入的 <code>policyNo</code> 值。</li>
 </ul>
-<h4 class="atx" id="62-表格數據循環">6.2 表格數據循環</h4>
+<h4 class="atx" id="72-表格數據循環">7.2 表格數據循環</h4>
 <ul>
 <li><p>當有 陣列資料 需要顯示，可以透過 <code>&lt;table&gt;</code> 來呈現資料。</p>
 </li>
@@ -1548,9 +1577,13 @@ pre[class*="language-"] {
 <span class="token punctuation">}</span></code></pre>
 </li>
 </ul>
-<h5 class="atx" id="621-單行的表格">6.2.1. 單行的表格</h5>
+<h5 class="atx" id="721-單行的表格">7.2.1. 單行的表格</h5>
 <ul>
 <li><p>透過 CSS 設定 奇數行 為 淺灰色底，使其比較好閱讀。</p>
+<pre><code class="fenced-code-block language-css"><span class="token comment">/* 表格顏色樣式 - 奇數行顏色 */</span>
+<span class="token selector">.color2 tr:nth-child(odd)</span> <span class="token punctuation">{</span>
+  <span class="token property">background-color</span><span class="token punctuation">:</span> #f2f2f2<span class="token punctuation">;</span> <span class="token comment">/* 奇數行淺灰 */</span>
+<span class="token punctuation">}</span></code></pre>
 </li>
 <li><p><code>&lt;colgroup&gt;</code>：表格的 欄位數量 與 占比。</p>
 <ul>
@@ -1574,12 +1607,6 @@ pre[class*="language-"] {
 </blockquote>
 </li>
 </ul>
-</li>
-</ul>
-<pre><code class="fenced-code-block language-css"><span class="token comment">/* 表格顏色樣式 - 奇數行顏色 */</span>
-<span class="token selector">.color2 tr:nth-child(odd)</span> <span class="token punctuation">{</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> #f2f2f2<span class="token punctuation">;</span> <span class="token comment">/* 奇數行淺灰 */</span>
-<span class="token punctuation">}</span></code></pre>
 <pre><code class="fenced-code-block language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span><span class="token punctuation">&gt;</span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>colgroup</span><span class="token punctuation">&gt;</span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>col</span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">width</span><span class="token punctuation">:</span> 14%<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">/&gt;</span></span>
@@ -1601,10 +1628,16 @@ pre[class*="language-"] {
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tr</span><span class="token punctuation">&gt;</span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>tbody</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">&gt;</span></span></code></pre>
-<h5 class="atx" id="622-多行的表格">6.2.2. 多行的表格</h5>
+</li>
+</ul>
+<h5 class="atx" id="722-多行的表格">7.2.2. 多行的表格</h5>
 <p>如果 每一筆 的數據過多，單行 無法呈現，可以使用此方法。</p>
 <ul>
 <li><p>為了 資料好辨識，透過 CSS 修改 每筆資料 第一行 的底色。</p>
+<pre><code class="fenced-code-block language-css"><span class="token comment">/* 表格顏色樣式 - 表身顏色 */</span>
+<span class="token selector">.color1 td</span> <span class="token punctuation">{</span>
+  <span class="token property">background-color</span><span class="token punctuation">:</span> #c6dee8<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
 </li>
 <li><p><code>&lt;colgroup&gt;</code>：表格的 欄位數量 與 占比。</p>
 <ul>
@@ -1661,12 +1694,6 @@ pre[class*="language-"] {
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<pre><code class="fenced-code-block language-css"><span class="token comment">/* 表格顏色樣式 - 表身顏色 */</span>
-<span class="token selector">.color1 td</span> <span class="token punctuation">{</span>
-  <span class="token property">background-color</span><span class="token punctuation">:</span> #c6dee8<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
 <pre><code class="fenced-code-block language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span><span class="token punctuation">&gt;</span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>colgroup</span><span class="token punctuation">&gt;</span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>col</span> <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">width</span><span class="token punctuation">:</span> 9%<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span></span><span class="token punctuation">/&gt;</span></span>
@@ -1731,6 +1758,8 @@ pre[class*="language-"] {
 
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> setting 和 getting
 <span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
 <h2 class="atx" id="java-設定">JAVA 設定</h2>
 <ul>
 <li><p>資料取得後，透過 Context 進行設定。</p>
@@ -2008,7 +2037,7 @@ context<span class="token punctuation">.</span><span class="token function">setV
 <span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>dto<span class="token punctuation">.</span>htmltopdf<span class="token punctuation">.</span></span><span class="token class-name">CoInfoDTO</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>dto<span class="token punctuation">.</span>htmltopdf<span class="token punctuation">.</span></span><span class="token class-name">PoInfoDTO</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>dto<span class="token punctuation">.</span>htmltopdf<span class="token punctuation">.</span></span><span class="token class-name">PolicyDTO</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ExportPdfUtil</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">HtmlToPDFUtil</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Autowired</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span></span><span class="token class-name">Service</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>thymeleaf<span class="token punctuation">.</span></span><span class="token class-name">TemplateEngine</span><span class="token punctuation">;</span>
@@ -2077,7 +2106,7 @@ context<span class="token punctuation">.</span><span class="token function">setV
         context<span class="token punctuation">.</span><span class="token function">setVariable</span><span class="token punctuation">(</span><span class="token string">"addrList"</span><span class="token punctuation">,</span> addrList<span class="token punctuation">)</span><span class="token punctuation">;</span>
         context<span class="token punctuation">.</span><span class="token function">setVariable</span><span class="token punctuation">(</span><span class="token string">"policyList"</span><span class="token punctuation">,</span> policyList<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="token keyword">return</span> <span class="token class-name">ExportPdfUtil</span><span class="token punctuation">.</span><span class="token function">htmlToPdf</span><span class="token punctuation">(</span>templateEngine<span class="token punctuation">,</span> <span class="token string">"客戶資料表.html"</span><span class="token punctuation">,</span> context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">HtmlToPDFUtil</span><span class="token punctuation">.</span><span class="token function">htmlToPdf</span><span class="token punctuation">(</span>templateEngine<span class="token punctuation">,</span> <span class="token string">"客戶資料表.html"</span><span class="token punctuation">,</span> context<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 </li>
