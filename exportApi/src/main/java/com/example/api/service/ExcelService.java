@@ -98,4 +98,17 @@ public class ExcelService {
 
         return ExcelUtil.generateExcel("sampleGrid.xlsx", context);
     }
+
+    /**
+     * Excel 檔案合併
+     *
+     * @return
+     */
+    public byte[] mergeExcel() {
+        Map<String, byte[]> fileList = new HashMap<>();
+        fileList.put("excelEach", excelEach());
+        fileList.put("excelGrid", excelGrid());
+
+        return ExcelUtil.mergeExcel(fileList);
+    }
 }

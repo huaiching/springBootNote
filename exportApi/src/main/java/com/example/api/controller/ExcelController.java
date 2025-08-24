@@ -40,4 +40,12 @@ public class ExcelController {
         var file = excelService.excelGrid();
         return ReponseUtil.responseEntity("Grid測試表格.xlsx", file);
     }
+
+    @Operation(summary = "Excel 檔案合併",
+            description = "Excel 檔案合併")
+    @PostMapping("/mergeExcel")
+    public ResponseEntity<Resource> mergeExcel() {
+        var file = excelService.mergeExcel();
+        return ReponseUtil.responseEntity("mergeExcel.xlsx", file);
+    }
 }

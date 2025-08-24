@@ -133,18 +133,18 @@ public class ExcelUtil {
             int i = 0;
             for (Map.Entry<String, byte[]> data : fileList.entrySet()) {
                 // 取得資料
-                String fileName = data.getKey();
-                byte[] fileData = data.getValue();
+                String sheetName = data.getKey();
+                byte[] file = data.getValue();
                 // 合併資料
-                try (InputStream inputStream = new ByteArrayInputStream(fileData);
+                try (InputStream inputStream = new ByteArrayInputStream(file);
                      Workbook workbook = WorkbookFactory.create(inputStream)) {
 
                     // 取得第一個工作表
                     Sheet originalSheet = workbook.getSheetAt(0);
 
                     // 建立新工作表
-                    fileName = fileName != null ? fileName : "Sheet" + (i + 1);
-                    Sheet newSheet = mergedWorkbook.createSheet(fileName);
+                    sheetName = sheetName != null ? sheetName : "Sheet" + (i + 1);
+                    Sheet newSheet = mergedWorkbook.createSheet(sheetName);
 
                     // 複製工作表內容
                     copySheet(mergedWorkbook, originalSheet, newSheet);

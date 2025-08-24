@@ -177,18 +177,18 @@ public class ExcelUtil {
             int i = 0;
             for (Map.Entry<String, byte[]> data : fileList.entrySet()) {
                 // 取得資料
-                String fileName = data.getKey();
-                byte[] fileData = data.getValue();
+                String sheetName = data.getKey();
+                byte[] file = data.getValue();
                 // 合併資料
-                try (InputStream inputStream = new ByteArrayInputStream(fileData);
+                try (InputStream inputStream = new ByteArrayInputStream(file);
                      Workbook workbook = WorkbookFactory.create(inputStream)) {
 
                     // 取得第一個工作表
                     Sheet originalSheet = workbook.getSheetAt(0);
 
                     // 建立新工作表
-                    fileName = fileName != null ? fileName : "Sheet" + (i + 1);
-                    Sheet newSheet = mergedWorkbook.createSheet(fileName);
+                    sheetName = sheetName != null ? sheetName : "Sheet" + (i + 1);
+                    Sheet newSheet = mergedWorkbook.createSheet(sheetName);
 
                     // 複製工作表內容
                     copySheet(mergedWorkbook, originalSheet, newSheet);
@@ -616,3 +616,45 @@ resources
   ```
 
 ![](.\image\excel_sampleGrid_demo_01.png)
+
+### 3. Excel 多檔合併
+
+範例使用 上面的 `Each 遞迴表格` 和 `Grid 動態表格` 來進行 多檔合併 的示範。
+
+#### 3.1. 資料內容
+
+- Service
+  
+  1. 呼叫 上面的方法，產生 Excel 檔案。
+  
+  2. 最後透過 工具 產生 Excel。
+  
+  ```java
+  /**
+   * Excel 檔案合併
+   *
+   * @return
+   */
+  public byte[] mergeExcel() {
+      Map<String, byte[]> fileList = new HashMap<>();
+      fileList.put("excelEach", excelEach());
+      fileList.put("excelGrid", excelGrid());
+  
+      return ExcelUtil.mergeExcel(fileList);
+  }
+  ```
+
+- Controller
+  
+  ```java
+  @Operation(summary = "Excel 檔案合併",
+          description = "Excel 檔案合併")
+  @PostMapping("/mergeExcel")
+  public ResponseEntity<Resource> mergeExcel() {
+      var file = excelService.mergeExcel();
+      return ReponseUtil.responseEntity("mergeExcel.xlsx", file);
+  }
+  ```
+
+![](./image/excel_mergeExcel_demo_01.png)
+![](./image/excel_mergeExcel_demo_02.png)
