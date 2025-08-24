@@ -15,7 +15,7 @@ public class HtmlToPdfUtil {
     /**
      * html 轉 PDF
      * @param templateEngine Thymeleaf 的 TemplateEngine，用於解析 HTML 樣板
-     * @param modelFile 樣版路徑 (resources/templates/{templateName}.html)
+     * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param context 資料內容
      * @return
      */

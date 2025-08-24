@@ -25,7 +25,7 @@ public class WordUtil {
     /**
      * 產生 Word 檔案
      *
-     * @param modelFile 樣版路徑（例如："templates/document_template.docx"，位於 classpath）
+     * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param context   資料內容（Map 對應樣版中 {{key}} 欄位）
      * @return 產出的 Word 檔案資料流（byte[]）
      */
@@ -62,8 +62,15 @@ public class WordUtil {
     /**
      * 產生 Word 檔案
      *
-     * @param modelFile 樣版路徑（例如："templates/document_template.docx"，位於 classpath）
-     * @param context   資料內容（Map 對應樣版中 {{key}} 欄位）
+     * @param
+     * @param context
+     * @return
+     */
+    /**
+     *
+     * @param modelFile 樣版路徑 (resources/templates/{modelFile})
+     * @param configure 列表渲染設定
+     * @param context 資料內容（Map 對應樣版中 {{key}} 欄位）
      * @return 產出的 Word 檔案資料流（byte[]）
      */
     public static byte[] generateWordList(String modelFile, Configure configure, Map<String, Object> context) {
@@ -100,7 +107,7 @@ public class WordUtil {
     /**
      * 產生 Word 檔案 (合併列印)
      *
-     * @param modelFile 樣版路徑（例如："templates/document_template.docx"，位於 classpath）
+     * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param contextList   資料內容 清單（Map 對應樣版中 {{key}} 欄位）
      * @return 產出的 Word 檔案資料流（byte[]）
      */

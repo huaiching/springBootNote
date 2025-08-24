@@ -23,7 +23,7 @@ public class ExcelUtil {
     /**
      * 產生 Excel 檔案
      *
-     * @param modelFile 樣版檔案路徑（相對於 classpath，例如 "templates/sample_template.xlsx"）
+     * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param context   JXLS Context，包含資料模型與變數（例如 context.putVar("users", userList)）
      * @return 產出的 Excel 檔案資料流（byte[]）
      */
@@ -63,7 +63,7 @@ public class ExcelUtil {
     /**
      * 產生 Excel 檔案 (多檔 + 單一資料表)
      *
-     * @param modelFile 樣版檔案路徑（相對於 classpath，例如 "templates/sample_template.xlsx"）
+     * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param dataList  資料內容 清單 (Map key = 分頁名稱 / Map value = context)
      * @return
      */
