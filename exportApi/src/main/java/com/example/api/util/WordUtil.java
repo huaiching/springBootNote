@@ -156,7 +156,7 @@ public class WordUtil {
     /**
      * Word 多檔合併
      * @param wordFileList 要合併的 Word 資料流 清單
-     * @return
+     * @return 產出的 Word 檔案資料流（byte[]）
      */
     public static byte[] mergeWord(List<byte[]> wordFileList) {
         // 產生檔案

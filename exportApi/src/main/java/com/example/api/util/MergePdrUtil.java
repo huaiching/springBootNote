@@ -12,7 +12,7 @@ public class MergePdrUtil {
      * PDF 檔案合併 (Apache PDFBox)
      *
      * @param pdfFileList 要合併的 PDF 清單
-     * @return PDF 資料流
+     * @return 產出的 PDF 檔案資料流（byte[]）
      */
     public static byte[] mergePDF(List<byte[]> pdfFileList) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

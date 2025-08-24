@@ -65,7 +65,7 @@ public class ExcelUtil {
      *
      * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param dataList  資料內容 清單 (Map key = 分頁名稱 / Map value = context)
-     * @return
+     * @return 產出的 Excel 檔案資料流（byte[]）
      */
     public static byte[] generateExcel(String modelFile, Map<String, Context> dataList) {
         // 參數驗證
@@ -117,7 +117,7 @@ public class ExcelUtil {
      * Excel 檔案合併 (針對一個工作表的檔案)
      *
      * @param fileList 資料內容 清單 (Map key = 檔案名稱 / Map value = 檔案資料流)
-     * @return
+     * @return 產出的 Excel 檔案資料流（byte[]）
      */
     public static byte[] mergeExcel(Map<String, byte[]> fileList) {
         // 參數驗證

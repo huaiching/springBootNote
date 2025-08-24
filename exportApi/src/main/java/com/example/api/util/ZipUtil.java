@@ -14,8 +14,8 @@ public class ZipUtil {
 
     /**
      * 將多個檔案壓縮成 ZIP 格式，並回傳為 byte 陣列
-     * @param fileList 要壓縮的檔案清單（檔名 -> 檔案內容）
-     * @return 壓縮後的 ZIP 檔案內容（byte 陣列）
+     * @param fileList 要壓縮的檔案 Map 清單（key=檔名, value=檔案內容）
+     * @return 產出的 ZIP 檔案資料流（byte[]）
      */
     public static byte[] createZip(Map<String, byte[]> fileList) {
         // 參數驗證
