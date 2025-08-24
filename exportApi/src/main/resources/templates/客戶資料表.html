@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    /* 設置頁面整體樣式 */
+    body {
+      font-family: "標楷體", "Noto Serif CJK TC", sans-serif;
+      font-size: 14px; /* 預設字體大小 */
+    }
+
+    /* 頁面佈局設定 */
+    @page {
+      size: A4; /* 紙張樣式：A4 = 直式 A4 ; A4 landscape = 橫式 A4 */
+      margin: 110pt 30pt 60pt 30pt;
+      @top-center {
+        content: element(header) element(headerInfo); /* 頁眉顯示 header 和 headerInfo 元素內容 */
+        padding-top: 30px;
+      }
+      @bottom-center {
+        font-family: "標楷體"; /* 頁腳字體 */
+        content: "第 " counter(page) " 頁 / 共 " counter(pages) " 頁"; /* 頁腳顯示頁碼 */
+        padding-bottom: 30px;
+      }
+    }
+    @page :first {
+      @bottom-right {
+        content: element(bottomRight);
+      }
+    }
+    @page :not(:first) {
+      @bottom-right {
+        content: none;
+      }
+    }
+
+    /* 頁眉樣式 */
+    header {
+      display: block; /* 頁眉為塊級元素 */
+      text-align: center; /* 文字居中 */
+      font-weight: bold; /* 文字加粗 */
+      font-size: 16px; /* 頁眉字體大小 */
+      position: running(header); /* 定義為運行元素，確保每頁顯示 */
+    }
+    .headerInfo {
+      width: 100%; /* 表格寬度填滿容器 */
+      font-size: 14px; /* 字體大小 */
+      position: running(headerInfo); /* 定義為運行元素，確保每頁顯示 */
+    }
+    .bottomRight {
+      font-size: 14px;
+      text-align: right;
+      position: running(bottomRight); /* 定義為運行元素 */
+    }
+
+    /* 分隔線樣式 */
+    hr {
+      border: 0.1px solid #000;
+    }
+
+    /* 強制換頁設定 */
+    .pageChange {
+      page-break-before: always;
+    }
+
+    /* 頁碼顯示樣式 */
+    .page-number::after {
+      content: "頁碼： " counter(page) " / " counter(pages) ;
+      font-family: "標楷體";
+      font-size: 14px;
+    }
+
+    /* 條碼樣式 */
+    .barcode {
+      font-family: "條碼";
+      font-size: 30px;
+      text-align: right;
+    }
+
+    /* 表格整體樣式 */
+    table {
+      width: 100%; /* 表格寬度填滿容器 */
+      border-collapse: collapse; /* 合併邊框，避免雙線效果 */
+      -fs-table-paginate: paginate; /* 啟用表格分頁功能 */
+      -fs-page-break-min-height: 1.5cm; /* 確保分頁時有足夠空間 */
+    }
+
+    /* 表格通用樣式 */
+    th, td {
+      border: 0.1mm solid; /* 儲存格邊框為 0.1mm 實線 */
+      padding: 6px; /* 儲存格內間距 */
+      text-align: center; /* 文字居中 */
+      font-size: 14px; /* 字體大小 */
+      line-height: 1.2; /* 統一行高，確保對齊 */
+    }
+
+    /* 表格顏色樣式 - 表頭顏色 */
+    th {
+      background-color: #66bce1; /* 表頭背景色為淺藍色 */
+    }
+    /* 表格顏色樣式 - 表身顏色 */
+    .color1 td {
+      background-color: #c6dee8;
+    }
+    /* 表格顏色樣式 - 奇數行顏色 */
+    .color2 tr:nth-child(odd) {
+      background-color: #f2f2f2; /* 奇數行淺灰 */
+    }
+
+    /* 重點文字顏色樣式 */
+    .highlight {
+      color: red; /* 文字顏色 */
+      background-color: #f5f5f5; /* 背景色 */
+      font-weight: bold; /* 加粗 */
+      padding: 2px 4px; /* 內間距 */
+    }
+
+    /* 表頭分頁設置 */
+    thead {
+      display: table-header-group; /* 確保表頭在每頁重複顯示 */
+    }
+
+    /* 表格內容行分頁設置 */
+    tbody tr {
+      page-break-inside: avoid; /* 避免行內分頁 */
+      break-inside: avoid; /* 現代分頁控制，確保行完整性 */
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <div>三商美邦人壽保險股份有限公司</div>
+  <div>客戶資料表</div>
+</header>
+
+<div class="headerInfo">
+  <table>
+    <tr style="border: none">
+      <td style="border: none; text-align: left">報表代碼：text001</td>
+      <td style="border: none; text-align: right">【機密資料】</td>
+    </tr>
+    <tr style="border: none">
+      <td style="border: none; text-align: left">列印單位：90251</td>
+      <td style="border: none; text-align: right" class="page-number"></td>
+    </tr>
+  </table>
+  <hr/>
+</div>
+
+<div class="bottomRight">
+  <div class="barcode">TEST123456</div>
+  <div style="text-align: right">TEST123456</div>
+</div>
+
+<h3>基本資料</h3>
+<div>姓名：<span th:text="${names}"></span></div>
+<div>性別：<span th:text="${sex}"></span></div>
+<div>年齡：<span th:text="${age}"></span></div>
+
+<br/>
+
+<h3>聯絡資料</h3>
+<table>
+  <colgroup>
+    <col style="width: 14%;"/>
+    <col style="width: 56%;"/>
+    <col style="width: 28%;"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>地址指示</th>
+      <th>地址</th>
+      <th>電話</th>
+    </tr>
+  </thead>
+  <tbody class="color2">
+    <tr th:each="a : ${addrList}">
+      <td th:text="${a.addrInd}"></td>
+      <td th:text="${a.address}"></td>
+      <td th:text="${a.tel}"></td>
+    </tr>
+  </tbody>
+</table>
+
+<br/>
+
+<h3>保單資料</h3>
+<table>
+  <colgroup>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+    <col style="width: 9%;"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th colspan="2">保單號碼</th>
+      <th colspan="1">狀態</th>
+      <th colspan="2">生效日期</th>
+      <th colspan="2">繳費日期</th>
+      <th colspan="1">理賠</th>
+      <th colspan="1">批註</th>
+      <th colspan="1">告知</th>
+      <th colspan="1">弱體</th>
+    </tr>
+    <tr>
+      <th colspan="1"></th>
+      <th colspan="1">關係</th>
+      <th colspan="2">險種</th>
+      <th colspan="1">版數</th>
+      <th colspan="2">保額</th>
+      <th colspan="2">生效日期</th>
+      <th colspan="2">變更生效日</th>
+    </tr>
+  </thead>
+  <tbody th:each="b : ${policyList}">
+    <tr class="color1" th:with="c=${b.poInfo}">
+      <td colspan="2" th:text="${c.policyNo}"></td>
+      <td colspan="1" th:text="${c.poStsCode}"></td>
+      <td colspan="2" th:text="${c.poIssueDate}"></td>
+      <td colspan="2" th:text="${c.paidToDate}"></td>
+      <td colspan="1" th:text="${c.claimInd}"></td>
+      <td colspan="1" th:text="${c.remarkInd}"></td>
+      <td colspan="1" th:text="${c.informInd}"></td>
+      <td colspan="1" th:text="${c.weakInd}"></td>
+    </tr>
+    <tr th:each="d : ${b.coInfoList}">
+      <td colspan="1"></td>
+      <td colspan="1" th:text="${d.clientIdent}"></td>
+      <td colspan="2" th:text="${d.planCode}"></td>
+      <td colspan="1" th:text="${d.rateScale}"></td>
+      <td colspan="2" style="text-align: right;" th:text="${#numbers.formatDecimal(d.faceAmt, 0, 'COMMA', 2, 'POINT')}"></td>
+      <td colspan="2" th:text="${d.coIssueDate}"></td>
+      <td colspan="2" th:text="${d.coChangeDate}"></td>
+    </tr>
+  </tbody>
+</table>
+
+<br/>
+
+<div class="pageChange"></div>
+<p>備註：</p>
+<p>此為<span class="highlight">練習用範例</span>，相關資料均為假資料。</p>
+</body>
+</html>

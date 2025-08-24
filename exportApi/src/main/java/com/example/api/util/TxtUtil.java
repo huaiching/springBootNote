@@ -1,0 +1,140 @@
+package com.example.api.util;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
+public class TxtUtil {
+
+    /**
+     * 產生 文字檔 (自動換行) (BIG5)
+     * @param contentList 每行的文字內容 清單
+     * @return 文字檔 資料流 (BIG5 編碼)
+     */
+    public static byte[] generateTxtBIG5(List<String> contentList) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        StringBuilder sb = new StringBuilder();
+        // 寫入內文 (自動換行)
+        for (String content : contentList) {
+            sb.append(content);
+            sb.append("\r\n");
+        }
+        try {
+            outputStream.write(sb.toString().getBytes("BIG5"));
+        } catch (Exception e) {
+            throw new RuntimeException("文字檔 產生失敗: ", e);
+        }
+        return outputStream.toByteArray();
+    }
+
+    /**
+     * 產生 文字檔 (自動換行) (UTF-8)
+     * @param contentList 每行的文字內容 清單
+     * @return 文字檔 資料流 (UTF-8 編碼)
+     */
+    public static byte[] generateTxtUTF8(List<String> contentList) {
+        byte[] big5Bytes = generateTxtBIG5(contentList);
+
+        // 將 Big5 byte[] 解碼為 String
+        String decodedString = new String(big5Bytes, Charset.forName("Big5"));
+
+        // 將 String 重新編碼為 UTF-8 byte[]
+        return decodedString.getBytes(StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 按照 BIG5 編碼，進行字串 自動補齊 與 文字擷取
+     *
+     * @param original  文字內容
+     * @param maxLength 最大字元數
+     * @return  擷取 或 補齊空白 後的字串
+     */
+    public static String formatBig5FixedWidth(String original, int maxLength) {
+        if (StringUtils.isEmpty(original)) {
+            return "";
+        }
+
+        // 計算 文字長度: 利用 BIG5 中文 佔 2 byte 的特性
+        Charset big5 = Charset.forName("BIG5");
+        byte[] bytes = original.getBytes(big5);
+        // 進行 文字的 擷取 與 補齊空格 的作業
+        if (bytes.length > maxLength) {
+            // 截取超過字節的部分
+            return new String(bytes, 0, maxLength, big5);
+        } else {
+            // 補齊空格
+            StringBuilder result = new StringBuilder(original);
+            while (result.toString().getBytes(big5).length < maxLength) {
+                result.append(" ");
+            }
+            return result.toString();
+        }
+    }
+
+    /**
+     * 字串擷取，以 Big5 編碼計算位置
+     *
+     * @param original 原始字串
+     * @param start 起始位元組位置（從 0 開始）
+     * @param end   結束位元組位置（不包含該位元組）
+     * @return 擷取的字串
+     */
+    public static String substring(String original, int start, int end) {
+        // 原始字串 轉換為 big5 byte[]
+        Charset big5 = Charset.forName("BIG5");
+        byte[] bytes = original.getBytes(big5);
+
+        // 校驗
+        if (start < 0 || end > bytes.length || start > end) {
+            throw new RuntimeException("無效的位元組範圍：start 與 end 必須符合邏輯且不超出字串長度。");
+        }
+        // 擷取字串
+        int length = end - start;
+        return new String(bytes, start, length, big5);
+    }
+
+    /**
+     * 在指定位置覆蓋資料
+     *
+     * @param originalString 原始字串
+     * @param insertString  要插入的字串
+     * @param startBytePos 插入的起始 byte 位置（從 0 開始）
+     * @return 修改後的字串
+     */
+    public static String overwrite(String originalString, String insertString, int startBytePos)  {
+        // 字串 轉換為 big5 byte[]
+        Charset big5 = Charset.forName("BIG5");
+        byte[] originalBytes = originalString.getBytes(big5);
+        byte[] insertData = insertString.getBytes(big5);
+
+        // 計算 要插入的字串長度
+        int replaceBytes = insertData.length;
+
+        // 檢查長度合法性
+        if (startBytePos < 0) {
+            throw new RuntimeException("起始位置錯誤: " + startBytePos);
+        }
+        // 原始字串 長度不夠 插入空白格
+        if (originalBytes.length < startBytePos + replaceBytes) {
+            originalBytes = formatBig5FixedWidth(originalString, startBytePos + replaceBytes).getBytes(big5);
+        }
+
+        // 建立新陣列：原始長度 - 被取代長度 + 插入長度 => 其實總長度不變
+        byte[] result = new byte[originalBytes.length];
+
+        // 複製前段
+        System.arraycopy(originalBytes, 0, result, 0, startBytePos);
+
+        // 插入內容
+        System.arraycopy(insertData, 0, result, startBytePos, insertData.length);
+
+        // 複製後段（跳過要被取代的原始位元組）
+        System.arraycopy(originalBytes, startBytePos + replaceBytes, result, startBytePos + insertData.length,
+                originalBytes.length - startBytePos - replaceBytes);
+
+        return new String(result, big5);
+    }
+}
