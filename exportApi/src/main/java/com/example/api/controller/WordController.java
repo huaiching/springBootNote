@@ -28,11 +28,20 @@ public class WordController {
 
     @Operation(summary = "Word 資料生成 (多筆資料)",
             description = "Word 資料生成 (多筆資料)")
+    @PostMapping("/generateWordMerge")
+    public ResponseEntity<Resource> generateWordMerge() {
+
+        var file = wordService.generateWordMerge();
+        return ReponseUtil.responseEntity("word檔案生成(多筆).docx", file);
+    }
+
+    @Operation(summary = "Word 清單資料生成",
+            description = "Word 清單資料生成")
     @PostMapping("/generateWordList")
     public ResponseEntity<Resource> generateWordList() {
 
         var file = wordService.generateWordList();
-        return ReponseUtil.responseEntity("word檔案生成(多筆).docx", file);
+        return ReponseUtil.responseEntity("word檔案生成(清單).docx", file);
     }
 
     @Operation(summary = "Word 多檔合併",

@@ -1,6 +1,7 @@
 package com.example.api.util;
 
 import com.deepoove.poi.XWPFTemplate;
+import com.deepoove.poi.config.Configure;
 import com.deepoove.poi.xwpf.NiceXWPFDocument;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.BreakType;
@@ -58,6 +59,43 @@ public class WordUtil {
         }
     }
 
+    /**
+     * 產生 Word 檔案
+     *
+     * @param modelFile 樣版路徑（例如："templates/document_template.docx"，位於 classpath）
+     * @param context   資料內容（Map 對應樣版中 {{key}} 欄位）
+     * @return 產出的 Word 檔案資料流（byte[]）
+     */
+    public static byte[] generateWordList(String modelFile, Configure configure, Map<String, Object> context) {
+        // 參數驗證
+        if (StringUtils.isEmpty(modelFile)) {
+            throw new RuntimeException("樣版路徑 不可空白!!");
+        }
+        if (context == null) {
+            throw new RuntimeException("資料內容 不可空白!!");
+        }
+
+        // 樣板位置
+        String model = "/templates/" + modelFile;
+
+        // 產生檔案
+        try (
+                InputStream inputStream = new ClassPathResource(model).getInputStream();
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
+        ) {
+            // 載入樣版並填入資料
+            XWPFTemplate template = XWPFTemplate.compile(inputStream, configure).render(context);
+
+            // 將結果寫入 outputStream 並關閉資源
+            template.writeAndClose(outputStream);
+
+            return outputStream.toByteArray();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Word 產生失敗，樣版路徑：" + modelFile, e);
+        }
+    }
+
 
     /**
      * 產生 Word 檔案 (合併列印)
@@ -66,7 +104,7 @@ public class WordUtil {
      * @param contextList   資料內容 清單（Map 對應樣版中 {{key}} 欄位）
      * @return 產出的 Word 檔案資料流（byte[]）
      */
-    public static byte[] generateWordList(String modelFile, List<Map<String, Object>> contextList) {
+    public static byte[] generateWordMerge(String modelFile, List<Map<String, Object>> contextList) {
         // 參數驗證
         if (StringUtils.isEmpty(modelFile)) {
             throw new RuntimeException("樣版路徑 不可空白!!");
