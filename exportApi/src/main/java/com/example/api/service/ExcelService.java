@@ -64,7 +64,7 @@ public class ExcelService {
             dataMap.put(userId, context);
         }
 
-        return ExcelUtil.generateExcel("sampleEach.xlsx", dataMap);
+        return ExcelUtil.generateExcelList("sampleEach.xlsx", dataMap);
     }
 
     /**

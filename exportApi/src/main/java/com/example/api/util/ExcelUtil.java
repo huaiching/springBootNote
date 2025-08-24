@@ -61,13 +61,13 @@ public class ExcelUtil {
     }
 
     /**
-     * 產生 Excel 檔案 (多檔 + 單一資料表)
+     * 產生 Excel 檔案 (相同樣板 + 多筆資料)
      *
      * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param dataList  資料內容 清單 (Map key = 分頁名稱 / Map value = context)
      * @return 產出的 Excel 檔案資料流（byte[]）
      */
-    public static byte[] generateExcel(String modelFile, Map<String, Context> dataList) {
+    public static byte[] generateExcelList(String modelFile, Map<String, Context> dataList) {
         // 參數驗證
         if (StringUtils.isEmpty(modelFile)) {
             throw new RuntimeException("樣版路徑 不可空白!!");
