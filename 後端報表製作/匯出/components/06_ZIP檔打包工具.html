@@ -1248,176 +1248,110 @@ pre[class*="language-"] {
   <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
 <body>
-  <article class="markdown-body"><h1 class="atx" id="文字工具">文字工具</h1>
-<p>此工具針對 文字相關處理，提供相關工具。</p>
-<ul>
-<li><p>generateTxtBIG5</p>
-<p>功能：產生 文字檔 (自動換行) (BIG5)</p>
-<p>輸入：每行的文字內容 清單</p>
-<p>輸出：文字檔 資料流 (BIG5 編碼)</p>
-</li>
-<li><p>generateTxtUTF8</p>
-<p>功能：產生 文字檔 (自動換行) (UTF-8)</p>
-<p>輸入：每行的文字內容 清單</p>
-<p>輸出：文字檔 資料流 (UTF-8 編碼)</p>
-</li>
-<li><p>formatBig5FixedWidth</p>
-<p>功能：按照 BIG5 編碼，進行字串 自動補齊空白 與 文字擷取</p>
-<p>輸入：文字內容</p>
-<p>　　　最大字元數</p>
-<p>輸出：擷取 或 補齊空白 後的字串</p>
-</li>
-<li><p>substring</p>
-<p>功能：字串擷取，以 Big5 編碼計算位置</p>
-<p>輸入：原始字串</p>
-<p>　　　起始位元組位置（從 0 開始）</p>
-<p>　　　結束位元組位置（不包含該位元組）</p>
-<p>輸出：擷取的字串</p>
-</li>
-<li><p>overwrite</p>
-<p>功能：在指定位置覆蓋資料</p>
-<p>輸入：原始字串</p>
-<p>　　　要插入的字串</p>
-<p>　　　插入的起始 byte 位置（從 0 開始）</p>
-<p>輸出：修改後的字串</p>
-</li>
-</ul>
-<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>lang3<span class="token punctuation">.</span></span><span class="token class-name">StringUtils</span><span class="token punctuation">;</span>
+  <article class="markdown-body"><h1 class="atx" id="zip檔打包工具">ZIP檔打包工具</h1>
+<p>此工具，可以將 多個檔案，打包為 ZIP檔，方便提供用戶下載。</p>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">CollectionUtils</span><span class="token punctuation">;</span>
+
 <span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>charset<span class="token punctuation">.</span></span><span class="token class-name">Charset</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>charset<span class="token punctuation">.</span></span><span class="token class-name">StandardCharsets</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>zip<span class="token punctuation">.</span></span><span class="token class-name">ZipEntry</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>zip<span class="token punctuation">.</span></span><span class="token class-name">ZipOutputStream</span><span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ExportTxtUtil</span> <span class="token punctuation">{</span>
-
-    <span class="token comment">/**
-     * 產生 純文字檔 (自動換行) (BIG5)
-     * @param contentList 每行的文字內容
-     * @return 純文字檔 資料流
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">generateTxtBIG5</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> contentList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">StringBuilder</span> sb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 寫入內文 (自動換行)</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">String</span> content <span class="token operator">:</span> contentList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>content<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"\r\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">try</span> <span class="token punctuation">{</span>
-            outputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>sb<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"BIG5"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"純文字檔 產生失敗: "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+<span class="token comment">/**
+ * Zip 打包工具
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ZipUtil</span> <span class="token punctuation">{</span>
 
     <span class="token comment">/**
-     * 產生 純文字檔 (自動換行) (UTF-8)
-     * @param contentList 每行的文字內容
-     * @return 純文字檔 資料流
+     * 將多個檔案壓縮成 ZIP 格式，並回傳為 byte 陣列
+     * @param fileList 要壓縮的檔案 Map 清單（key=檔名, value=檔案內容）
+     * @return 產出的 ZIP 檔案資料流（byte[]）
      */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">generateTxtUTF8</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> contentList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> big5Bytes <span class="token operator">=</span> <span class="token function">generateTxtBIG5</span><span class="token punctuation">(</span>contentList<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 將 Big5 byte[] 解碼為 String</span>
-        <span class="token class-name">String</span> decodedString <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>big5Bytes<span class="token punctuation">,</span> <span class="token class-name">Charset</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"Big5"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 將 String 重新編碼為 UTF-8 byte[]</span>
-        <span class="token keyword">return</span> decodedString<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token class-name">StandardCharsets</span><span class="token punctuation">.</span>UTF_8<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 文字格式化: 依照 最大字元數，自動補齊 或 擷取
-     * @param original  文字內容
-     * @param maxLength 最大字元數
-     * @return  格式化後的文字
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">formatBig5FixedWidth</span><span class="token punctuation">(</span><span class="token class-name">String</span> original<span class="token punctuation">,</span> <span class="token keyword">int</span> maxLength<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">StringUtils</span><span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">createZip</span><span class="token punctuation">(</span><span class="token class-name">Map</span><span class="token operator">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">&gt;</span> fileList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 參數驗證</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">CollectionUtils</span><span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>fileList<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"要打包的檔案 不可空白!!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
 
-        <span class="token comment">// 計算 文字長度: 利用 BIG5 中文 佔 2 byte 的特性</span>
-        <span class="token class-name">Charset</span> big5 <span class="token operator">=</span> <span class="token class-name">Charset</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"BIG5"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> bytes <span class="token operator">=</span> original<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>big5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 進行 文字的 擷取 與 補齊空格 的作業</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>bytes<span class="token punctuation">.</span>length <span class="token operator">&gt;</span> maxLength<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token comment">// 截取超過字節的部分</span>
-            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>bytes<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> maxLength<span class="token punctuation">,</span> big5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token comment">// 補齊空格</span>
-            <span class="token class-name">StringBuilder</span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span>original<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>big5<span class="token punctuation">)</span><span class="token punctuation">.</span>length <span class="token operator">&lt;</span> maxLength<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span>
+                <span class="token class-name">ByteArrayOutputStream</span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name">ZipOutputStream</span> zipOutputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ZipOutputStream</span><span class="token punctuation">(</span>outputStream<span class="token punctuation">)</span>
+        <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Map<span class="token punctuation">.</span>Entry</span><span class="token operator">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">&gt;</span> file <span class="token operator">:</span> fileList<span class="token punctuation">.</span><span class="token function">entrySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token class-name">String</span> fileName <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token function">getKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> fileData <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>fileName <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> fileName<span class="token punctuation">.</span><span class="token function">isBlank</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"檔名不可為空"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>fileData <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"檔案內容不可為空: "</span> <span class="token operator">+</span> fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+
+                <span class="token comment">// 確保使用相對路徑格式</span>
+                <span class="token class-name">String</span> safeFileName <span class="token operator">=</span> fileName<span class="token punctuation">.</span><span class="token function">replaceAll</span><span class="token punctuation">(</span><span class="token string">"\\\\"</span><span class="token punctuation">,</span> <span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                zipOutputStream<span class="token punctuation">.</span><span class="token function">putNextEntry</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ZipEntry</span><span class="token punctuation">(</span>safeFileName<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                zipOutputStream<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>fileData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                zipOutputStream<span class="token punctuation">.</span><span class="token function">closeEntry</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
-            <span class="token keyword">return</span> result<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment">// 確保壓縮流正確結束</span>
+            zipOutputStream<span class="token punctuation">.</span><span class="token function">finish</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">return</span> outputStream<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"Zip 產生失敗: "</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 字串擷取，以 Big5 編碼計算位置
-     *
-     * @param original 原始字串
-     * @param start 起始位元組位置（從 0 開始）
-     * @param end   結束位元組位置（不包含該位元組）
-     * @return 擷取的字串
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">substring</span><span class="token punctuation">(</span><span class="token class-name">String</span> original<span class="token punctuation">,</span> <span class="token keyword">int</span> start<span class="token punctuation">,</span> <span class="token keyword">int</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// 原始字串 轉換為 big5 byte[]</span>
-        <span class="token class-name">Charset</span> big5 <span class="token operator">=</span> <span class="token class-name">Charset</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"BIG5"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> bytes <span class="token operator">=</span> original<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>big5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 校驗</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>start <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token operator">||</span> end <span class="token operator">&gt;</span> bytes<span class="token punctuation">.</span>length <span class="token operator">||</span> start <span class="token operator">&gt;</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"無效的位元組範圍：start 與 end 必須符合邏輯且不超出字串長度。"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token comment">// 擷取字串</span>
-        <span class="token keyword">int</span> length <span class="token operator">=</span> end <span class="token operator">-</span> start<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>bytes<span class="token punctuation">,</span> start<span class="token punctuation">,</span> length<span class="token punctuation">,</span> big5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">/**
-     * 在指定位置覆蓋資料
-     *
-     * @param originalString     原始字串
-     * @param insertString  要插入的字串
-     * @param startBytePos 插入的起始 byte 位置（從 0 開始）
-     * @return 修改後的字串
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token function">overwrite</span><span class="token punctuation">(</span><span class="token class-name">String</span> originalString<span class="token punctuation">,</span> <span class="token class-name">String</span> insertString<span class="token punctuation">,</span> <span class="token keyword">int</span> startBytePos<span class="token punctuation">)</span>  <span class="token punctuation">{</span>
-        <span class="token comment">// 字串 轉換為 big5 byte[]</span>
-        <span class="token class-name">Charset</span> big5 <span class="token operator">=</span> <span class="token class-name">Charset</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"BIG5"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> originalBytes <span class="token operator">=</span> originalString<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>big5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> insertData <span class="token operator">=</span> insertString<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>big5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 計算 要插入的字串長度</span>
-        <span class="token keyword">int</span> replaceBytes <span class="token operator">=</span> insertData<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
-
-        <span class="token comment">// 檢查長度合法性</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>startBytePos <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"起始位置錯誤: "</span> <span class="token operator">+</span> startBytePos<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token comment">// 原始字串 長度不夠 插入空白格</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>originalBytes<span class="token punctuation">.</span>length <span class="token operator">&lt;</span> startBytePos <span class="token operator">+</span> replaceBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            originalBytes <span class="token operator">=</span> <span class="token function">formatBig5FixedWidth</span><span class="token punctuation">(</span>originalString<span class="token punctuation">,</span> startBytePos <span class="token operator">+</span> replaceBytes<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>big5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
-        <span class="token comment">// 建立新陣列：原始長度 - 被取代長度 + 插入長度 =&gt; 其實總長度不變</span>
-        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span>originalBytes<span class="token punctuation">.</span>length<span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 複製前段</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">arraycopy</span><span class="token punctuation">(</span>originalBytes<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> result<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> startBytePos<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 插入內容</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">arraycopy</span><span class="token punctuation">(</span>insertData<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> result<span class="token punctuation">,</span> startBytePos<span class="token punctuation">,</span> insertData<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token comment">// 複製後段（跳過要被取代的原始位元組）</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">arraycopy</span><span class="token punctuation">(</span>originalBytes<span class="token punctuation">,</span> startBytePos <span class="token operator">+</span> replaceBytes<span class="token punctuation">,</span> result<span class="token punctuation">,</span> startBytePos <span class="token operator">+</span> insertData<span class="token punctuation">.</span>length<span class="token punctuation">,</span>
-                originalBytes<span class="token punctuation">.</span>length <span class="token operator">-</span> startBytePos <span class="token operator">-</span> replaceBytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> big5<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
+<h2 class="atx" id="範例">範例</h2>
+<ul>
+<li><p>Service</p>
+<pre><code class="fenced-code-block language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>api<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ZipUtil</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span></span><span class="token class-name">Autowired</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span></span><span class="token class-name">Service</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">HashMap</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Map</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ZipService</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">ExcelService</span> excelService<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> <span class="token class-name">WordService</span> wordService<span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * Zip 檔案打包
+     * @return
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">generateZip</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 產生 excel</span>
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> excelFile <span class="token operator">=</span> excelService<span class="token punctuation">.</span><span class="token function">excelEach</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 產生 word</span>
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> wordFile <span class="token operator">=</span> wordService<span class="token punctuation">.</span><span class="token function">generateWord</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 打包為 zip</span>
+        <span class="token class-name">Map</span><span class="token operator">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">&gt;</span> fileList <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fileList<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"excel.xlsx"</span><span class="token punctuation">,</span> excelFile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fileList<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"word.docx"</span><span class="token punctuation">,</span> wordFile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token class-name">ZipUtil</span><span class="token punctuation">.</span><span class="token function">createZip</span><span class="token punctuation">(</span>fileList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>Controller</p>
+<pre><code class="fenced-code-block language-java"><span class="token annotation punctuation">@Operation</span><span class="token punctuation">(</span>summary <span class="token operator">=</span> <span class="token string">"Zip 檔案打包"</span><span class="token punctuation">,</span>
+        description <span class="token operator">=</span> <span class="token string">"Zip 檔案打包"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@PostMapping</span><span class="token punctuation">(</span><span class="token string">"/generateZip"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Resource</span><span class="token punctuation">&gt;</span></span> <span class="token function">generateZip</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">var</span> file <span class="token operator">=</span> zipService<span class="token punctuation">.</span><span class="token function">generateZip</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token class-name">ReponseUtil</span><span class="token punctuation">.</span><span class="token function">responseEntity</span><span class="token punctuation">(</span><span class="token string">"zipFilt.zip"</span><span class="token punctuation">,</span> file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
 </article>
 </body>
 </html>
