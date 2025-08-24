@@ -6,12 +6,12 @@
   使用套件 `fr.opensagres.poi.xwpf.converter.pdf`
 
 ```xml
-        <!-- fr.opensagres.poi.xwpf.converter.pdf -->
-        <dependency>
-            <groupId>fr.opensagres.xdocreport</groupId>
-            <artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
-            <version>2.0.3</version>
-        </dependency>
+<!-- fr.opensagres.poi.xwpf.converter.pdf -->
+<dependency>
+    <groupId>fr.opensagres.xdocreport</groupId>
+    <artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
+    <version>2.0.3</version>
+</dependency>
 ```
 
 ## 工具
@@ -32,8 +32,7 @@ import java.io.ByteArrayOutputStream;
 /**
  * PDF 匯出工具
  */
-public class ExportPdfUtil {
-
+public class WordToPdfUtil {
 
     /**
      * word 轉 PDF
@@ -62,39 +61,31 @@ public class ExportPdfUtil {
 - Service
   
   ```java
+  import org.springframework.stereotype.Service;  
+  import com.example.api.util.WordToPdfUtil;
+  import com.example.api.util.WordUtil;  
+  import java.util.HashMap;
+  import java.util.Map;
+  
   @Service
-  public class ExportServiceImpl implements ExportService {
-      @Autowired
-      private ClntRepository clntRepository;
-  
+  public class WordToPdfService {
       /**
-       * 單筆列印客戶證號明細表
+       * word 轉 PDF
        *
-       * @param clientId 客戶證號
        * @return
        */
-      @Override
-      public byte[] wordTest(String clientId) {
-          Clnt clnt = clntRepository.findById(clientId).get();
-  
+      public byte[] generate() {
+          String userId = "A123456789";
+          String userName = "測試人員";
+          String userSex = "男性";
           Map<String, Object> context = new HashMap<>();
-          context.put("names", clnt.getNames());
-          context.put("clientId", clnt.getClientId());
-          context.put("sex", SexEnum.getDescByCode(clnt.getSex()));
+          context.put("names", userName);
+          context.put("clientId", userId);
+          context.put("sex", userSex);
   
-          return ExportWordUtil.generateWord("/templates/sample.docx", context);
-      }
+          byte[] file = WordUtil.generateWord("/templates/sample.docx", context);
   
-      /**
-       * 列印單筆客戶證號明細表 並轉成 PDF
-       *
-       * @param clientId 客戶證號
-       * @return
-       */
-      @Override
-      public byte[] wordToPdf(String clientId) {
-          var wordFile = wordTest(clientId);
-          return ExportPdfUtil.wordToPDF(wordFile);
+          return WordToPdfUtil.wordToPDF(file);
       }
   }
   ```
@@ -102,21 +93,12 @@ public class ExportPdfUtil {
 - Controller
   
   ```java
-  @RestController
-  @Tag(name = "PDF 報表匯出測試")
-  @RequestMapping("/export/pdf")
-  public class ExportPDFController {
-      @Autowired
-      private ExportService exportService;
+  @Operation(summary = "word 轉 PDF",
+          description = "word 轉 PDF")
+  @PostMapping("/generateWord")
+  public ResponseEntity<Resource> generateWord() {
   
-      @Operation(summary = "Word 轉成 PDF",
-              description = "Word 轉成 PDF",
-              operationId = "wordToPDF")
-      @GetMapping("/wordToPDF")
-      public ResponseEntity<Resource> wordToPDF(@RequestParam String clientId) {
-  
-          var file = exportService.wordToPdf(clientId);
-          return ExportReponseUtil.responseEntity("客戶證號明細表.pdf", file);
-      }
+      var file = wordToPdfService.generate();
+      return ReponseUtil.responseEntity("wordToPdf.pdf", file);
   }
   ```

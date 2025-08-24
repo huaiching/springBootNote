@@ -6,32 +6,32 @@
 
 此套件 源自於 `apache.poi`，還可以透過 `樣版檔` 來達成 快速產生 Excel 檔案。
 
-- ```xml
-          <!-- apache.poi -->
-          <dependency>
-              <groupId>org.apache.poi</groupId>
-              <artifactId>poi</artifactId>
-              <version>5.2.3</version>
-          </dependency>
-          <dependency>
-              <groupId>org.apache.poi</groupId>
-              <artifactId>poi-ooxml</artifactId>
-              <version>5.2.3</version>
-          </dependency>
-          <!-- JXLS -->
-          <dependency>
-              <groupId>org.jxls</groupId>
-              <artifactId>jxls-poi</artifactId>
-              <version>2.12.0</version>
-              <!-- 排除其自帶的 POI -->
-              <exclusions>
-                  <exclusion>
-                      <groupId>org.apache.poi</groupId>
-                      <artifactId>*</artifactId>
-                  </exclusion>
-              </exclusions>
-          </dependency>使用 `JXLS 2` 這個套件，來產生 Excel 檔案。
-  ```
+```xml
+<!-- apache.poi -->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>5.2.3</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>5.2.3</version>
+</dependency>
+<!-- JXLS -->
+<dependency>
+    <groupId>org.jxls</groupId>
+    <artifactId>jxls-poi</artifactId>
+    <version>2.12.0</version>
+    <!-- 排除其自帶的 POI -->
+    <exclusions>
+        <exclusion>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>*</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
 
 ## 工具
 

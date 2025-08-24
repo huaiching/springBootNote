@@ -1,7 +1,6 @@
 package com.example.api.service;
 
 import com.deepoove.poi.config.Configure;
-import com.deepoove.poi.plugin.table.LoopColumnTableRenderPolicy;
 import com.deepoove.poi.plugin.table.LoopRowTableRenderPolicy;
 import com.example.api.dto.excel.AddrDTO;
 import org.springframework.stereotype.Service;
@@ -105,20 +104,8 @@ public class WordService {
     public byte[] mergeWord() {
         List<byte[]> fileList = new ArrayList<>();
 
-        for (int i = 1; i <= 5; i++) {
-            String userId = "TEST00" + i;
-            String userName = "測試人員" + i;
-            String userSex = "男性";
-
-            Map<String, Object> context = new HashMap<>();
-            context.put("names", userName);
-            context.put("clientId", userId);
-            context.put("sex", userSex);
-
-            byte[] file = WordUtil.generateWord("sample.docx", context);
-
-            fileList.add(file);
-        }
+        fileList.add(generateWord());
+        fileList.add(generateWordList());
 
         return WordUtil.mergeWord(fileList);
     }

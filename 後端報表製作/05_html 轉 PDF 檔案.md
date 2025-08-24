@@ -6,15 +6,15 @@
   使用套件 `openhtmltopdf`
 
 ```xml
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.openhtmltopdf</groupId>
-            <artifactId>openhtmltopdf-pdfbox</artifactId>
-            <version>1.0.10</version>
-        </dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.openhtmltopdf</groupId>
+    <artifactId>openhtmltopdf-pdfbox</artifactId>
+    <version>1.0.10</version>
+</dependency>
 ```
 
 ## 工具
@@ -863,13 +863,11 @@ hr {
   import org.springframework.stereotype.Service;
   import org.thymeleaf.TemplateEngine;
   import org.thymeleaf.context.Context;
-  
   import java.util.ArrayList;
   import java.util.List;
   
   @Service
   public class PdfService {
-  
       @Autowired
       private TemplateEngine templateEngine;
   

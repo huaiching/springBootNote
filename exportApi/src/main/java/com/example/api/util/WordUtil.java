@@ -60,13 +60,7 @@ public class WordUtil {
     }
 
     /**
-     * 產生 Word 檔案
-     *
-     * @param
-     * @param context
-     * @return
-     */
-    /**
+     * 產生 Word 檔案 (相同樣板 + 多筆資料)
      *
      * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param configure 列表渲染設定
@@ -155,6 +149,7 @@ public class WordUtil {
 
     /**
      * Word 多檔合併
+     *
      * @param wordFileList 要合併的 Word 資料流 清單
      * @return 產出的 Word 檔案資料流（byte[]）
      */
@@ -188,7 +183,6 @@ public class WordUtil {
         } catch (IOException e) {
             throw new RuntimeException("Word 產生失敗", e);
         }
-
 
     }
 }
