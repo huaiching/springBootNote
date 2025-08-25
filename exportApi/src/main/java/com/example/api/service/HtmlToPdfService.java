@@ -20,6 +20,10 @@ public class HtmlToPdfService {
     @Autowired
     private TemplateEngine templateEngine;
 
+    /**
+     * html 產出 PDF
+     * @return 產出的 PDF 檔案資料流（byte[]）
+     */
     public byte[] generatePdf() {
         // 模擬資料
         // 基本資料

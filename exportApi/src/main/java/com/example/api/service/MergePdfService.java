@@ -13,6 +13,10 @@ public class MergePdfService {
     @Autowired
     private HtmlToPdfService htmlToPdfService;
 
+    /**
+     * PDF 合併
+     * @return 產出的 PDF 檔案資料流（byte[]）
+     */
     public byte[] mergePDF() {
         List<byte[]> fileList = new ArrayList<>();
 

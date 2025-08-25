@@ -18,7 +18,7 @@ public class WordService {
     /**
      * Word 資料生成
      *
-     * @return
+     * @return 產出的 Word 檔案資料流（byte[]）
      */
     public byte[] generateWord() {
         String userId = "A123456789";
@@ -37,7 +37,7 @@ public class WordService {
     /**
      * Word 資料生成 (多筆資料)
      *
-     * @return
+     * @return 產出的 Word 檔案資料流（byte[]）
      */
     public byte[] generateWordMerge() {
 
@@ -63,7 +63,7 @@ public class WordService {
     /**
      * Word 清單資料生成
      *
-     * @return
+     * @return 產出的 Word 檔案資料流（byte[]）
      */
     public byte[] generateWordList() {
         String userId = "A123456789";
@@ -99,7 +99,7 @@ public class WordService {
     /**
      * Word 多檔合併
      *
-     * @return
+     * @return 產出的 Word 檔案資料流（byte[]）
      */
     public byte[] mergeWord() {
         List<byte[]> fileList = new ArrayList<>();

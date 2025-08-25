@@ -16,7 +16,8 @@ public class ZipService {
 
     /**
      * Zip 檔案打包
-     * @return
+     *
+     * @return 產出的 Zip 檔案資料流（byte[]）
      */
     public byte[] generateZip() {
         // 產生 excel

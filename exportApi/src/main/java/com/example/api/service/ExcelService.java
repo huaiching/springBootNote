@@ -14,7 +14,7 @@ public class ExcelService {
     /**
      * Excel 的 Each 遞迴資料
      *
-     * @return
+     * @return 產出的 Excel 檔案資料流（byte[]）
      */
     public byte[] excelEach() {
         String userId = "A123456789";
@@ -40,7 +40,7 @@ public class ExcelService {
     /**
      * Excel 的 Each 遞迴資料 (多筆資料)
      *
-     * @return
+     * @return 產出的 Excel 檔案資料流（byte[]）
      */
     public byte[] excelEachAll() {
         Map<String, Context> dataMap = new HashMap<>();
@@ -70,7 +70,7 @@ public class ExcelService {
     /**
      * Excel 的 Grid 動態資料
      *
-     * @return
+     * @return 產出的 Excel 檔案資料流（byte[]）
      */
     public byte[] excelGrid() {
         // 設定 headers
@@ -102,7 +102,7 @@ public class ExcelService {
     /**
      * Excel 檔案合併
      *
-     * @return
+     * @return 產出的 Excel 檔案資料流（byte[]）
      */
     public byte[] mergeExcel() {
         Map<String, byte[]> fileList = new HashMap<>();
