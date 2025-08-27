@@ -56,7 +56,7 @@ public class HtmlToPdfService {
             policyDTO.setPoInfo(poInfo);
             // 保障
             List<CoInfoDTO> coInfoList = new ArrayList<>();
-            for (int j = 1 ; j <= 3 ; j++) {
+            for (int j = 1 ; j <= 9 ; j++) {
                 CoInfoDTO coInfo = new CoInfoDTO();
                 coInfo.setClientIdent("I1");
                 coInfo.setPlanCode("ABCD"+i);
@@ -78,6 +78,6 @@ public class HtmlToPdfService {
         context.setVariable("addrList", addrList);
         context.setVariable("policyList", policyList);
 
-        return HtmlToPdfUtil.generate(templateEngine, "客戶資料表.html", context);
+        return HtmlToPdfUtil.generate(templateEngine, "sample.html", context);
     }
 }

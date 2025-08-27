@@ -5,21 +5,23 @@
   <style>
     /* 設置頁面整體樣式 */
     body {
-      font-family: "標楷體", "Noto Serif CJK TC", sans-serif;
+      font-family: "標楷體";
       font-size: 12px; /* 預設字體大小 */
     }
 
     /* 頁面佈局設定 */
     @page {
       size: A4; /* 紙張樣式：A4 = 直式 A4 ; A4 landscape = 橫式 A4 */
-      margin: 110pt 30pt 60pt 30pt;
+      margin: 80pt 30pt 50pt 30pt;
       @top-center {
         content: element(header) element(headerInfo); /* 頁眉顯示 header 和 headerInfo 元素內容 */
+        font-size: 12px;
         padding-top: 30px;
       }
       @bottom-center {
-        font-family: "標楷體"; /* 頁腳字體 */
+        font-family: "標楷體";
         content: "第 " counter(page) " 頁 / 共 " counter(pages) " 頁"; /* 頁腳顯示頁碼 */
+        font-size: 12px;
         padding-bottom: 30px;
       }
     }
@@ -82,7 +84,6 @@
       width: 100%; /* 表格寬度填滿容器 */
       border-collapse: collapse; /* 合併邊框，避免雙線效果 */
       -fs-table-paginate: paginate; /* 啟用表格分頁功能 */
-      -fs-page-break-min-height: 1.5cm; /* 確保分頁時有足夠空間 */
     }
 
     /* 表格通用樣式 */
@@ -246,7 +247,9 @@
 <br/>
 
 <div class="pageChange"></div>
-<p>備註：</p>
-<p>此為<span class="highlight">練習用範例</span>，相關資料均為假資料。</p>
+<div>
+  <span>強制換頁測試：<br/></span>
+  <span>此為<span class="highlight">練習用範例</span>，相關資料均為假資料。</span>
+</div>
 </body>
 </html>
