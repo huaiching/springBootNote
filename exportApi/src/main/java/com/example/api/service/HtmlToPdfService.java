@@ -34,14 +34,14 @@ public class HtmlToPdfService {
         List<AddrDTO> addrList = new ArrayList<>();
         for (int i = 1 ; i <= 10 ; i++) {
             AddrDTO addr = new AddrDTO();
-            addr.setAddrInd(String.valueOf(i));
+            addr.setAddrInd(String.valueOf(i-1));
             addr.setAddress("台北市內湖區石潭路58號"+i+"樓");
             addr.setTel("02-23455511");
             addrList.add(addr);
         }
         // 保單資料
         List<PolicyDTO> policyList = new ArrayList<>();
-        for (int i = 0 ; i < 5 ; i++) {
+        for (int i = 1 ; i <= 5 ; i++) {
             PolicyDTO policyDTO = new PolicyDTO();
             // 保單
             PoInfoDTO poInfo = new PoInfoDTO();
@@ -59,7 +59,7 @@ public class HtmlToPdfService {
             for (int j = 1 ; j <= 9 ; j++) {
                 CoInfoDTO coInfo = new CoInfoDTO();
                 coInfo.setClientIdent("I1");
-                coInfo.setPlanCode("ABCD"+i);
+                coInfo.setPlanCode("A"+i+j);
                 coInfo.setRateScale("0");
                 coInfo.setFaceAmt(1000000.00);
                 coInfo.setCoIssueDate("100/01/10");
