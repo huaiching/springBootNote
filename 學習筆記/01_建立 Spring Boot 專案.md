@@ -54,7 +54,7 @@
    2. 開啟 `src/main/resources` 的 `application.properties`，並填入下面設定
       
       ```properties
-      spring.port=9010
+      server.port=9010
       
       springdoc.api-docs.enabled=true
       springdoc.api-docs.path=/api-docs
