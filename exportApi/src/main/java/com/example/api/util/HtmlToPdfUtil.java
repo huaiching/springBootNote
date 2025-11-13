@@ -1,11 +1,12 @@
 package com.example.api.util;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+import org.springframework.core.io.ClassPathResource;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.io.IOException;
 
 /**
  * html 生成 PDF 工具
