@@ -29,10 +29,23 @@ public class HtmlToPdfUtil {
             builder.useFastMode();
             builder.withHtmlContent(html, null);
             // 設定中文字型
-            File fontFile1 = new File("src/main/resources/templates/fonts/kaiu.ttf");
-            builder.useFont(fontFile1, "標楷體");
-            File fontFile2 = new File("src/main/resources/templates/fonts/3of9Barcode.ttf");
-            builder.useFont(fontFile2, "條碼");
+            ClassPathResource fontFile1 = new ClassPathResource("templates/fonts/kaiu.ttf");
+            builder.useFont(() -> {
+                try {
+                    return fontFile1.getInputStream();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            },"標楷體");
+
+            ClassPathResource fontFile2 = new ClassPathResource("templates/fonts/3of9Barcode.ttf");
+            builder.useFont(() -> {
+                try {
+                    return fontFile2.getInputStream();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            },"條碼");
             // 資料輸出
             builder.toStream(os);
             builder.run();
