@@ -1,5 +1,126 @@
 # Flowable - 資料表
 
+```mermaid
+flowchart LR
+    %% --- 節點定義 --- 
+    Flowable(("Flowable <br> 流程管理引擎"))
+
+    %% --- 流程定義 ACT_RE_* ---
+    ACT_RE_*["ACT_RE_* <br> 流程定義"]
+    ACT_RE_DEPLOYMENT["ACT_RE_DEPLOYMENT <br> 流程部署紀錄"]
+    ACT_RE_PROCDEF["ACT_RE_PROCDEF <br> BPMN 流程定義"]
+    ACT_RE_MODEL["ACT_RE_MODEL <br> 流程模型"]
+
+    %% --- 流程執行中 ACT_RU_* ---
+    ACT_RU_*["ACT_RU_* <br> 流程執行中資料"]
+    ACT_RU_EXECUTION["ACT_RU_EXECUTION <br> 執行實例"]
+    ACT_RU_TASK["ACT_RU_TASK <br> 待辦任務（userTask）"]
+    ACT_RU_VARIABLE["ACT_RU_VARIABLE <br> 流程變數"]
+    ACT_RU_JOB["ACT_RU_JOB <br> 排程任務"]
+    ACT_RU_TIMER_JOB["ACT_RU_TIMER_JOB <br> 定時任務"]
+    ACT_RU_SUSPENDED_JOB["ACT_RU_SUSPENDED_JOB <br> 暫停任務"]
+    ACT_RU_DEADLETTER_JOB["ACT_RU_DEADLETTER_JOB <br> 失敗任務"]
+    ACT_RU_EVENT_SUBSCR["ACT_RU_EVENT_SUBSCR <br> 事件訂閱"]
+    ACT_RU_IDENTITYLINK["ACT_RU_IDENTITYLINK <br> 任務與使用者的關聯"]
+
+    %% --- 流程歷史 ACT_HI_* ---
+    ACT_HI_*["ACT_HI_* <br> 流程歷史"]
+    ACT_HI_PROCINST["ACT_HI_PROCINST <br> 歷史流程實例"]
+    ACT_HI_TASKINST["ACT_HI_TASKINST <br> 歷史任務實例"]
+    ACT_HI_VARINST["ACT_HI_VARINST <br> 歷史變數實例"]
+    ACT_HI_DETAIL["ACT_HI_DETAIL <br> 歷史明細（包含變數更新、任務指派等）"]
+    ACT_HI_ACTINST["ACT_HI_ACTINST <br> 歷史活動實例"]
+    ACT_HI_IDENTITYLINK["ACT_HI_IDENTITYLINK <br> 身份關聯歷史"]
+    ACT_HI_COMMENT["ACT_HI_COMMENT <br> 歷史評論"]
+    ACT_HI_ATTACHMENT["ACT_HI_ATTACHMENT <br> 歷史附件"]
+
+    %% --- 帳號/權限 ACT_ID_* ---
+    ACT_ID_*["ACT_ID_* <br> 帳號/權限"]
+    ACT_ID_USER["ACT_ID_USER <br> Flowable 使用者"]
+    ACT_ID_GROUP["ACT_ID_GROUP <br> 角色/群組"]
+    ACT_ID_MEMBERSHIP["ACT_ID_MEMBERSHIP <br> 使用者與群組的關聯"]
+    ACT_ID_INFO["ACT_ID_INFO <br> 使用者的額外資訊"]
+    ACT_ID_PROPERTY["ACT_ID_PROPERTY <br> 身份服務屬性"]
+
+    %% --- 通用資料 ACT_GE_* ---
+    ACT_GE_*["ACT_GE_* <br> 通用資料"]
+    ACT_GE_BYTEARRAY["ACT_GE_BYTEARRAY <br> 二進位資料（BPMN XML、圖片）"]
+    ACT_GE_PROPERTY["ACT_GE_PROPERTY <br> 系統屬性"]
+
+    %% --- 主流程連線 (Sequence Flows) ---
+    Flowable --- ACT_RE_*
+    Flowable --- ACT_RU_*
+    ACT_HI_* --- Flowable
+    ACT_ID_* --- Flowable 
+    ACT_GE_* --- Flowable 
+    ACT_RE_* --- ACT_RE_DEPLOYMENT
+    ACT_RE_* --- ACT_RE_PROCDEF
+    ACT_RE_* --- ACT_RE_MODEL
+    ACT_RU_* ---ACT_RU_EXECUTION     
+    ACT_RU_* ---ACT_RU_TASK          
+    ACT_RU_* ---ACT_RU_VARIABLE      
+    ACT_RU_* ---ACT_RU_JOB           
+    ACT_RU_* ---ACT_RU_TIMER_JOB     
+    ACT_RU_* ---ACT_RU_SUSPENDED_JOB 
+    ACT_RU_* ---ACT_RU_DEADLETTER_JOB
+    ACT_RU_* ---ACT_RU_EVENT_SUBSCR  
+    ACT_RU_* ---ACT_RU_IDENTITYLINK  
+    ACT_HI_PROCINST --- ACT_HI_*
+    ACT_HI_TASKINST  --- ACT_HI_*   
+    ACT_HI_VARINST --- ACT_HI_*
+    ACT_HI_DETAIL --- ACT_HI_*
+    ACT_HI_ACTINST --- ACT_HI_*
+    ACT_HI_IDENTITYLINK --- ACT_HI_*
+    ACT_HI_COMMENT --- ACT_HI_*
+    ACT_HI_ATTACHMENT --- ACT_HI_*
+    ACT_ID_USER --- ACT_ID_*   
+    ACT_ID_GROUP --- ACT_ID_*   
+    ACT_ID_MEMBERSHIP --- ACT_ID_*   
+    ACT_ID_INFO --- ACT_ID_*   
+    ACT_ID_PROPERTY --- ACT_ID_*   
+    ACT_GE_BYTEARRAY --- ACT_GE_*  
+    ACT_GE_PROPERTY --- ACT_GE_*  
+
+    %% --- 上色 ---
+    style ACT_RE_* fill:#2196F3,stroke:#0b3d91,stroke-width:1px
+    style ACT_RE_DEPLOYMENT fill:#2196F3,stroke:#0b3d91,stroke-width:1px
+    style ACT_RE_PROCDEF fill:#2196F3,stroke:#0b3d91,stroke-width:1px
+    style ACT_RE_MODEL fill:#2196F3,stroke:#0b3d91,stroke-width:1px
+
+    style ACT_RU_* fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_EXECUTION fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_TASK fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_VARIABLE fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_JOB fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_TIMER_JOB fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_SUSPENDED_JOB fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_DEADLETTER_JOB fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_EVENT_SUBSCR fill:#4CAF50,stroke:#256029,stroke-width:1px
+    style ACT_RU_IDENTITYLINK fill:#4CAF50,stroke:#256029,stroke-width:1px
+
+    style ACT_HI_* fill:#FF9800,stroke:#b36000,stroke-width:1px
+    style ACT_HI_PROCINST fill:#FF9800,stroke:#b36000,stroke-width:1px
+    style ACT_HI_TASKINST fill:#FF9800,stroke:#b36000,stroke-width:1px
+    style ACT_HI_VARINST fill:#FF9800,stroke:#b36000,stroke-width:1px
+    style ACT_HI_DETAIL fill:#FF9800,stroke:#b36000,stroke-width:1px
+    style ACT_HI_ACTINST fill:#FF9800,stroke:#b36000,stroke-width:1px
+    style ACT_HI_IDENTITYLINK fill:#FF9800,stroke:#b36000,stroke-width:1px
+    style ACT_HI_COMMENT fill:#FF9800,stroke:#b36000,stroke-width:1px
+    style ACT_HI_ATTACHMENT fill:#FF9800,stroke:#b36000,stroke-width:1px
+
+    style ACT_ID_* fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
+    style ACT_ID_USER fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
+    style ACT_ID_GROUP fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
+    style ACT_ID_MEMBERSHIP fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
+    style ACT_ID_INFO fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
+    style ACT_ID_PROPERTY fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
+
+
+    style ACT_GE_* fill:#9E9E9E,stroke:#616161,stroke-width:1px
+    style ACT_GE_BYTEARRAY fill:#9E9E9E,stroke:#616161,stroke-width:1px
+    style ACT_GE_PROPERTY fill:#9E9E9E,stroke:#616161,stroke-width:1px
+```
+
 Flowable 的資料表，主要有以下幾個模組：
 
 - **ACT_RE_***（Repository：流程定義）
@@ -12,14 +133,14 @@ Flowable 的資料表，主要有以下幾個模組：
 
 這些表儲存 **流程模型、流程定義、表單定義** 等靜態資料。
 
-| Table                 | 說明                                 |
-| --------------------- | ---------------------------------- |
-| **ACT_RE_DEPLOYMENT** | 流程部署紀錄（一次部署一筆）                     |
-| **ACT_RE_PROCDEF**    | BPMN 流程定義（對應 processDefinitionId）  |
-| **ACT_RE_MODEL**      | Flowable Modeler 中的模型（BPMN/表單/DMN） |
+| Table                 | 說明                                |
+| --------------------- | --------------------------------- |
+| **ACT_RE_DEPLOYMENT** | 流程部署紀錄（一次部署一筆）                    |
+| **ACT_RE_PROCDEF**    | BPMN 流程定義（對應 processDefinitionId） |
+| **ACT_RE_MODEL**      | 流程模型（BPMN/表單/DMN）                 |
 
 <details>
-<summary>ACT_RE_DEPLOYMENT（部署記錄） - 欄位說明（點擊展開）</summary>
+<summary>ACT_RE_DEPLOYMENT（流程部署紀錄） - 欄位說明（點擊展開）</summary>
 
 | 欄位                    | 類型        | 說明           |
 | --------------------- | --------- | ------------ |
@@ -46,7 +167,7 @@ ORDER BY DEPLOY_TIME_ DESC;
 </details>
 
 <details>
-<summary>ACT_RE_PROCDEF（流程定義） - 欄位說明（點擊展開）</summary>
+<summary>ACT_RE_PROCDEF（BPMN 流程定義） - 欄位說明（點擊展開）</summary>
 
 | 欄位                      | 類型      | 說明                                   |
 | ----------------------- | ------- | ------------------------------------ |
@@ -106,17 +227,17 @@ WHERE VERSION_ = (
 
 只會儲存 **正在執行中的流程**，流程完成後資料會搬到 `ACT_HI_*`。
 
-| Table                     | 說明                                     |
-| ------------------------- | -------------------------------------- |
-| **ACT_RU_EXECUTION**      | 執行中的流程實例（Process Instance / Execution） |
-| **ACT_RU_TASK**           | 執行中的 User Task（待辦任務清單）                 |
-| **ACT_RU_VARIABLE**       | 流程變數（目前流程 instance 與 task 綁的變數）        |
-| **ACT_RU_JOB**            | 排程任務（含定時 StartEvent、失敗任務）              |
-| **ACT_RU_TIMER_JOB**      | 定時任務                                   |
-| **ACT_RU_SUSPENDED_JOB**  | 暫停的任務                                  |
-| **ACT_RU_DEADLETTER_JOB** | 失敗任務（死信）                               |
-| **ACT_RU_EVENT_SUBSCR**   | 事件訂閱（Message / Signal）                 |
-| **ACT_RU_IDENTITYLINK**   | 任務與使用者的關聯（候選人/代理人/角色）                  |
+| Table                     | 說明                                 |
+| ------------------------- | ---------------------------------- |
+| **ACT_RU_EXECUTION**      | 執行實例（Process Instance / Execution） |
+| **ACT_RU_TASK**           | 待辦任務（userTask）                     |
+| **ACT_RU_VARIABLE**       | 流程變數（目前流程 instance 與 task 綁的變數）    |
+| **ACT_RU_JOB**            | 排程任務（含定時 StartEvent、失敗任務）          |
+| **ACT_RU_TIMER_JOB**      | 定時任務                               |
+| **ACT_RU_SUSPENDED_JOB**  | 暫停任務                               |
+| **ACT_RU_DEADLETTER_JOB** | 失敗任務                               |
+| **ACT_RU_EVENT_SUBSCR**   | 事件訂閱（Message / Signal）             |
+| **ACT_RU_IDENTITYLINK**   | 任務與使用者的關聯（候選人/代理人/角色）              |
 
 <details>
 <summary>ACT_RU_EXECUTION（執行實例） - 欄位說明（點擊展開）</summary>
@@ -252,7 +373,7 @@ WHERE PROC_INST_ID_ = 'process-instance-id';
 </details>
 
 <details>
-<summary>ACT_RU_JOB（異步任務） - 欄位說明（點擊展開）</summary>
+<summary>ACT_RU_JOB（排程任務） - 欄位說明（點擊展開）</summary>
 
 | 欄位                   | 類型        | 說明        |
 | -------------------- | --------- | --------- |
@@ -281,6 +402,128 @@ WHERE PROC_INST_ID_ = 'process-instance-id';
 | CUSTOM_VALUES_ID_    | VARCHAR   | 自訂值 ID    |
 | CREATE_TIME_         | TIMESTAMP | 建立時間      |
 | TENANT_ID_           | VARCHAR   | 租戶 ID     |
+
+</details>
+
+<details>
+<summary>ACT_RU_TIMER_JOB（定時任務） - 欄位說明（點擊展開）</summary>
+
+| 欄位                   | 類型        | 說明              |
+| -------------------- | --------- | --------------- |
+| ID_                  | VARCHAR   | 任務 ID（主鍵）       |
+| REV_                 | INTEGER   | 版本號             |
+| TYPE_                | VARCHAR   | 任務類型（timer）     |
+| LOCK_EXP_TIME_       | TIMESTAMP | 鎖定到期時間          |
+| LOCK_OWNER_          | VARCHAR   | 鎖定者             |
+| EXCLUSIVE_           | BOOLEAN   | 是否獨占            |
+| EXECUTION_ID_        | VARCHAR   | 執行 ID           |
+| PROCESS_INSTANCE_ID_ | VARCHAR   | 流程實例 ID         |
+| PROC_DEF_ID_         | VARCHAR   | 流程定義 ID         |
+| ELEMENT_ID_          | VARCHAR   | BPMN 元件 ID      |
+| ELEMENT_NAME_        | VARCHAR   | BPMN 元件名稱       |
+| SCOPE_ID_            | VARCHAR   | 作用域 ID          |
+| SUB_SCOPE_ID_        | VARCHAR   | 子作用域 ID         |
+| SCOPE_TYPE_          | VARCHAR   | 作用域類型           |
+| SCOPE_DEFINITION_ID_ | VARCHAR   | 作用域定義 ID        |
+| RETRIES_             | INTEGER   | 重試次數            |
+| EXCEPTION_STACK_ID_  | VARCHAR   | 異常堆疊 ID         |
+| EXCEPTION_MSG_       | VARCHAR   | 異常訊息            |
+| DUEDATE_             | TIMESTAMP | 下次執行時間          |
+| REPEAT_              | VARCHAR   | 重複設定（R3/PT10M…） |
+| HANDLER_TYPE_        | VARCHAR   | 處理器             |
+| HANDLER_CFG_         | VARCHAR   | 處理器設定           |
+| CUSTOM_VALUES_ID_    | VARCHAR   | 自訂資料            |
+| CREATE_TIME_         | TIMESTAMP | 建立時間            |
+| TENANT_ID_           | VARCHAR   | 租戶 ID           |
+
+</details>
+
+<details>
+<summary>ACT_RU_SUSPENDED_JOB（暫停任務） - 欄位說明（點擊展開）</summary>
+
+| 欄位                   | 類型        | 說明         |
+| -------------------- | --------- | ---------- |
+| ID_                  | VARCHAR   | 任務 ID（主鍵）  |
+| REV_                 | INTEGER   | 版本號        |
+| TYPE_                | VARCHAR   | 任務類型       |
+| LOCK_EXP_TIME_       | TIMESTAMP | 鎖定時間       |
+| LOCK_OWNER_          | VARCHAR   | 鎖定者        |
+| EXCLUSIVE_           | BOOLEAN   | 是否獨占       |
+| EXECUTION_ID_        | VARCHAR   | 執行 ID      |
+| PROCESS_INSTANCE_ID_ | VARCHAR   | 流程實例 ID    |
+| PROC_DEF_ID_         | VARCHAR   | 流程定義 ID    |
+| ELEMENT_ID_          | VARCHAR   | BPMN 元件 ID |
+| ELEMENT_NAME_        | VARCHAR   | BPMN 元件名稱  |
+| SCOPE_ID_            | VARCHAR   | 作用域 ID     |
+| SUB_SCOPE_ID_        | VARCHAR   | 子作用域 ID    |
+| SCOPE_TYPE_          | VARCHAR   | 作用域類型      |
+| SCOPE_DEFINITION_ID_ | VARCHAR   | 作用域定義 ID   |
+| RETRIES_             | INTEGER   | 重試次數       |
+| EXCEPTION_STACK_ID_  | VARCHAR   | 異常堆疊       |
+| EXCEPTION_MSG_       | VARCHAR   | 異常訊息       |
+| DUEDATE_             | TIMESTAMP | 原到期時間      |
+| REPEAT_              | VARCHAR   | 重複設定       |
+| HANDLER_TYPE_        | VARCHAR   | 處理器        |
+| HANDLER_CFG_         | VARCHAR   | 處理器設定      |
+| CUSTOM_VALUES_ID_    | VARCHAR   | 自訂資料       |
+| CREATE_TIME_         | TIMESTAMP | 建立時間       |
+| TENANT_ID_           | VARCHAR   | 租戶 ID      |
+
+</details>
+
+<details>
+<summary>ACT_RU_DEADLETTER_JOB（失敗任務） - 欄位說明（點擊展開）</summary>
+
+| 欄位                   | 類型        | 說明         |
+| -------------------- | --------- | ---------- |
+| ID_                  | VARCHAR   | 任務 ID（主鍵）  |
+| REV_                 | INTEGER   | 版本號        |
+| TYPE_                | VARCHAR   | 任務類型       |
+| LOCK_EXP_TIME_       | TIMESTAMP | 鎖定時間       |
+| LOCK_OWNER_          | VARCHAR   | 鎖定者        |
+| EXCLUSIVE_           | BOOLEAN   | 是否獨占       |
+| EXECUTION_ID_        | VARCHAR   | 執行 ID      |
+| PROCESS_INSTANCE_ID_ | VARCHAR   | 流程實例 ID    |
+| PROC_DEF_ID_         | VARCHAR   | 流程定義 ID    |
+| ELEMENT_ID_          | VARCHAR   | BPMN 元件 ID |
+| ELEMENT_NAME_        | VARCHAR   | BPMN 元件名稱  |
+| SCOPE_ID_            | VARCHAR   | 作用域 ID     |
+| SUB_SCOPE_ID_        | VARCHAR   | 子作用域 ID    |
+| SCOPE_TYPE_          | VARCHAR   | 作用域類型      |
+| SCOPE_DEFINITION_ID_ | VARCHAR   | 作用域定義 ID   |
+| RETRIES_             | INTEGER   | 重試次數       |
+| EXCEPTION_STACK_ID_  | VARCHAR   | 異常堆疊       |
+| EXCEPTION_MSG_       | VARCHAR   | 異常訊息       |
+| DUEDATE_             | TIMESTAMP | 原到期時間      |
+| REPEAT_              | VARCHAR   | 重複設定       |
+| HANDLER_TYPE_        | VARCHAR   | 處理器        |
+| HANDLER_CFG_         | VARCHAR   | 處理器設定      |
+| CUSTOM_VALUES_ID_    | VARCHAR   | 自訂資料       |
+| CREATE_TIME_         | TIMESTAMP | 建立時間       |
+| TENANT_ID_           | VARCHAR   | 租戶 ID      |
+
+</details>
+
+<details>
+<summary>ACT_RU_EVENT_SUBSCR（事件訂閱） - 欄位說明（點擊展開）</summary>
+
+| 欄位                   | 類型        | 說明                    |
+| -------------------- | --------- | --------------------- |
+| ID_                  | VARCHAR   | 訂閱 ID（主鍵）             |
+| REV_                 | INTEGER   | 版本號                   |
+| EVENT_TYPE_          | VARCHAR   | 事件類型（message, signal） |
+| EVENT_NAME_          | VARCHAR   | 事件名稱                  |
+| EXECUTION_ID_        | VARCHAR   | 執行 ID                 |
+| PROC_INST_ID_        | VARCHAR   | 流程實例 ID               |
+| ACTIVITY_ID_         | VARCHAR   | 活動 ID                 |
+| CONFIGURATION_       | VARCHAR   | 配置                    |
+| CREATED_             | TIMESTAMP | 建立時間                  |
+| PROC_DEF_ID_         | VARCHAR   | 流程定義 ID               |
+| SUB_SCOPE_ID_        | VARCHAR   | 子作用域 ID               |
+| SCOPE_ID_            | VARCHAR   | 作用域 ID                |
+| SCOPE_DEFINITION_ID_ | VARCHAR   | 作用域定義 ID              |
+| SCOPE_TYPE_          | VARCHAR   | 作用域類型                 |
+| TENANT_ID_           | VARCHAR   | 租戶 ID                 |
 
 </details>
 
@@ -321,48 +564,25 @@ WHERE TASK_ID_ = 'task-id' AND TYPE_ = 'candidate';
 
 </details>
 
-<details>
-<summary>ACT_RU_EVENT_SUBSCR（事件訂閱） - 欄位說明（點擊展開）</summary>
-
-| 欄位                   | 類型        | 說明                    |
-| -------------------- | --------- | --------------------- |
-| ID_                  | VARCHAR   | 訂閱 ID（主鍵）             |
-| REV_                 | INTEGER   | 版本號                   |
-| EVENT_TYPE_          | VARCHAR   | 事件類型（message, signal） |
-| EVENT_NAME_          | VARCHAR   | 事件名稱                  |
-| EXECUTION_ID_        | VARCHAR   | 執行 ID                 |
-| PROC_INST_ID_        | VARCHAR   | 流程實例 ID               |
-| ACTIVITY_ID_         | VARCHAR   | 活動 ID                 |
-| CONFIGURATION_       | VARCHAR   | 配置                    |
-| CREATED_             | TIMESTAMP | 建立時間                  |
-| PROC_DEF_ID_         | VARCHAR   | 流程定義 ID               |
-| SUB_SCOPE_ID_        | VARCHAR   | 子作用域 ID               |
-| SCOPE_ID_            | VARCHAR   | 作用域 ID                |
-| SCOPE_DEFINITION_ID_ | VARCHAR   | 作用域定義 ID              |
-| SCOPE_TYPE_          | VARCHAR   | 作用域類型                 |
-| TENANT_ID_           | VARCHAR   | 租戶 ID                 |
-
-</details>
-
 ## 3. History（流程歷史紀錄） `ACT_HI_*`
 
 這些表儲存 **已結案或已完成的流程**，通常會保留很久。
 
-| Table                   | 說明                                             |
-| ----------------------- | ---------------------------------------------- |
-| **ACT_HI_PROCINST**     | 流程實例的歷史資料（開始時間/結束時間）                           |
-| **ACT_HI_TASKINST**     | 任務歷史（誰處理、開始結束、意見）                              |
-| **ACT_HI_VARINST**      | 流程變數的歷史                                        |
-| **ACT_HI_DETAIL**       | 詳細操作紀錄（表單輸入、Variable 更新）                       |
-| **ACT_HI_ACTINST**      | BPMN activity 歷史（Gateway/Task/ServiceTask/...） |
-| **ACT_HI_IDENTITYLINK** | 身份關聯歷史                                         |
-| **ACT_HI_COMMENT**      | 任務意見/評論                                        |
-| **ACT_HI_ATTACHMENT**   | 附件歷史                                           |
+| Table                   | 說明                                   |
+| ----------------------- | ------------------------------------ |
+| **ACT_HI_PROCINST**     | 歷史流程實例（開始時間/結束時間）                    |
+| **ACT_HI_TASKINST**     | 歷史任務實例（誰處理、開始結束、意見）                  |
+| **ACT_HI_VARINST**      | 歷史變數實例                               |
+| **ACT_HI_DETAIL**       | 歷史明細（包含變數更新、任務指派等）                   |
+| **ACT_HI_ACTINST**      | 歷史活動實例（Gateway/Task/ServiceTask/...） |
+| **ACT_HI_IDENTITYLINK** | 身份關聯歷史                               |
+| **ACT_HI_COMMENT**      | 任務意見/評論                              |
+| **ACT_HI_ATTACHMENT**   | 歷史附件                                 |
 
 </details>
 
 <details>
-<summary>ACT_HI_PROCINST（流程實例歷史） - 欄位說明（點擊展開）</summary>
+<summary>ACT_HI_PROCINST（歷史流程實例） - 欄位說明（點擊展開）</summary>
 
 | 欄位                         | 類型        | 說明          |
 | -------------------------- | --------- | ----------- |
@@ -403,7 +623,7 @@ GROUP BY PROC_DEF_ID_;
 </details>
 
 <details>
-<summary>ACT_HI_TASKINST（任務歷史） - 欄位說明（點擊展開）</summary>
+<summary>ACT_HI_TASKINST（歷史任務實例） - 欄位說明（點擊展開）</summary>
 
 | 欄位                   | 類型        | 說明        |
 | -------------------- | --------- | --------- |
@@ -454,7 +674,7 @@ GROUP BY TASK_DEF_KEY_;
 </details>
 
 <details>
-<summary>ACT_HI_VARINST（變數歷史） - 欄位說明（點擊展開）</summary>
+<summary>ACT_HI_VARINST（歷史變數實例） - 欄位說明（點擊展開）</summary>
 
 | 欄位                 | 類型        | 說明        |
 | ------------------ | --------- | --------- |
@@ -479,7 +699,30 @@ GROUP BY TASK_DEF_KEY_;
 </details>
 
 <details>
-<summary>ACT_HI_ACTINST（活動實例歷史） - 欄位說明（點擊展開）</summary>
+<summary>ACT_HI_DETAIL（歷史明細） - 欄位說明（點擊展開）</summary>
+
+| 欄位            | 類型        | 說明                               |
+| ------------- | --------- | -------------------------------- |
+| ID_           | VARCHAR   | 詳細 ID（主鍵）                        |
+| TYPE_         | VARCHAR   | 類型（VariableUpdate, FormProperty） |
+| PROC_INST_ID_ | VARCHAR   | 流程實例 ID                          |
+| EXECUTION_ID_ | VARCHAR   | 執行 ID                            |
+| TASK_ID_      | VARCHAR   | 任務 ID                            |
+| ACT_INST_ID_  | VARCHAR   | 活動實例 ID                          |
+| NAME_         | VARCHAR   | 名稱                               |
+| VAR_TYPE_     | VARCHAR   | 變數類型                             |
+| REV_          | INTEGER   | 版本號                              |
+| TIME_         | TIMESTAMP | 時間                               |
+| BYTEARRAY_ID_ | VARCHAR   | 二進位資料 ID                         |
+| DOUBLE_       | DOUBLE    | Double 值                         |
+| LONG_         | BIGINT    | Long 值                           |
+| TEXT_         | VARCHAR   | 文字值                              |
+| TEXT2_        | VARCHAR   | 額外文字欄位                           |
+
+</details>
+
+<details>
+<summary>ACT_HI_ACTINST（歷史活動實例） - 欄位說明（點擊展開）</summary>
 
 | 欄位                 | 類型        | 說明                                                  |
 | ------------------ | --------- | --------------------------------------------------- |
@@ -513,30 +756,26 @@ ORDER BY START_TIME_;
 </details>
 
 <details>
-<summary>ACT_HI_DETAIL（詳細歷史） - 欄位說明（點擊展開）</summary>
+<summary>ACT_HI_IDENTITYLINK（身份關聯歷史） - 欄位說明（點擊展開）</summary>
 
-| 欄位            | 類型        | 說明                               |
-| ------------- | --------- | -------------------------------- |
-| ID_           | VARCHAR   | 詳細 ID（主鍵）                        |
-| TYPE_         | VARCHAR   | 類型（VariableUpdate, FormProperty） |
-| PROC_INST_ID_ | VARCHAR   | 流程實例 ID                          |
-| EXECUTION_ID_ | VARCHAR   | 執行 ID                            |
-| TASK_ID_      | VARCHAR   | 任務 ID                            |
-| ACT_INST_ID_  | VARCHAR   | 活動實例 ID                          |
-| NAME_         | VARCHAR   | 名稱                               |
-| VAR_TYPE_     | VARCHAR   | 變數類型                             |
-| REV_          | INTEGER   | 版本號                              |
-| TIME_         | TIMESTAMP | 時間                               |
-| BYTEARRAY_ID_ | VARCHAR   | 二進位資料 ID                         |
-| DOUBLE_       | DOUBLE    | Double 值                         |
-| LONG_         | BIGINT    | Long 值                           |
-| TEXT_         | VARCHAR   | 文字值                              |
-| TEXT2_        | VARCHAR   | 額外文字欄位                           |
+| 欄位                   | 類型        | 說明                                                     |
+| -------------------- | --------- | ------------------------------------------------------ |
+| ID_                  | VARCHAR   | 關聯 ID（主鍵）                                              |
+| GROUP_ID_            | VARCHAR   | 群組 ID                                                  |
+| TYPE_                | VARCHAR   | 關聯類型（candidate, assignee, owner, participant, starter） |
+| USER_ID_             | VARCHAR   | 用戶 ID                                                  |
+| TASK_ID_             | VARCHAR   | 任務 ID                                                  |
+| CREATE_TIME_         | TIMESTAMP | 建立時間                                                   |
+| PROC_INST_ID_        | VARCHAR   | 流程實例 ID                                                |
+| SCOPE_ID_            | VARCHAR   | 作用域 ID                                                 |
+| SUB_SCOPE_ID_        | VARCHAR   | 子作用域 ID                                                |
+| SCOPE_TYPE_          | VARCHAR   | 作用域類型                                                  |
+| SCOPE_DEFINITION_ID_ | VARCHAR   | 作用域定義 ID                                               |
 
 </details>
 
 <details>
-<summary>ACT_HI_COMMENT（評論歷史） - 欄位說明（點擊展開）</summary>
+<summary>ACT_HI_COMMENT（歷史評論） - 欄位說明（點擊展開）</summary>
 
 | 欄位            | 類型        | 說明                 |
 | ------------- | --------- | ------------------ |
@@ -563,26 +802,7 @@ ORDER BY TIME_;
 </details>
 
 <details>
-<summary>ACT_HI_IDENTITYLINK（身份關聯歷史） - 欄位說明（點擊展開）</summary>
-
-| 欄位                   | 類型        | 說明                                                     |
-| -------------------- | --------- | ------------------------------------------------------ |
-| ID_                  | VARCHAR   | 關聯 ID（主鍵）                                              |
-| GROUP_ID_            | VARCHAR   | 群組 ID                                                  |
-| TYPE_                | VARCHAR   | 關聯類型（candidate, assignee, owner, participant, starter） |
-| USER_ID_             | VARCHAR   | 用戶 ID                                                  |
-| TASK_ID_             | VARCHAR   | 任務 ID                                                  |
-| CREATE_TIME_         | TIMESTAMP | 建立時間                                                   |
-| PROC_INST_ID_        | VARCHAR   | 流程實例 ID                                                |
-| SCOPE_ID_            | VARCHAR   | 作用域 ID                                                 |
-| SUB_SCOPE_ID_        | VARCHAR   | 子作用域 ID                                                |
-| SCOPE_TYPE_          | VARCHAR   | 作用域類型                                                  |
-| SCOPE_DEFINITION_ID_ | VARCHAR   | 作用域定義 ID                                               |
-
-</details>
-
-<details>
-<summary>ACT_HI_ATTACHMENT（附件歷史） - 欄位說明（點擊展開）</summary>
+<summary>ACT_HI_ATTACHMENT（歷史附件） - 欄位說明（點擊展開）</summary>
 
 | 欄位            | 類型        | 說明                          |
 | ------------- | --------- | --------------------------- |
@@ -718,10 +938,10 @@ WHERE g.ID_ = 'managers';
 
 存放通用的資料，如二進位內容、系統屬性等。
 
-| Table                | 說明                |
-| -------------------- | ----------------- |
-| **ACT_GE_BYTEARRAY** | BPMN XML、圖片等二進位內容 |
-| **ACT_GE_PROPERTY**  | Flowable 系統版本/設定  |
+| Table                | 說明                 |
+| -------------------- | ------------------ |
+| **ACT_GE_BYTEARRAY** | 二進位資料（BPMN XML、圖片） |
+| **ACT_GE_PROPERTY**  | 系統屬性               |
 
 <details>
 <summary>ACT_GE_BYTEARRAY（二進位資料） - 欄位說明（點擊展開）</summary>

@@ -6,6 +6,24 @@
 
 Flowable 提供了多個核心 Service 來操作流程引擎：
 
+```mermaid
+flowchart LR
+    %% --- 節點定義 ---
+    Flowable(("Flowable <br> 流程管理引擎"))
+    RepositoryService["RepositoryService <br> 靜態資源"]
+    RuntimeService["RuntimeService <br> 執行中流程"]  
+    TaskService["TaskService <br> 用戶任務"] 
+    HistoryService["HistoryService <br> 歷史查詢"]  
+    ManagementService["ManagementService <br> 監控"]
+ 
+    %% --- 主流程連線 (Sequence Flows) ---    
+    Flowable --- RepositoryService
+    Flowable --- RuntimeService
+    Flowable --- TaskService
+    HistoryService --- Flowable 
+    ManagementService --- Flowable 
+```
+
 | Service               | 說明                         |
 | --------------------- | -------------------------- |
 | **RepositoryService** | 管理流程定義、部署、模型               |
