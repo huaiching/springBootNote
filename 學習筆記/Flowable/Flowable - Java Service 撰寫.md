@@ -459,7 +459,10 @@ flowchart LR
 
 ## 範例
 
-### 1. 案件查詢
+</details>
+
+<details>
+<summary>案件查詢</summary>
 
 使用 `RuntimeService` 的 `createProcessInstanceQuery()` 進行案件查詢：
 
@@ -570,7 +573,10 @@ public class FlowableCaseQueryService {
 }
 ```
 
-### 2. 新增案件
+</details>
+
+<details>
+<summary>新增案件</summary>
 
 使用 `RuntimeService` 的 `startProcessInstanceByKey()` 啟動流程實例：
 
@@ -629,7 +635,10 @@ public class FlowableCaseCreateService {
 }
 ```
 
-### 3. 送至下一關 / 送至照會
+</details>
+
+<details>
+<summary>送至下一關 / 送至照會</summary>
 
 使用 `TaskService` 完成當前任務，讓流程前進到下一個節點：
 
@@ -745,7 +754,10 @@ public class FlowableCaseAdvanceService {
 }
 ```
 
-### 4. 返回上一關
+</details>
+
+<details>
+<summary>返回上一關</summary>
 
 透過任務跳轉的方式讓流程返回到上一個節點：
 
@@ -847,7 +859,10 @@ public class FlowableCaseRollbackService {
 }
 ```
 
-### 5. 查詢案件完整歷史
+</details>
+
+<details>
+<summary>查詢案件完整歷史</summary>
 
 使用 `HistoryService` 查詢流程的完整歷史記錄：
 
@@ -926,3 +941,5 @@ public class FlowableCaseHistoryService {
     }
 }
 ```
+
+</details>
