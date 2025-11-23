@@ -1,124 +1,22 @@
 # Flowable - 資料表
 
 ```mermaid
-flowchart LR
+flowchart
     %% --- 節點定義 --- 
     Flowable(("Flowable <br> 流程管理引擎"))
 
-    %% --- 流程定義 ACT_RE_* ---
     ACT_RE_*["ACT_RE_* <br> 流程定義"]
-    ACT_RE_DEPLOYMENT["ACT_RE_DEPLOYMENT <br> 流程部署紀錄"]
-    ACT_RE_PROCDEF["ACT_RE_PROCDEF <br> BPMN 流程定義"]
-    ACT_RE_MODEL["ACT_RE_MODEL <br> 流程模型"]
-
-    %% --- 流程執行中 ACT_RU_* ---
     ACT_RU_*["ACT_RU_* <br> 流程執行中資料"]
-    ACT_RU_EXECUTION["ACT_RU_EXECUTION <br> 執行實例"]
-    ACT_RU_TASK["ACT_RU_TASK <br> 待辦任務（userTask）"]
-    ACT_RU_VARIABLE["ACT_RU_VARIABLE <br> 流程變數"]
-    ACT_RU_JOB["ACT_RU_JOB <br> 排程任務"]
-    ACT_RU_TIMER_JOB["ACT_RU_TIMER_JOB <br> 定時任務"]
-    ACT_RU_SUSPENDED_JOB["ACT_RU_SUSPENDED_JOB <br> 暫停任務"]
-    ACT_RU_DEADLETTER_JOB["ACT_RU_DEADLETTER_JOB <br> 失敗任務"]
-    ACT_RU_EVENT_SUBSCR["ACT_RU_EVENT_SUBSCR <br> 事件訂閱"]
-    ACT_RU_IDENTITYLINK["ACT_RU_IDENTITYLINK <br> 任務與使用者的關聯"]
-
-    %% --- 流程歷史 ACT_HI_* ---
     ACT_HI_*["ACT_HI_* <br> 流程歷史"]
-    ACT_HI_PROCINST["ACT_HI_PROCINST <br> 歷史流程實例"]
-    ACT_HI_TASKINST["ACT_HI_TASKINST <br> 歷史任務實例"]
-    ACT_HI_VARINST["ACT_HI_VARINST <br> 歷史變數實例"]
-    ACT_HI_DETAIL["ACT_HI_DETAIL <br> 歷史明細（包含變數更新、任務指派等）"]
-    ACT_HI_ACTINST["ACT_HI_ACTINST <br> 歷史活動實例"]
-    ACT_HI_IDENTITYLINK["ACT_HI_IDENTITYLINK <br> 身份關聯歷史"]
-    ACT_HI_COMMENT["ACT_HI_COMMENT <br> 歷史評論"]
-    ACT_HI_ATTACHMENT["ACT_HI_ATTACHMENT <br> 歷史附件"]
-
-    %% --- 帳號/權限 ACT_ID_* ---
     ACT_ID_*["ACT_ID_* <br> 帳號/權限"]
-    ACT_ID_USER["ACT_ID_USER <br> Flowable 使用者"]
-    ACT_ID_GROUP["ACT_ID_GROUP <br> 角色/群組"]
-    ACT_ID_MEMBERSHIP["ACT_ID_MEMBERSHIP <br> 使用者與群組的關聯"]
-    ACT_ID_INFO["ACT_ID_INFO <br> 使用者的額外資訊"]
-    ACT_ID_PROPERTY["ACT_ID_PROPERTY <br> 身份服務屬性"]
-
-    %% --- 通用資料 ACT_GE_* ---
     ACT_GE_*["ACT_GE_* <br> 通用資料"]
-    ACT_GE_BYTEARRAY["ACT_GE_BYTEARRAY <br> 二進位資料（BPMN XML、圖片）"]
-    ACT_GE_PROPERTY["ACT_GE_PROPERTY <br> 系統屬性"]
 
     %% --- 主流程連線 (Sequence Flows) ---
     Flowable --- ACT_RE_*
     Flowable --- ACT_RU_*
-    ACT_HI_* --- Flowable
-    ACT_ID_* --- Flowable 
-    ACT_GE_* --- Flowable 
-    ACT_RE_* --- ACT_RE_DEPLOYMENT
-    ACT_RE_* --- ACT_RE_PROCDEF
-    ACT_RE_* --- ACT_RE_MODEL
-    ACT_RU_* ---ACT_RU_EXECUTION     
-    ACT_RU_* ---ACT_RU_TASK          
-    ACT_RU_* ---ACT_RU_VARIABLE      
-    ACT_RU_* ---ACT_RU_JOB           
-    ACT_RU_* ---ACT_RU_TIMER_JOB     
-    ACT_RU_* ---ACT_RU_SUSPENDED_JOB 
-    ACT_RU_* ---ACT_RU_DEADLETTER_JOB
-    ACT_RU_* ---ACT_RU_EVENT_SUBSCR  
-    ACT_RU_* ---ACT_RU_IDENTITYLINK  
-    ACT_HI_PROCINST --- ACT_HI_*
-    ACT_HI_TASKINST  --- ACT_HI_*   
-    ACT_HI_VARINST --- ACT_HI_*
-    ACT_HI_DETAIL --- ACT_HI_*
-    ACT_HI_ACTINST --- ACT_HI_*
-    ACT_HI_IDENTITYLINK --- ACT_HI_*
-    ACT_HI_COMMENT --- ACT_HI_*
-    ACT_HI_ATTACHMENT --- ACT_HI_*
-    ACT_ID_USER --- ACT_ID_*   
-    ACT_ID_GROUP --- ACT_ID_*   
-    ACT_ID_MEMBERSHIP --- ACT_ID_*   
-    ACT_ID_INFO --- ACT_ID_*   
-    ACT_ID_PROPERTY --- ACT_ID_*   
-    ACT_GE_BYTEARRAY --- ACT_GE_*  
-    ACT_GE_PROPERTY --- ACT_GE_*  
-
-    %% --- 上色 ---
-    style ACT_RE_* fill:#2196F3,stroke:#0b3d91,stroke-width:1px
-    style ACT_RE_DEPLOYMENT fill:#2196F3,stroke:#0b3d91,stroke-width:1px
-    style ACT_RE_PROCDEF fill:#2196F3,stroke:#0b3d91,stroke-width:1px
-    style ACT_RE_MODEL fill:#2196F3,stroke:#0b3d91,stroke-width:1px
-
-    style ACT_RU_* fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_EXECUTION fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_TASK fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_VARIABLE fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_JOB fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_TIMER_JOB fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_SUSPENDED_JOB fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_DEADLETTER_JOB fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_EVENT_SUBSCR fill:#4CAF50,stroke:#256029,stroke-width:1px
-    style ACT_RU_IDENTITYLINK fill:#4CAF50,stroke:#256029,stroke-width:1px
-
-    style ACT_HI_* fill:#FF9800,stroke:#b36000,stroke-width:1px
-    style ACT_HI_PROCINST fill:#FF9800,stroke:#b36000,stroke-width:1px
-    style ACT_HI_TASKINST fill:#FF9800,stroke:#b36000,stroke-width:1px
-    style ACT_HI_VARINST fill:#FF9800,stroke:#b36000,stroke-width:1px
-    style ACT_HI_DETAIL fill:#FF9800,stroke:#b36000,stroke-width:1px
-    style ACT_HI_ACTINST fill:#FF9800,stroke:#b36000,stroke-width:1px
-    style ACT_HI_IDENTITYLINK fill:#FF9800,stroke:#b36000,stroke-width:1px
-    style ACT_HI_COMMENT fill:#FF9800,stroke:#b36000,stroke-width:1px
-    style ACT_HI_ATTACHMENT fill:#FF9800,stroke:#b36000,stroke-width:1px
-
-    style ACT_ID_* fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
-    style ACT_ID_USER fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
-    style ACT_ID_GROUP fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
-    style ACT_ID_MEMBERSHIP fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
-    style ACT_ID_INFO fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
-    style ACT_ID_PROPERTY fill:#AB47BC,stroke:#7B1FA2,stroke-width:1px
-
-
-    style ACT_GE_* fill:#9E9E9E,stroke:#616161,stroke-width:1px
-    style ACT_GE_BYTEARRAY fill:#9E9E9E,stroke:#616161,stroke-width:1px
-    style ACT_GE_PROPERTY fill:#9E9E9E,stroke:#616161,stroke-width:1px
+    Flowable --- ACT_HI_* 
+    Flowable --- ACT_ID_* 
+    Flowable --- ACT_GE_* 
 ```
 
 Flowable 的資料表，主要有以下幾個模組：
@@ -132,6 +30,20 @@ Flowable 的資料表，主要有以下幾個模組：
 ## 1. Repository（流程定義相關表） `ACT_RE_*`
 
 這些表儲存 **流程模型、流程定義、表單定義** 等靜態資料。
+
+```mermaid
+flowchart 
+    %% --- 節點定義 --- 
+    ACT_RE_*(("ACT_RE_* <br> 流程定義"))
+    ACT_RE_DEPLOYMENT["ACT_RE_DEPLOYMENT <br> 流程部署紀錄"]
+    ACT_RE_PROCDEF["ACT_RE_PROCDEF <br> BPMN 流程定義"]
+    ACT_RE_MODEL["ACT_RE_MODEL <br> 流程模型"]
+
+    %% --- 主流程連線 (Sequence Flows) ---
+    ACT_RE_* --- ACT_RE_DEPLOYMENT
+    ACT_RE_* --- ACT_RE_PROCDEF
+    ACT_RE_* --- ACT_RE_MODEL
+```
 
 | Table                 | 說明                                |
 | --------------------- | --------------------------------- |
@@ -226,6 +138,32 @@ WHERE VERSION_ = (
 ## 2. Runtime（流程執行中資料） `ACT_RU_*`
 
 只會儲存 **正在執行中的流程**，流程完成後資料會搬到 `ACT_HI_*`。
+
+```mermaid
+flowchart
+    %% --- 節點定義 --- 
+    ACT_RU_*(("ACT_RU_* <br> 流程執行中資料"))
+    ACT_RU_EXECUTION["ACT_RU_EXECUTION <br> 執行實例"]
+    ACT_RU_TASK["ACT_RU_TASK <br> 待辦任務（userTask）"]
+    ACT_RU_VARIABLE["ACT_RU_VARIABLE <br> 流程變數"]
+    ACT_RU_JOB["ACT_RU_JOB <br> 排程任務"]
+    ACT_RU_TIMER_JOB["ACT_RU_TIMER_JOB <br> 定時任務"]
+    ACT_RU_SUSPENDED_JOB["ACT_RU_SUSPENDED_JOB <br> 暫停任務"]
+    ACT_RU_DEADLETTER_JOB["ACT_RU_DEADLETTER_JOB <br> 失敗任務"]
+    ACT_RU_EVENT_SUBSCR["ACT_RU_EVENT_SUBSCR <br> 事件訂閱"]
+    ACT_RU_IDENTITYLINK["ACT_RU_IDENTITYLINK <br> 任務與使用者的關聯"]
+
+    %% --- 主流程連線 (Sequence Flows) ---
+    ACT_RU_* --- ACT_RU_EXECUTION     
+    ACT_RU_* --- ACT_RU_TASK          
+    ACT_RU_* --- ACT_RU_VARIABLE    
+    ACT_RU_* --- ACT_RU_EVENT_SUBSCR  
+    ACT_RU_* --- ACT_RU_IDENTITYLINK    
+    ACT_RU_JOB            --- ACT_RU_*
+    ACT_RU_TIMER_JOB      --- ACT_RU_*
+    ACT_RU_SUSPENDED_JOB  --- ACT_RU_*
+    ACT_RU_DEADLETTER_JOB --- ACT_RU_*
+```
 
 | Table                     | 說明                                 |
 | ------------------------- | ---------------------------------- |
@@ -568,6 +506,30 @@ WHERE TASK_ID_ = 'task-id' AND TYPE_ = 'candidate';
 
 這些表儲存 **已結案或已完成的流程**，通常會保留很久。
 
+```mermaid
+flowchart
+    %% --- 節點定義 --- 
+    ACT_HI_*(("ACT_HI_* <br> 流程歷史"))
+    ACT_HI_PROCINST["ACT_HI_PROCINST <br> 歷史流程實例"]
+    ACT_HI_TASKINST["ACT_HI_TASKINST <br> 歷史任務實例"]
+    ACT_HI_VARINST["ACT_HI_VARINST <br> 歷史變數實例"]
+    ACT_HI_DETAIL["ACT_HI_DETAIL <br> 歷史明細（包含變數更新、任務指派等）"]
+    ACT_HI_ACTINST["ACT_HI_ACTINST <br> 歷史活動實例"]
+    ACT_HI_IDENTITYLINK["ACT_HI_IDENTITYLINK <br> 身份關聯歷史"]
+    ACT_HI_COMMENT["ACT_HI_COMMENT <br> 歷史評論"]
+    ACT_HI_ATTACHMENT["ACT_HI_ATTACHMENT <br> 歷史附件"]
+
+    %% --- 主流程連線 (Sequence Flows) ---
+    ACT_HI_* --- ACT_HI_PROCINST    
+    ACT_HI_* --- ACT_HI_TASKINST    
+    ACT_HI_* --- ACT_HI_VARINST     
+    ACT_HI_* --- ACT_HI_DETAIL      
+    ACT_HI_ACTINST      --- ACT_HI_*
+    ACT_HI_IDENTITYLINK --- ACT_HI_*
+    ACT_HI_COMMENT      --- ACT_HI_*
+    ACT_HI_ATTACHMENT   --- ACT_HI_*
+```
+
 | Table                   | 說明                                   |
 | ----------------------- | ------------------------------------ |
 | **ACT_HI_PROCINST**     | 歷史流程實例（開始時間/結束時間）                    |
@@ -824,6 +786,24 @@ ORDER BY TIME_;
 
 Flowable 內建的用戶和群組管理（實務上常用外部系統如 LDAP、OAuth）。
 
+```mermaid
+flowchart
+    %% --- 節點定義 --- 
+    ACT_ID_*(("ACT_ID_* <br> 帳號/權限"))
+    ACT_ID_USER["ACT_ID_USER <br> Flowable 使用者"]
+    ACT_ID_GROUP["ACT_ID_GROUP <br> 角色/群組"]
+    ACT_ID_MEMBERSHIP["ACT_ID_MEMBERSHIP <br> 使用者與群組的關聯"]
+    ACT_ID_INFO["ACT_ID_INFO <br> 使用者的額外資訊"]
+    ACT_ID_PROPERTY["ACT_ID_PROPERTY <br> 身份服務屬性"]
+
+    %% --- 主流程連線 (Sequence Flows) ---
+    ACT_ID_* --- ACT_ID_USER
+    ACT_ID_* --- ACT_ID_GROUP
+    ACT_ID_* --- ACT_ID_MEMBERSHIP
+    ACT_ID_INFO     --- ACT_ID_*
+    ACT_ID_PROPERTY --- ACT_ID_*
+```
+
 | Table                 | 說明           |
 | --------------------- | ------------ |
 | **ACT_ID_USER**       | Flowable 使用者 |
@@ -942,6 +922,18 @@ WHERE g.ID_ = 'managers';
 | -------------------- | ------------------ |
 | **ACT_GE_BYTEARRAY** | 二進位資料（BPMN XML、圖片） |
 | **ACT_GE_PROPERTY**  | 系統屬性               |
+
+```mermaid
+flowchart
+    %% --- 節點定義 --- 
+    ACT_GE_*(("ACT_GE_* <br> 通用資料"))
+    ACT_GE_BYTEARRAY["ACT_GE_BYTEARRAY <br> 二進位資料（BPMN XML、圖片）"]
+    ACT_GE_PROPERTY["ACT_GE_PROPERTY <br> 系統屬性"]
+
+    %% --- 主流程連線 (Sequence Flows) ---
+    ACT_GE_* --- ACT_GE_BYTEARRAY
+    ACT_GE_* --- ACT_GE_PROPERTY
+```
 
 <details>
 <summary>ACT_GE_BYTEARRAY（二進位資料） - 欄位說明（點擊展開）</summary>

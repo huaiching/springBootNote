@@ -15,7 +15,7 @@ flowchart LR
     TaskService["TaskService <br> 用戶任務"] 
     HistoryService["HistoryService <br> 歷史查詢"]  
     ManagementService["ManagementService <br> 監控"]
- 
+
     %% --- 主流程連線 (Sequence Flows) ---    
     Flowable --- RepositoryService
     Flowable --- RuntimeService
@@ -34,58 +34,428 @@ flowchart LR
 
 ## 常用方法
 
-| Service               | 方法                                                                                                                                                                                                                          | 輸入參數                                                                                        | 說明                                |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------- |
-| **RepositoryService** | `createDeployment()` <br> → `addClasspathResource(String path)` （加入 classpath 下的 BPMN 資源） <br> → `deploy()` （執行部署）                                                                                                          | `path`（BPMN 路徑, classpath 位置）                                                               | 部署流程（classPath 方式）                |
-|                       | `addInputStream(String resourceName, InputStream inputStream)`                                                                                                                                                              | `resourceName`（資源名稱）<br>`inputStream`（BPMN XML InputStream）                                 | 部署流程（InputStream 方式）              |
-|                       | `deleteDeployment(String deploymentId, boolean cascade)`                                                                                                                                                                    | `deploymentId`（部署 ID）<br>`cascade`（是否刪除相關流程實例）                                              | 刪除流程部署                            |
-|                       | `createProcessDefinitionQuery()`                                                                                                                                                                                            | 無                                                                                           | 查詢流程定義                            |
-|                       | `getProcessDiagram(String processDefinitionId)`                                                                                                                                                                             | `processDefinitionId`（流程定義 ID）                                                              | 取得流程圖 InputStream                 |
-|                       | `suspendProcessDefinitionById(String id)`                                                                                                                                                                                   | `id`（流程定義 ID）                                                                               | 暫停流程定義                            |
-|                       | `activateProcessDefinitionById(String id)`                                                                                                                                                                                  | `id`（流程定義 ID）                                                                               | 激活流程定義                            |
-|                       | `getBpmnModel(String processDefinitionId)`                                                                                                                                                                                  | `processDefinitionId`（流程定義 ID）                                                              | 取得 BPMN 模型物件（程式控制用）               |
-|                       | `getProcessModel(String processDefinitionId)`                                                                                                                                                                               | `processDefinitionId`（流程定義 ID）                                                              | 取得 BPMN XML InputStream           |
-| **RuntimeService**    | `startProcessInstanceByKey(String key)`                                                                                                                                                                                     | `key`（流程 key）                                                                               | 啟動流程實例                            |
-|                       | `startProcessInstanceByKey(String key, Map vars)`                                                                                                                                                                           | `key`（流程 key）<br>`vars`（初始流程變數 Map）                                                         | 帶流程變數啟動流程                         |
-|                       | `startProcessInstanceById(String defId)`                                                                                                                                                                                    | `defId`（流程定義 ID）                                                                            | 啟動流程實例                            |
-|                       | `startProcessInstanceById(String defId, Map vars)`                                                                                                                                                                          | `defId`（流程定義 ID）<br>`vars`（初始流程變數 Map）                                                      | 帶流程變數啟動流程                         |
-|                       | `setVariable(String execId, String varName, Object value)`                                                                                                                                                                  | `execId`（流程執行 ID）<br>`varName`（變數名稱）<br>`value`（變數值）                                        | 設定單一流程變數                          |
-|                       | `setVariables(String execId, Map vars)`                                                                                                                                                                                     | `execId`（流程執行 ID）<br>`vars`（多個變數 Map）                                                       | 設定多個流程變數                          |
-|                       | `getVariable(String execId, String varName)`                                                                                                                                                                                | `execId`（流程執行 ID）<br>`varName`（變數名稱）                                                        | 取得單一流程變數                          |
-|                       | `getVariables(String execId)`                                                                                                                                                                                               | `execId`（流程執行 ID）                                                                           | 取得全部流程變數                          |
-|                       | `deleteProcessInstance(String processInstanceId, String reason)`                                                                                                                                                            | `processInstanceId`（流程實例 ID）<br>`reason`（刪除原因）                                              | 刪除流程實例                            |
-|                       | `createProcessInstanceQuery()`                                                                                                                                                                                              | 無                                                                                           | 查詢流程實例                            |
-|                       | `createChangeActivityStateBuilder()` <br> → `processInstanceId(String processInstanceId)` （指定流程實例） <br> → `moveActivityIdTo(String currentActivityId, String targetActivityId)` （從當前節點跳到目標節點） <br> → `changeState()` （執行跳轉） | `processInstanceId`（流程實例 ID）<br>`currentActivityId`（當前節點 ID）<br>`targetActivityId`（目標節點 ID） | 將流程從當前節點跳轉到指定節點，可退回上一關或跳關         |
-| **TaskService**       | `createTaskQuery()`                                                                                                                                                                                                         | 無                                                                                           | 查詢任務                              |
-|                       | `complete(String taskId)`                                                                                                                                                                                                   | `taskId`（任務 ID）                                                                             | 完成任務                              |
-|                       | `complete(String taskId, Map vars)`                                                                                                                                                                                         | `taskId`（任務 ID）<br>`vars`（流程變數 Map）                                                         | 完成任務並寫入流程變數                       |
-|                       | `claim(String taskId, String userId)`                                                                                                                                                                                       | `taskId`（任務 ID）<br>`userId`（使用者 ID）                                                         | 簽收任務                              |
-|                       | `unclaim(String taskId)`                                                                                                                                                                                                    | `taskId`（任務 ID）                                                                             | 取消簽收                              |
-|                       | `setAssignee(String taskId, String userId)`                                                                                                                                                                                 | `taskId`（任務 ID）<br>`userId`（負責人 ID）                                                         | 指派任務負責人                           |
-|                       | `delegateTask(String taskId, String userId)`                                                                                                                                                                                | `taskId`（任務 ID）<br>`userId`（受委派使用者 ID）                                                      | 委派任務                              |
-|                       | `setOwner(String taskId, String userId)`                                                                                                                                                                                    | `taskId`（任務 ID）<br>`userId`（擁有者 ID）                                                         | 設定任務擁有者                           |
-|                       | `setVariable(String taskId, String varName, Object value)`                                                                                                                                                                  | `taskId`（任務 ID）<br>`varName`（變數名稱）<br>`value`（變數值）                                          | 設定任務變數                            |
-|                       | `getVariables(String taskId)`                                                                                                                                                                                               | `taskId`（任務 ID）                                                                             | 取得任務變數                            |
-| **HistoryService**    | `createHistoricProcessInstanceQuery()`                                                                                                                                                                                      | 無                                                                                           | 查詢歷史流程                            |
-|                       | `createHistoricTaskInstanceQuery()`                                                                                                                                                                                         | 無                                                                                           | 查詢歷史任務                            |
-|                       | `createHistoricActivityInstanceQuery()`                                                                                                                                                                                     | 無                                                                                           | 查詢歷史活動（含 userTask/網關/ServiceTask） |
-|                       | `createHistoricVariableInstanceQuery()`                                                                                                                                                                                     | 無                                                                                           | 查詢歷史變數                            |
-|                       | `deleteHistoricProcessInstance(String processInstanceId)`                                                                                                                                                                   | `processInstanceId`（流程實例 ID）                                                                | 刪除歷史流程資料                          |
-| **ManagementService** | `createJobQuery()`                                                                                                                                                                                                          | 無                                                                                           | 查詢異步 Job                          |
-|                       | `executeJob(String jobId)`                                                                                                                                                                                                  | `jobId`（Job ID）                                                                             | 手動執行 Job                          |
-|                       | `deleteJob(String jobId)`                                                                                                                                                                                                   | `jobId`（Job ID）                                                                             | 刪除 Job                            |
-|                       | `createTimerJobQuery()`                                                                                                                                                                                                     | 無                                                                                           | 查詢 Timer Job                      |
-|                       | `getTableCount()`                                                                                                                                                                                                           | 無                                                                                           | 取得所有 Flowable 表的筆數                |
-| **IdentityService**   | `saveUser(User user)`                                                                                                                                                                                                       | `user`（使用者物件）                                                                               | 新增/更新使用者                          |
-|                       | `deleteUser(String userId)`                                                                                                                                                                                                 | `userId`（使用者 ID）                                                                            | 刪除使用者                             |
-|                       | `createUserQuery()`                                                                                                                                                                                                         | 無                                                                                           | 查詢使用者                             |
-|                       | `saveGroup(Group group)`                                                                                                                                                                                                    | `group`（群組物件）                                                                               | 新增/更新群組                           |
-|                       | `createGroupQuery()`                                                                                                                                                                                                        | 無                                                                                           | 查詢群組                              |
-|                       | `createMembership(String userId, String groupId)`                                                                                                                                                                           | `userId`（使用者 ID）<br>`groupId`（群組 ID）                                                        | 使用者加入群組                           |
-| **FormService**       | `getStartFormData(String defId)`                                                                                                                                                                                            | `defId`（流程定義 ID）                                                                            | 取得流程啟動表單                          |
-|                       | `submitStartFormData(String defId, Map formData)`                                                                                                                                                                           | `defId`（流程定義 ID）<br>`formData`（表單資料 Map）                                                    | 提交流程啟動表單                          |
-|                       | `getTaskFormData(String taskId)`                                                                                                                                                                                            | `taskId`（任務 ID）                                                                             | 取得任務表單                            |
-|                       | `submitTaskFormData(String taskId, Map formData)`                                                                                                                                                                           | `taskId`（任務 ID）<br>`formData`（表單資料 Map）                                                     | 提交任務表單                            |
+### RepositoryService - 靜態資源
+
+<details>
+<summary>createDeployment - 部署流程（classPath 方式）</summary>
+
+`createDeployment()` <br> → `addClasspathResource(String path)` （加入 classpath 下的 BPMN 資源） <br> → `deploy()` （執行部署）
+
+- `path`（BPMN 路徑, classpath 位置）
+
+</details>
+
+<details>
+<summary>addInputStream - 部署流程（InputStream 方式）</summary>
+
+`addInputStream(String resourceName, InputStream inputStream)`
+
+- `resourceName`（資源名稱）
+- `inputStream`（BPMN XML InputStream）
+
+</details>
+
+<details>
+<summary>deleteDeployment - 刪除流程部署</summary>
+
+`deleteDeployment(String deploymentId, boolean cascade)`
+
+- `deploymentId`（部署 ID）
+- `cascade`（是否刪除相關流程實例）
+
+</details>
+
+<details>
+<summary>createProcessDefinitionQuery - 查詢流程定義</summary>
+
+`createProcessDefinitionQuery()`
+
+</details>
+
+<details>
+<summary>getProcessDiagram - 取得流程圖 InputStream</summary>
+
+`getProcessDiagram(String processDefinitionId)`
+
+- `processDefinitionId`（流程定義 ID）
+
+</details>
+
+<details>
+<summary>suspendProcessDefinitionById - 暫停流程定義</summary>
+
+`suspendProcessDefinitionById(String id)`
+
+- `id`（流程定義 ID）
+
+</details>
+
+<details>
+<summary>activateProcessDefinitionById - 激活流程定義</summary>
+
+`activateProcessDefinitionById(String id)`
+
+- `id`（流程定義 ID）
+
+</details>
+
+<details>
+<summary>getBpmnModel - 取得 BPMN 模型物件（程式控制用）</summary>
+
+`getBpmnModel(String processDefinitionId)`
+
+- `processDefinitionId`（流程定義 ID）
+
+</details>
+
+<details>
+<summary>getProcessModel - 取得 BPMN XML InputStream</summary>
+
+`getProcessModel(String processDefinitionId)`
+
+- `processDefinitionId`（流程定義 ID）
+
+</details>
+
+### RuntimeService - 執行中流程
+
+<details>
+<summary>startProcessInstanceByKey - 啟動流程實例</summary>
+
+`startProcessInstanceByKey(String key, Map vars)`
+
+- `key`（BPMN 流程的 ID）
+- `vars`（初始流程變數 Map） 【選填】
+
+</details>
+
+<details>
+<summary>setVariable - 設定單一流程變數（全域變數）</summary>
+
+`setVariable(String execId, String varName, Object value)`
+
+- `execId`（流程執行 ID）
+- `varName`（變數名稱）
+- `value`（變數值）
+
+</details>
+
+<details>
+<summary>setVariables - 設定多個流程變數（全域變數）</summary>
+
+`setVariables(String execId, Map vars)`
+
+- `execId`（流程執行 ID）
+- `vars`（多個變數 Map）
+
+</details>
+
+<details>
+<summary>getVariable - 取得單一流程變數（全域變數）</summary>
+
+`getVariable(String execId, String varName)`
+
+- `execId`（流程執行 ID）
+- `varName`（變數名稱）
+
+</details>
+
+<details>
+<summary>getVariables - 取得全部流程變數（全域變數）</summary>
+
+`getVariables(String execId)`
+
+- `execId`（流程執行 ID）
+
+</details>
+
+<details>
+<summary>deleteProcessInstance - 刪除流程實例</summary>
+
+`deleteProcessInstance(String processInstanceId, String reason)`
+
+- `processInstanceId`（流程實例 ID）
+- `reason`（刪除原因）
+
+</details>
+
+<details>
+<summary>createProcessInstanceQuery - 查詢流程實例</summary>
+
+`createProcessInstanceQuery()`
+
+</details>
+
+<details>
+<summary>createChangeActivityStateBuilder - 將流程從當前節點跳轉到指定節點，可退回上一關或跳關</summary>
+
+`createChangeActivityStateBuilder()` <br> → `processInstanceId(String processInstanceId)` （指定流程實例） <br> → `moveActivityIdTo(String currentActivityId, String targetActivityId)` （從當前節點跳到目標節點） <br> → `changeState()` （執行跳轉）
+
+- `processInstanceId`（流程實例 ID）
+- `currentActivityId`（當前節點 ID）
+- `targetActivityId`（目標節點 ID）
+
+</details>
+
+### TaskService - 用戶任務
+
+<details>
+<summary>createTaskQuery - 查詢任務</summary>
+
+`createTaskQuery()`
+
+</details>
+
+<details>
+<summary>complete - 完成任務</summary>
+
+`complete(String taskId)`
+
+- `taskId`（任務 ID）
+
+</details>
+
+<details>
+<summary>complete - 完成任務（寫入流程變數）</summary>
+
+`complete(String taskId, Map vars)`
+
+- `taskId`（任務 ID）
+- `vars`（流程變數 Map）
+
+</details>
+
+<details>
+<summary>claim - 簽收任務</summary>
+
+`claim(String taskId, String userId)`
+
+- `taskId`（任務 ID）
+- `userId`（使用者 ID）
+
+</details>
+
+<details>
+<summary>unclaim - 取消簽收</summary>
+
+`claim(String taskId, String userId)`
+
+- `taskId`（任務 ID）
+
+</details>
+
+<details>
+<summary>setAssignee - 指派任務負責人</summary>
+
+`setAssignee(String taskId, String userId)`
+
+- `taskId`（任務 ID）
+- `userId`（負責人 ID）
+
+</details>
+
+<details>
+<summary>delegateTask - 委派任務</summary>
+
+`delegateTask(String taskId, String userId)`
+
+- `taskId`（任務 ID）
+- `userId`（受委派使用者 ID）
+
+</details>
+
+<details>
+<summary>setOwner - 設定任務擁有者</summary>
+
+`setOwner(String taskId, String userId)`
+
+- `taskId`（任務 ID）
+- `userId`（擁有者 ID）
+
+</details>
+
+<details>
+<summary>setVariable - 設定單一流程變數（當前任務的區域變數）</summary>
+
+`setVariable(String execId, String varName, Object value)`
+
+- `taskId`（任務 ID）
+- `varName`（變數名稱）
+- `value`（變數值）
+
+</details>
+
+<details>
+<summary>setVariables - 設定多個流程變數（當前任務的區域變數）</summary>
+
+`setVariables(String execId, Map vars)`
+
+- `taskId`（任務 ID）
+- `vars`（多個變數 Map）
+
+</details>
+
+<details>
+<summary>getVariable - 取得單一流程變數（當前任務的區域變數）</summary>
+
+`getVariable(String execId, String varName)`
+
+- `taskId`（任務 ID）
+- `varName`（變數名稱）
+
+</details>
+
+<details>
+<summary>getVariables - 取得全部流程變數（當前任務的區域變數）</summary>
+
+`getVariables(String execId)`
+
+- `taskId`（任務 ID）
+
+</details>
+
+<details>
+<summary>createHistoricProcessInstanceQuery - 查詢歷史流程</summary>
+
+`createHistoricProcessInstanceQuery()`
+
+</details>
+
+<details>
+<summary>createHistoricTaskInstanceQuery - 查詢歷史任務</summary>
+
+`createHistoricTaskInstanceQuery()`
+
+</details>
+
+<details>
+<summary>createHistoricActivityInstanceQuery - 查詢歷史活動（含 userTask/網關/ServiceTask）</summary>
+
+`createHistoricActivityInstanceQuery()`
+
+</details>
+
+<details>
+<summary>createHistoricVariableInstanceQuery - 查詢歷史變數</summary>
+
+`createHistoricVariableInstanceQuery()`
+
+</details>
+
+<details>
+<summary>deleteHistoricProcessInstance - 刪除歷史流程資料</summary>
+
+`deleteHistoricProcessInstance(String processInstanceId)`
+
+- `processInstanceId`（流程實例 ID）
+
+</details>
+
+### HistoryService - 歷史資料
+
+<details>
+<summary>createHistoricProcessInstanceQuery - 查詢歷史流程實例</summary>
+
+`createHistoricProcessInstanceQuery()` <br> → `processInstanceId(String processInstanceId)` （依流程實例 ID 查詢） <br> → `list()` / `singleResult()` （取得結果）
+
+- `processInstanceId`（流程實例 ID）
+
+</details>
+
+<details>
+<summary>createHistoricTaskInstanceQuery - 查詢歷史任務實例</summary>
+
+`createHistoricTaskInstanceQuery()` <br> → `taskAssignee(String assignee)` （依任務執行人查詢） <br> → `list()` / `singleResult()` （取得結果）
+
+- `assignee`（任務執行人）
+
+</details>
+
+<details>
+<summary>createHistoricActivityInstanceQuery - 查詢歷史活動實例</summary>
+
+`createHistoricActivityInstanceQuery()` <br> → `processInstanceId(String processInstanceId)` （依流程實例 ID 查詢） <br> → `list()` （取得結果）
+
+- `processInstanceId`（流程實例 ID）
+
+</details>
+
+<details>
+<summary>createHistoricVariableInstanceQuery - 查詢歷史變數實例</summary>
+
+`createHistoricVariableInstanceQuery()` <br> → `processInstanceId(String processInstanceId)` （依流程實例 ID 查詢） <br> → `list()` （取得結果）
+
+- `processInstanceId`（流程實例 ID）
+
+</details>
+
+<details>
+<summary>deleteHistoricProcessInstance - 刪除歷史流程實例</summary>
+
+`deleteHistoricProcessInstance(String processInstanceId)`
+
+- `processInstanceId`（流程實例 ID）
+
+</details>
+
+<details>
+<summary>deleteHistoricTaskInstance - 刪除歷史任務實例</summary>
+
+`deleteHistoricTaskInstance(String taskId)`
+
+- `taskId`（任務 ID）
+
+</details>
+
+<details>
+<summary>createHistoricDetailQuery - 查詢歷史詳細資料</summary>
+
+`createHistoricDetailQuery()` <br> → `processInstanceId(String processInstanceId)` （依流程實例 ID 查詢） <br> → `list()` （取得結果）
+
+- `processInstanceId`（流程實例 ID）
+
+</details>
+
+### ManagementService - 監控
+
+<details>
+<summary>createJobQuery - 查詢異步 Job</summary>
+
+`createJobQuery()`
+
+</details>
+
+<details>
+<summary>executeJob - 手動執行 Job</summary>
+
+`executeJob(String jobId)`
+
+- `jobId`（Job ID）
+
+</details>
+
+<details>
+<summary>deleteJob - 刪除 Job</summary>
+
+`deleteJob(String jobId)`
+
+- `jobId`（Job ID）
+
+</details>
+
+<details>
+<summary>createTimerJobQuery - 查詢 Timer Job</summary>
+
+`createTimerJobQuery()`
+
+</details>
+
+<details>
+<summary>getTableCount - 取得所有 Flowable 表的筆數</summary>
+
+`getTableCount()`
+
+</details>
 
 ## 範例
 

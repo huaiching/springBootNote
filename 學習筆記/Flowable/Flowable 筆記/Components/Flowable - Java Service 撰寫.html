@@ -1252,7 +1252,7 @@ pre[class*="language-"] {
 <p>本章節詳細說明如何撰寫 Java Service 來控制和操作 Flowable 的 BPMN 流程。</p>
 <h2 class="atx" id="flowable-核心-service-介紹">Flowable 核心 Service 介紹</h2>
 <p>Flowable 提供了多個核心 Service 來操作流程引擎：</p>
-<div class="mermaid" data-processed="true"><svg aria-roledescription="flowchart-v2" viewBox="-7.999992370605469 -8 535.7500610351562 314.6000061035156" style="max-width: 535.7500610351562px;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1763877683489"><style>#mermaid-1763877683489{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1763877683489 .error-icon{fill:#552222;}#mermaid-1763877683489 .error-text{fill:#552222;stroke:#552222;}#mermaid-1763877683489 .edge-thickness-normal{stroke-width:2px;}#mermaid-1763877683489 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1763877683489 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1763877683489 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1763877683489 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1763877683489 .marker{fill:#333333;stroke:#333333;}#mermaid-1763877683489 .marker.cross{stroke:#333333;}#mermaid-1763877683489 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1763877683489 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1763877683489 .cluster-label text{fill:#333;}#mermaid-1763877683489 .cluster-label span{color:#333;}#mermaid-1763877683489 .label text,#mermaid-1763877683489 span{fill:#333;color:#333;}#mermaid-1763877683489 .node rect,#mermaid-1763877683489 .node circle,#mermaid-1763877683489 .node ellipse,#mermaid-1763877683489 .node polygon,#mermaid-1763877683489 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1763877683489 .node .label{text-align:center;}#mermaid-1763877683489 .node.clickable{cursor:pointer;}#mermaid-1763877683489 .arrowheadPath{fill:#333333;}#mermaid-1763877683489 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1763877683489 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1763877683489 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1763877683489 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1763877683489 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1763877683489 .cluster text{fill:#333;}#mermaid-1763877683489 .cluster span{color:#333;}#mermaid-1763877683489 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1763877683489 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1763877683489 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Flowable LE-RepositoryService" id="L-Flowable-RepositoryService-0" d="M299.37212744699394,103.67823332858029L307.5212204534683,91.9151948219533C315.6703134599426,80.15215631532631,331.9684994728912,56.626079302072334,344.2842591460322,44.86304079544535C356.60001881917316,33.10000228881836,364.93335215250653,33.10000228881836,369.10001881917316,33.10000228881836L373.26668548583984,33.10000228881836"></path><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Flowable LE-RuntimeService" id="L-Flowable-RuntimeService-0" d="M323.26668548583984,149.30000686645508L327.43335215250653,149.30000686645508C331.60001881917316,149.30000686645508,339.93335215250653,149.30000686645508,349.5771013895671,149.30000686645508C359.2208506266276,149.30000686645508,370.17501576741535,149.30000686645508,375.65209833780926,149.30000686645508L381.1291809082031,149.30000686645508"></path><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Flowable LE-TaskService" id="L-Flowable-TaskService-0" d="M299.37212744699394,194.92178040432987L307.5212204534683,206.68481891095686C315.6703134599426,218.44785741758383,331.9684994728912,241.97393443083783,348.01134235220894,253.7369729374648C364.0541852315267,265.5000114440918,379.84168497721356,265.5000114440918,387.73543485005695,265.5000114440918L395.6291847229004,265.5000114440918"></path><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-HistoryService LE-Flowable" id="L-HistoryService-Flowable-0" d="M142.1625099182129,91.20000457763672L149.67987124125162,91.20000457763672C157.19723256429037,91.20000457763672,172.23195521036783,91.20000457763672,185.6654809716437,95.4699319206693C199.0990067329196,99.73985926370189,210.93133560939387,108.27971394976707,216.847500047631,112.54964129279965L222.76366448586816,116.81956863583224"></path><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-ManagementService LE-Flowable" id="L-ManagementService-Flowable-0" d="M162.2666778564453,207.40000915527344L166.43334452311197,207.40000915527344C170.60001118977866,207.40000915527344,178.93334452311197,207.40000915527344,189.01617562801576,203.13008181224086C199.0990067329196,198.86015446920828,210.93133560939387,190.3202997831431,216.847500047631,186.05037244011052L222.76366448586816,181.78044509707792"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(267.7666816711426, 149.30000686645508)" id="flowchart-Flowable-8304" class="node default default"><circle height="66.20000457763672" width="111.00000762939453" r="55.500003814697266" ry="0" rx="0" style=""></circle><g transform="translate(-48.000003814697266, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="96.00000762939453"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Flowable <br> 流程管理引擎</span></div></foreignObject></g></g><g transform="translate(446.5083541870117, 33.10000228881836)" id="flowchart-RepositoryService-8305" class="node default default"><rect height="66.20000457763672" width="146.48333740234375" y="-33.10000228881836" x="-73.24166870117188" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-65.74166870117188, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="131.48333740234375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">RepositoryService <br> 靜態資源</span></div></foreignObject></g></g><g transform="translate(446.5083541870117, 149.30000686645508)" id="flowchart-RuntimeService-8306" class="node default default"><rect height="66.20000457763672" width="130.75833892822266" y="-33.10000228881836" x="-65.37916946411133" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-57.87916946411133, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="115.75833892822266"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">RuntimeService <br> 執行中流程</span></div></foreignObject></g></g><g transform="translate(446.5083541870117, 265.5000114440918)" id="flowchart-TaskService-8307" class="node default default"><rect height="66.20000457763672" width="101.75833892822266" y="-33.10000228881836" x="-50.87916946411133" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-43.37916946411133, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="86.75833892822266"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">TaskService <br> 用戶任務</span></div></foreignObject></g></g><g transform="translate(81.13333892822266, 91.20000457763672)" id="flowchart-HistoryService-8308" class="node default default"><rect height="66.20000457763672" width="122.05834197998047" y="-33.10000228881836" x="-61.029170989990234" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-53.529170989990234, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="107.05834197998047"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">HistoryService <br> 歷史查詢</span></div></foreignObject></g></g><g transform="translate(81.13333892822266, 207.40000915527344)" id="flowchart-ManagementService-8309" class="node default default"><rect height="66.20000457763672" width="162.2666778564453" y="-33.10000228881836" x="-81.13333892822266" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-73.63333892822266, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="147.2666778564453"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">ManagementService <br> 監控</span></div></foreignObject></g></g></g></g></g></svg></div>
+<div class="mermaid" data-processed="true"><svg aria-roledescription="flowchart-v2" viewBox="-7.999992370605469 -8 535.7500610351562 314.6000061035156" style="max-width: 535.7500610351562px;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1763902382538"><style>#mermaid-1763902382538{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1763902382538 .error-icon{fill:#552222;}#mermaid-1763902382538 .error-text{fill:#552222;stroke:#552222;}#mermaid-1763902382538 .edge-thickness-normal{stroke-width:2px;}#mermaid-1763902382538 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1763902382538 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1763902382538 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1763902382538 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1763902382538 .marker{fill:#333333;stroke:#333333;}#mermaid-1763902382538 .marker.cross{stroke:#333333;}#mermaid-1763902382538 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1763902382538 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1763902382538 .cluster-label text{fill:#333;}#mermaid-1763902382538 .cluster-label span{color:#333;}#mermaid-1763902382538 .label text,#mermaid-1763902382538 span{fill:#333;color:#333;}#mermaid-1763902382538 .node rect,#mermaid-1763902382538 .node circle,#mermaid-1763902382538 .node ellipse,#mermaid-1763902382538 .node polygon,#mermaid-1763902382538 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1763902382538 .node .label{text-align:center;}#mermaid-1763902382538 .node.clickable{cursor:pointer;}#mermaid-1763902382538 .arrowheadPath{fill:#333333;}#mermaid-1763902382538 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1763902382538 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1763902382538 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1763902382538 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1763902382538 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1763902382538 .cluster text{fill:#333;}#mermaid-1763902382538 .cluster span{color:#333;}#mermaid-1763902382538 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1763902382538 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1763902382538 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Flowable LE-RepositoryService" id="L-Flowable-RepositoryService-0" d="M299.37212744699394,103.67823332858029L307.5212204534683,91.9151948219533C315.6703134599426,80.15215631532631,331.9684994728912,56.626079302072334,344.2842591460322,44.86304079544535C356.60001881917316,33.10000228881836,364.93335215250653,33.10000228881836,369.10001881917316,33.10000228881836L373.26668548583984,33.10000228881836"></path><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Flowable LE-RuntimeService" id="L-Flowable-RuntimeService-0" d="M323.26668548583984,149.30000686645508L327.43335215250653,149.30000686645508C331.60001881917316,149.30000686645508,339.93335215250653,149.30000686645508,349.5771013895671,149.30000686645508C359.2208506266276,149.30000686645508,370.17501576741535,149.30000686645508,375.65209833780926,149.30000686645508L381.1291809082031,149.30000686645508"></path><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Flowable LE-TaskService" id="L-Flowable-TaskService-0" d="M299.37212744699394,194.92178040432987L307.5212204534683,206.68481891095686C315.6703134599426,218.44785741758383,331.9684994728912,241.97393443083783,348.01134235220894,253.7369729374648C364.0541852315267,265.5000114440918,379.84168497721356,265.5000114440918,387.73543485005695,265.5000114440918L395.6291847229004,265.5000114440918"></path><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-HistoryService LE-Flowable" id="L-HistoryService-Flowable-0" d="M142.1625099182129,91.20000457763672L149.67987124125162,91.20000457763672C157.19723256429037,91.20000457763672,172.23195521036783,91.20000457763672,185.6654809716437,95.4699319206693C199.0990067329196,99.73985926370189,210.93133560939387,108.27971394976707,216.847500047631,112.54964129279965L222.76366448586816,116.81956863583224"></path><path style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-ManagementService LE-Flowable" id="L-ManagementService-Flowable-0" d="M162.2666778564453,207.40000915527344L166.43334452311197,207.40000915527344C170.60001118977866,207.40000915527344,178.93334452311197,207.40000915527344,189.01617562801576,203.13008181224086C199.0990067329196,198.86015446920828,210.93133560939387,190.3202997831431,216.847500047631,186.05037244011052L222.76366448586816,181.78044509707792"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(267.7666816711426, 149.30000686645508)" id="flowchart-Flowable-112" class="node default default"><circle height="66.20000457763672" width="111.00000762939453" r="55.500003814697266" ry="0" rx="0" style=""></circle><g transform="translate(-48.000003814697266, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="96.00000762939453"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Flowable <br> 流程管理引擎</span></div></foreignObject></g></g><g transform="translate(446.5083541870117, 33.10000228881836)" id="flowchart-RepositoryService-113" class="node default default"><rect height="66.20000457763672" width="146.48333740234375" y="-33.10000228881836" x="-73.24166870117188" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-65.74166870117188, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="131.48333740234375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">RepositoryService <br> 靜態資源</span></div></foreignObject></g></g><g transform="translate(446.5083541870117, 149.30000686645508)" id="flowchart-RuntimeService-114" class="node default default"><rect height="66.20000457763672" width="130.75833892822266" y="-33.10000228881836" x="-65.37916946411133" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-57.87916946411133, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="115.75833892822266"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">RuntimeService <br> 執行中流程</span></div></foreignObject></g></g><g transform="translate(446.5083541870117, 265.5000114440918)" id="flowchart-TaskService-115" class="node default default"><rect height="66.20000457763672" width="101.75833892822266" y="-33.10000228881836" x="-50.87916946411133" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-43.37916946411133, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="86.75833892822266"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">TaskService <br> 用戶任務</span></div></foreignObject></g></g><g transform="translate(81.13333892822266, 91.20000457763672)" id="flowchart-HistoryService-116" class="node default default"><rect height="66.20000457763672" width="122.05834197998047" y="-33.10000228881836" x="-61.029170989990234" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-53.529170989990234, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="107.05834197998047"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">HistoryService <br> 歷史查詢</span></div></foreignObject></g></g><g transform="translate(81.13333892822266, 207.40000915527344)" id="flowchart-ManagementService-117" class="node default default"><rect height="66.20000457763672" width="162.2666778564453" y="-33.10000228881836" x="-81.13333892822266" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-73.63333892822266, -25.60000228881836)" style="" class="label"><foreignObject height="51.20000457763672" width="147.2666778564453"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">ManagementService <br> 監控</span></div></foreignObject></g></g></g></g></g></svg></div>
 <table>
 <thead>
 <tr>
@@ -1282,316 +1282,414 @@ pre[class*="language-"] {
 </tr>
 </tbody></table>
 <h2 class="atx" id="常用方法">常用方法</h2>
-<table>
-<thead>
-<tr>
-<th>Service</th>
-<th>方法</th>
-<th>輸入參數</th>
-<th>說明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>RepositoryService</strong></td>
-<td><code>createDeployment()</code> <br> → <code>addClasspathResource(String path)</code> （加入 classpath 下的 BPMN 資源） <br> → <code>deploy()</code> （執行部署）</td>
-<td><code>path</code>（BPMN 路徑, classpath 位置）</td>
-<td>部署流程（classPath 方式）</td>
-</tr>
-<tr>
-<td></td>
-<td><code>addInputStream(String resourceName, InputStream inputStream)</code></td>
-<td><code>resourceName</code>（資源名稱）<br><code>inputStream</code>（BPMN XML InputStream）</td>
-<td>部署流程（InputStream 方式）</td>
-</tr>
-<tr>
-<td></td>
-<td><code>deleteDeployment(String deploymentId, boolean cascade)</code></td>
-<td><code>deploymentId</code>（部署 ID）<br><code>cascade</code>（是否刪除相關流程實例）</td>
-<td>刪除流程部署</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createProcessDefinitionQuery()</code></td>
-<td>無</td>
-<td>查詢流程定義</td>
-</tr>
-<tr>
-<td></td>
-<td><code>getProcessDiagram(String processDefinitionId)</code></td>
-<td><code>processDefinitionId</code>（流程定義 ID）</td>
-<td>取得流程圖 InputStream</td>
-</tr>
-<tr>
-<td></td>
-<td><code>suspendProcessDefinitionById(String id)</code></td>
-<td><code>id</code>（流程定義 ID）</td>
-<td>暫停流程定義</td>
-</tr>
-<tr>
-<td></td>
-<td><code>activateProcessDefinitionById(String id)</code></td>
-<td><code>id</code>（流程定義 ID）</td>
-<td>激活流程定義</td>
-</tr>
-<tr>
-<td></td>
-<td><code>getBpmnModel(String processDefinitionId)</code></td>
-<td><code>processDefinitionId</code>（流程定義 ID）</td>
-<td>取得 BPMN 模型物件（程式控制用）</td>
-</tr>
-<tr>
-<td></td>
-<td><code>getProcessModel(String processDefinitionId)</code></td>
-<td><code>processDefinitionId</code>（流程定義 ID）</td>
-<td>取得 BPMN XML InputStream</td>
-</tr>
-<tr>
-<td><strong>RuntimeService</strong></td>
-<td><code>startProcessInstanceByKey(String key)</code></td>
-<td><code>key</code>（流程 key）</td>
-<td>啟動流程實例</td>
-</tr>
-<tr>
-<td></td>
-<td><code>startProcessInstanceByKey(String key, Map vars)</code></td>
-<td><code>key</code>（流程 key）<br><code>vars</code>（初始流程變數 Map）</td>
-<td>帶流程變數啟動流程</td>
-</tr>
-<tr>
-<td></td>
-<td><code>startProcessInstanceById(String defId)</code></td>
-<td><code>defId</code>（流程定義 ID）</td>
-<td>啟動流程實例</td>
-</tr>
-<tr>
-<td></td>
-<td><code>startProcessInstanceById(String defId, Map vars)</code></td>
-<td><code>defId</code>（流程定義 ID）<br><code>vars</code>（初始流程變數 Map）</td>
-<td>帶流程變數啟動流程</td>
-</tr>
-<tr>
-<td></td>
-<td><code>setVariable(String execId, String varName, Object value)</code></td>
-<td><code>execId</code>（流程執行 ID）<br><code>varName</code>（變數名稱）<br><code>value</code>（變數值）</td>
-<td>設定單一流程變數</td>
-</tr>
-<tr>
-<td></td>
-<td><code>setVariables(String execId, Map vars)</code></td>
-<td><code>execId</code>（流程執行 ID）<br><code>vars</code>（多個變數 Map）</td>
-<td>設定多個流程變數</td>
-</tr>
-<tr>
-<td></td>
-<td><code>getVariable(String execId, String varName)</code></td>
-<td><code>execId</code>（流程執行 ID）<br><code>varName</code>（變數名稱）</td>
-<td>取得單一流程變數</td>
-</tr>
-<tr>
-<td></td>
-<td><code>getVariables(String execId)</code></td>
-<td><code>execId</code>（流程執行 ID）</td>
-<td>取得全部流程變數</td>
-</tr>
-<tr>
-<td></td>
-<td><code>deleteProcessInstance(String processInstanceId, String reason)</code></td>
-<td><code>processInstanceId</code>（流程實例 ID）<br><code>reason</code>（刪除原因）</td>
-<td>刪除流程實例</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createProcessInstanceQuery()</code></td>
-<td>無</td>
-<td>查詢流程實例</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createChangeActivityStateBuilder()</code> <br> → <code>processInstanceId(String processInstanceId)</code> （指定流程實例） <br> → <code>moveActivityIdTo(String currentActivityId, String targetActivityId)</code> （從當前節點跳到目標節點） <br> → <code>changeState()</code> （執行跳轉）</td>
-<td><code>processInstanceId</code>（流程實例 ID）<br><code>currentActivityId</code>（當前節點 ID）<br><code>targetActivityId</code>（目標節點 ID）</td>
-<td>將流程從當前節點跳轉到指定節點，可退回上一關或跳關</td>
-</tr>
-<tr>
-<td><strong>TaskService</strong></td>
-<td><code>createTaskQuery()</code></td>
-<td>無</td>
-<td>查詢任務</td>
-</tr>
-<tr>
-<td></td>
-<td><code>complete(String taskId)</code></td>
-<td><code>taskId</code>（任務 ID）</td>
-<td>完成任務</td>
-</tr>
-<tr>
-<td></td>
-<td><code>complete(String taskId, Map vars)</code></td>
-<td><code>taskId</code>（任務 ID）<br><code>vars</code>（流程變數 Map）</td>
-<td>完成任務並寫入流程變數</td>
-</tr>
-<tr>
-<td></td>
-<td><code>claim(String taskId, String userId)</code></td>
-<td><code>taskId</code>（任務 ID）<br><code>userId</code>（使用者 ID）</td>
-<td>簽收任務</td>
-</tr>
-<tr>
-<td></td>
-<td><code>unclaim(String taskId)</code></td>
-<td><code>taskId</code>（任務 ID）</td>
-<td>取消簽收</td>
-</tr>
-<tr>
-<td></td>
-<td><code>setAssignee(String taskId, String userId)</code></td>
-<td><code>taskId</code>（任務 ID）<br><code>userId</code>（負責人 ID）</td>
-<td>指派任務負責人</td>
-</tr>
-<tr>
-<td></td>
-<td><code>delegateTask(String taskId, String userId)</code></td>
-<td><code>taskId</code>（任務 ID）<br><code>userId</code>（受委派使用者 ID）</td>
-<td>委派任務</td>
-</tr>
-<tr>
-<td></td>
-<td><code>setOwner(String taskId, String userId)</code></td>
-<td><code>taskId</code>（任務 ID）<br><code>userId</code>（擁有者 ID）</td>
-<td>設定任務擁有者</td>
-</tr>
-<tr>
-<td></td>
-<td><code>setVariable(String taskId, String varName, Object value)</code></td>
-<td><code>taskId</code>（任務 ID）<br><code>varName</code>（變數名稱）<br><code>value</code>（變數值）</td>
-<td>設定任務變數</td>
-</tr>
-<tr>
-<td></td>
-<td><code>getVariables(String taskId)</code></td>
-<td><code>taskId</code>（任務 ID）</td>
-<td>取得任務變數</td>
-</tr>
-<tr>
-<td><strong>HistoryService</strong></td>
-<td><code>createHistoricProcessInstanceQuery()</code></td>
-<td>無</td>
-<td>查詢歷史流程</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createHistoricTaskInstanceQuery()</code></td>
-<td>無</td>
-<td>查詢歷史任務</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createHistoricActivityInstanceQuery()</code></td>
-<td>無</td>
-<td>查詢歷史活動（含 userTask/網關/ServiceTask）</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createHistoricVariableInstanceQuery()</code></td>
-<td>無</td>
-<td>查詢歷史變數</td>
-</tr>
-<tr>
-<td></td>
-<td><code>deleteHistoricProcessInstance(String processInstanceId)</code></td>
-<td><code>processInstanceId</code>（流程實例 ID）</td>
-<td>刪除歷史流程資料</td>
-</tr>
-<tr>
-<td><strong>ManagementService</strong></td>
-<td><code>createJobQuery()</code></td>
-<td>無</td>
-<td>查詢異步 Job</td>
-</tr>
-<tr>
-<td></td>
-<td><code>executeJob(String jobId)</code></td>
-<td><code>jobId</code>（Job ID）</td>
-<td>手動執行 Job</td>
-</tr>
-<tr>
-<td></td>
-<td><code>deleteJob(String jobId)</code></td>
-<td><code>jobId</code>（Job ID）</td>
-<td>刪除 Job</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createTimerJobQuery()</code></td>
-<td>無</td>
-<td>查詢 Timer Job</td>
-</tr>
-<tr>
-<td></td>
-<td><code>getTableCount()</code></td>
-<td>無</td>
-<td>取得所有 Flowable 表的筆數</td>
-</tr>
-<tr>
-<td><strong>IdentityService</strong></td>
-<td><code>saveUser(User user)</code></td>
-<td><code>user</code>（使用者物件）</td>
-<td>新增/更新使用者</td>
-</tr>
-<tr>
-<td></td>
-<td><code>deleteUser(String userId)</code></td>
-<td><code>userId</code>（使用者 ID）</td>
-<td>刪除使用者</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createUserQuery()</code></td>
-<td>無</td>
-<td>查詢使用者</td>
-</tr>
-<tr>
-<td></td>
-<td><code>saveGroup(Group group)</code></td>
-<td><code>group</code>（群組物件）</td>
-<td>新增/更新群組</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createGroupQuery()</code></td>
-<td>無</td>
-<td>查詢群組</td>
-</tr>
-<tr>
-<td></td>
-<td><code>createMembership(String userId, String groupId)</code></td>
-<td><code>userId</code>（使用者 ID）<br><code>groupId</code>（群組 ID）</td>
-<td>使用者加入群組</td>
-</tr>
-<tr>
-<td><strong>FormService</strong></td>
-<td><code>getStartFormData(String defId)</code></td>
-<td><code>defId</code>（流程定義 ID）</td>
-<td>取得流程啟動表單</td>
-</tr>
-<tr>
-<td></td>
-<td><code>submitStartFormData(String defId, Map formData)</code></td>
-<td><code>defId</code>（流程定義 ID）<br><code>formData</code>（表單資料 Map）</td>
-<td>提交流程啟動表單</td>
-</tr>
-<tr>
-<td></td>
-<td><code>getTaskFormData(String taskId)</code></td>
-<td><code>taskId</code>（任務 ID）</td>
-<td>取得任務表單</td>
-</tr>
-<tr>
-<td></td>
-<td><code>submitTaskFormData(String taskId, Map formData)</code></td>
-<td><code>taskId</code>（任務 ID）<br><code>formData</code>（表單資料 Map）</td>
-<td>提交任務表單</td>
-</tr>
-</tbody></table>
+<h3 class="atx" id="repositoryservice---靜態資源">RepositoryService - 靜態資源</h3>
+<details>
+<summary>createDeployment - 部署流程（classPath 方式）</summary>
+
+<p><code>createDeployment()</code> <br> → <code>addClasspathResource(String path)</code> （加入 classpath 下的 BPMN 資源） <br> → <code>deploy()</code> （執行部署）</p>
+<ul>
+<li><code>path</code>（BPMN 路徑, classpath 位置）</li>
+</ul>
+</details>
+
+<details>
+<summary>addInputStream - 部署流程（InputStream 方式）</summary>
+
+<p><code>addInputStream(String resourceName, InputStream inputStream)</code></p>
+<ul>
+<li><code>resourceName</code>（資源名稱）</li>
+<li><code>inputStream</code>（BPMN XML InputStream）</li>
+</ul>
+</details>
+
+<details>
+<summary>deleteDeployment - 刪除流程部署</summary>
+
+<p><code>deleteDeployment(String deploymentId, boolean cascade)</code></p>
+<ul>
+<li><code>deploymentId</code>（部署 ID）</li>
+<li><code>cascade</code>（是否刪除相關流程實例）</li>
+</ul>
+</details>
+
+<details>
+<summary>createProcessDefinitionQuery - 查詢流程定義</summary>
+
+<p><code>createProcessDefinitionQuery()</code></p>
+</details>
+
+<details>
+<summary>getProcessDiagram - 取得流程圖 InputStream</summary>
+
+<p><code>getProcessDiagram(String processDefinitionId)</code></p>
+<ul>
+<li><code>processDefinitionId</code>（流程定義 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>suspendProcessDefinitionById - 暫停流程定義</summary>
+
+<p><code>suspendProcessDefinitionById(String id)</code></p>
+<ul>
+<li><code>id</code>（流程定義 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>activateProcessDefinitionById - 激活流程定義</summary>
+
+<p><code>activateProcessDefinitionById(String id)</code></p>
+<ul>
+<li><code>id</code>（流程定義 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>getBpmnModel - 取得 BPMN 模型物件（程式控制用）</summary>
+
+<p><code>getBpmnModel(String processDefinitionId)</code></p>
+<ul>
+<li><code>processDefinitionId</code>（流程定義 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>getProcessModel - 取得 BPMN XML InputStream</summary>
+
+<p><code>getProcessModel(String processDefinitionId)</code></p>
+<ul>
+<li><code>processDefinitionId</code>（流程定義 ID）</li>
+</ul>
+</details>
+
+<h3 class="atx" id="runtimeservice---執行中流程">RuntimeService - 執行中流程</h3>
+<details>
+<summary>startProcessInstanceByKey - 啟動流程實例</summary>
+
+<p><code>startProcessInstanceByKey(String key, Map vars)</code></p>
+<ul>
+<li><code>key</code>（BPMN 流程的 ID）</li>
+<li><code>vars</code>（初始流程變數 Map） 【選填】</li>
+</ul>
+</details>
+
+<details>
+<summary>setVariable - 設定單一流程變數（全域變數）</summary>
+
+<p><code>setVariable(String execId, String varName, Object value)</code></p>
+<ul>
+<li><code>execId</code>（流程執行 ID）</li>
+<li><code>varName</code>（變數名稱）</li>
+<li><code>value</code>（變數值）</li>
+</ul>
+</details>
+
+<details>
+<summary>setVariables - 設定多個流程變數（全域變數）</summary>
+
+<p><code>setVariables(String execId, Map vars)</code></p>
+<ul>
+<li><code>execId</code>（流程執行 ID）</li>
+<li><code>vars</code>（多個變數 Map）</li>
+</ul>
+</details>
+
+<details>
+<summary>getVariable - 取得單一流程變數（全域變數）</summary>
+
+<p><code>getVariable(String execId, String varName)</code></p>
+<ul>
+<li><code>execId</code>（流程執行 ID）</li>
+<li><code>varName</code>（變數名稱）</li>
+</ul>
+</details>
+
+<details>
+<summary>getVariables - 取得全部流程變數（全域變數）</summary>
+
+<p><code>getVariables(String execId)</code></p>
+<ul>
+<li><code>execId</code>（流程執行 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>deleteProcessInstance - 刪除流程實例</summary>
+
+<p><code>deleteProcessInstance(String processInstanceId, String reason)</code></p>
+<ul>
+<li><code>processInstanceId</code>（流程實例 ID）</li>
+<li><code>reason</code>（刪除原因）</li>
+</ul>
+</details>
+
+<details>
+<summary>createProcessInstanceQuery - 查詢流程實例</summary>
+
+<p><code>createProcessInstanceQuery()</code></p>
+</details>
+
+<details>
+<summary>createChangeActivityStateBuilder - 將流程從當前節點跳轉到指定節點，可退回上一關或跳關</summary>
+
+<p><code>createChangeActivityStateBuilder()</code> <br> → <code>processInstanceId(String processInstanceId)</code> （指定流程實例） <br> → <code>moveActivityIdTo(String currentActivityId, String targetActivityId)</code> （從當前節點跳到目標節點） <br> → <code>changeState()</code> （執行跳轉）</p>
+<ul>
+<li><code>processInstanceId</code>（流程實例 ID）</li>
+<li><code>currentActivityId</code>（當前節點 ID）</li>
+<li><code>targetActivityId</code>（目標節點 ID）</li>
+</ul>
+</details>
+
+<h3 class="atx" id="taskservice---用戶任務">TaskService - 用戶任務</h3>
+<details>
+<summary>createTaskQuery - 查詢任務</summary>
+
+<p><code>createTaskQuery()</code></p>
+</details>
+
+<details>
+<summary>complete - 完成任務</summary>
+
+<p><code>complete(String taskId)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>complete - 完成任務（寫入流程變數）</summary>
+
+<p><code>complete(String taskId, Map vars)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+<li><code>vars</code>（流程變數 Map）</li>
+</ul>
+</details>
+
+<details>
+<summary>claim - 簽收任務</summary>
+
+<p><code>claim(String taskId, String userId)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+<li><code>userId</code>（使用者 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>unclaim - 取消簽收</summary>
+
+<p><code>claim(String taskId, String userId)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>setAssignee - 指派任務負責人</summary>
+
+<p><code>setAssignee(String taskId, String userId)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+<li><code>userId</code>（負責人 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>delegateTask - 委派任務</summary>
+
+<p><code>delegateTask(String taskId, String userId)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+<li><code>userId</code>（受委派使用者 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>setOwner - 設定任務擁有者</summary>
+
+<p><code>setOwner(String taskId, String userId)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+<li><code>userId</code>（擁有者 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>setVariable - 設定單一流程變數（當前任務的區域變數）</summary>
+
+<p><code>setVariable(String execId, String varName, Object value)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+<li><code>varName</code>（變數名稱）</li>
+<li><code>value</code>（變數值）</li>
+</ul>
+</details>
+
+<details>
+<summary>setVariables - 設定多個流程變數（當前任務的區域變數）</summary>
+
+<p><code>setVariables(String execId, Map vars)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+<li><code>vars</code>（多個變數 Map）</li>
+</ul>
+</details>
+
+<details>
+<summary>getVariable - 取得單一流程變數（當前任務的區域變數）</summary>
+
+<p><code>getVariable(String execId, String varName)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+<li><code>varName</code>（變數名稱）</li>
+</ul>
+</details>
+
+<details>
+<summary>getVariables - 取得全部流程變數（當前任務的區域變數）</summary>
+
+<p><code>getVariables(String execId)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>createHistoricProcessInstanceQuery - 查詢歷史流程</summary>
+
+<p><code>createHistoricProcessInstanceQuery()</code></p>
+</details>
+
+<details>
+<summary>createHistoricTaskInstanceQuery - 查詢歷史任務</summary>
+
+<p><code>createHistoricTaskInstanceQuery()</code></p>
+</details>
+
+<details>
+<summary>createHistoricActivityInstanceQuery - 查詢歷史活動（含 userTask/網關/ServiceTask）</summary>
+
+<p><code>createHistoricActivityInstanceQuery()</code></p>
+</details>
+
+<details>
+<summary>createHistoricVariableInstanceQuery - 查詢歷史變數</summary>
+
+<p><code>createHistoricVariableInstanceQuery()</code></p>
+</details>
+
+<details>
+<summary>deleteHistoricProcessInstance - 刪除歷史流程資料</summary>
+
+<p><code>deleteHistoricProcessInstance(String processInstanceId)</code></p>
+<ul>
+<li><code>processInstanceId</code>（流程實例 ID）</li>
+</ul>
+</details>
+
+<h3 class="atx" id="historyservice---歷史資料">HistoryService - 歷史資料</h3>
+<details>
+<summary>createHistoricProcessInstanceQuery - 查詢歷史流程實例</summary>
+
+<p><code>createHistoricProcessInstanceQuery()</code> <br> → <code>processInstanceId(String processInstanceId)</code> （依流程實例 ID 查詢） <br> → <code>list()</code> / <code>singleResult()</code> （取得結果）</p>
+<ul>
+<li><code>processInstanceId</code>（流程實例 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>createHistoricTaskInstanceQuery - 查詢歷史任務實例</summary>
+
+<p><code>createHistoricTaskInstanceQuery()</code> <br> → <code>taskAssignee(String assignee)</code> （依任務執行人查詢） <br> → <code>list()</code> / <code>singleResult()</code> （取得結果）</p>
+<ul>
+<li><code>assignee</code>（任務執行人）</li>
+</ul>
+</details>
+
+<details>
+<summary>createHistoricActivityInstanceQuery - 查詢歷史活動實例</summary>
+
+<p><code>createHistoricActivityInstanceQuery()</code> <br> → <code>processInstanceId(String processInstanceId)</code> （依流程實例 ID 查詢） <br> → <code>list()</code> （取得結果）</p>
+<ul>
+<li><code>processInstanceId</code>（流程實例 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>createHistoricVariableInstanceQuery - 查詢歷史變數實例</summary>
+
+<p><code>createHistoricVariableInstanceQuery()</code> <br> → <code>processInstanceId(String processInstanceId)</code> （依流程實例 ID 查詢） <br> → <code>list()</code> （取得結果）</p>
+<ul>
+<li><code>processInstanceId</code>（流程實例 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>deleteHistoricProcessInstance - 刪除歷史流程實例</summary>
+
+<p><code>deleteHistoricProcessInstance(String processInstanceId)</code></p>
+<ul>
+<li><code>processInstanceId</code>（流程實例 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>deleteHistoricTaskInstance - 刪除歷史任務實例</summary>
+
+<p><code>deleteHistoricTaskInstance(String taskId)</code></p>
+<ul>
+<li><code>taskId</code>（任務 ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>createHistoricDetailQuery - 查詢歷史詳細資料</summary>
+
+<p><code>createHistoricDetailQuery()</code> <br> → <code>processInstanceId(String processInstanceId)</code> （依流程實例 ID 查詢） <br> → <code>list()</code> （取得結果）</p>
+<ul>
+<li><code>processInstanceId</code>（流程實例 ID）</li>
+</ul>
+</details>
+
+<h3 class="atx" id="managementservice---監控">ManagementService - 監控</h3>
+<details>
+<summary>createJobQuery - 查詢異步 Job</summary>
+
+<p><code>createJobQuery()</code></p>
+</details>
+
+<details>
+<summary>executeJob - 手動執行 Job</summary>
+
+<p><code>executeJob(String jobId)</code></p>
+<ul>
+<li><code>jobId</code>（Job ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>deleteJob - 刪除 Job</summary>
+
+<p><code>deleteJob(String jobId)</code></p>
+<ul>
+<li><code>jobId</code>（Job ID）</li>
+</ul>
+</details>
+
+<details>
+<summary>createTimerJobQuery - 查詢 Timer Job</summary>
+
+<p><code>createTimerJobQuery()</code></p>
+</details>
+
+<details>
+<summary>getTableCount - 取得所有 Flowable 表的筆數</summary>
+
+<p><code>getTableCount()</code></p>
+</details>
+
 <h2 class="atx" id="範例">範例</h2>
 <h3 class="atx" id="1-案件查詢">1. 案件查詢</h3>
 <p>使用 <code>RuntimeService</code> 的 <code>createProcessInstanceQuery()</code> 進行案件查詢：</p>
