@@ -1,0 +1,60 @@
+server:
+  port: 9010
+# ==================== SpringBoot ====================
+spring:
+  application:
+    name: flowable-case-demo
+  datasource:
+    url: jdbc:h2:file:./database/mydb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    # Hikari 連線池（Spring Boot 預設）可自行調整
+    hikari:
+      maximum-pool-size: 20
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# ==================== Springdoc / Swagger ====================
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    version: 5.11.10
+    path: /swagger-ui.html
+    # 讓 Swagger 也可以直接看到 Flowable 內建的 REST（可選）
+#    urls:
+#      - name: 自訂 API
+#        url: /api-docs
+
+# ==================== Flowable 專屬設定 ====================
+flowable:
+  # 流程定義部署
+  process-definition-location-prefix: classpath*:/processes/
+
+  # 資料庫設定
+  database-schema-update: true          # 自動建表
+
+  # 歷史資料設定
+  history-level: full                   # 完整歷史記錄
+
+  # 非同步執行器
+  async-executor-activate: true         # 啟用非同步執行
+
+  # 流程定義檢查
+  check-process-definitions: true       # 自動偵測流程變更
+
+  # IDM 身份管理
+  idm-enabled: true                     # 啟用身份管理

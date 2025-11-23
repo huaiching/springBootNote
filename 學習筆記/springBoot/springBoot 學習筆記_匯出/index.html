@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>React 教學筆記</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    nav {
+      width: 350px;
+      background-color: #f5f5f5;
+      padding: 1em;
+      border-right: 1px solid #ccc;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    nav h2 {
+      font-size: 1.2em;
+      margin-top: 0;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    nav li {
+      margin: 0.5em 0;
+    }
+
+    nav a {
+      color: #007BFF;
+      text-decoration: none;
+      display: block;
+      padding: 0.2em;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    nav a.active {
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+    }
+
+    iframe {
+      flex: 1;
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h2>React 教學筆記</h2>
+    <ul id="nav-list"></ul>
+  </nav>
+
+  <iframe name="content-frame" src="Components/01_建立 Spring Boot 專案.html" id="content-frame"></iframe>
+
+  <script>
+    // 定義章節陣列
+    const chapters = [
+      { id: '01', title: '建立 Spring Boot 專案' },
+      { id: '02', title: '設定 H2 Database' },
+      { id: '03', title: 'Spring Boot 資料結構' },
+      { id: '04', title: 'config - Spring Boot 的設定檔' },
+      { id: '05', title: 'dto - 與資料庫無關的資料傳輸物件' },
+      { id: '06', title: 'service - 邏輯處理' },
+      { id: '07', title: 'controller - API 對外接口' },
+      { id: '08', title: 'entity - JPA 資料傳輸物件' },
+      { id: '09', title: 'repository - SQL 處理層' },
+      { id: '10', title: 'constants - 常數 與 Enum' },
+      { id: '11', title: 'util - 工具類' },
+      { id: '12', title: '報表 - 文字工具' },
+      { id: '13', title: '報表 - ZIP檔打包工具' },
+      { id: '13', title: '報表 - Excel 檔案' },
+      { id: '13', title: '報表 - Word 檔案' },
+      { id: '13', title: '報表 - html 轉 PDF 檔案' },
+      { id: '13', title: '報表 - Word 轉 PDF 檔案' },
+      { id: '13', title: '報表 - PDF 檔案合併' },
+      { id: '13', title: '報表 - ResponseEntity 工具' },
+      { id: '13', title: '附錄' }
+    ];
+
+    // 使用 map 產生導覽列
+    const navList = document.getElementById('nav-list');
+    const navHTML = chapters.map(chapter => {
+      const href = `Components/${chapter.id}_${chapter.title}.html`;
+      return `
+        <li>
+          <a href="${href}" target="content-frame">${chapter.id} ${chapter.title}</a>
+        </li>
+      `;
+    }).join('');
+    
+    navList.innerHTML = navHTML;
+
+    // 獲取所有連結
+    const links = document.querySelectorAll('nav a');
+    const iframe = document.getElementById('content-frame');
+
+    function setActiveLink(href) {
+      links.forEach(link => {
+        if (link.getAttribute('href') === href) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    // 初始載入
+    setActiveLink(iframe.getAttribute('src'));
+
+    // 當使用者點擊側邊欄連結時，更新樣式
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        setActiveLink(link.getAttribute('href'));
+      });
+    });
+
+    // 當 iframe 中的內容變動時也嘗試更新
+    iframe.addEventListener('load', () => {
+      const src = iframe.contentWindow.location.pathname.split('/').pop();
+      const fullPath = 'Components/' + src;
+      setActiveLink(fullPath);
+    });
+  </script>
+</body>
+</html>

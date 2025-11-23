@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>React 教學筆記</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    nav {
+      width: 350px;
+      background-color: #f5f5f5;
+      padding: 1em;
+      border-right: 1px solid #ccc;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    nav h2 {
+      font-size: 1.2em;
+      margin-top: 0;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    nav li {
+      margin: 0.5em 0;
+    }
+
+    nav a {
+      color: #007BFF;
+      text-decoration: none;
+      display: block;
+      padding: 0.2em;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    nav a.active {
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+    }
+
+    iframe {
+      flex: 1;
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h2>Flowable 流程控制引擎 簡易教學</h2>
+    <ul id="nav-list"></ul>
+  </nav>
+
+  <iframe name="content-frame" src="Components/Flowable - 設定.html" id="content-frame"></iframe>
+
+  <script>
+    // 定義章節陣列
+    const chapters = [
+      { title: 'Flowable - 設定' },
+      { title: 'Flowable - 資料表' },
+      { title: 'Flowable - BPMN 流程圖' },
+      { title: 'Flowable - Java Service 撰寫' }
+    ];
+
+    // 使用 map 產生導覽列
+    const navList = document.getElementById('nav-list');
+    const navHTML = chapters.map(chapter => {
+      const href = `Components/${chapter.title}.html`;
+      return `
+        <li>
+          <a href="${href}" target="content-frame">${chapter.title}</a>
+        </li>
+      `;
+    }).join('');
+    
+    navList.innerHTML = navHTML;
+
+    // 獲取所有連結
+    const links = document.querySelectorAll('nav a');
+    const iframe = document.getElementById('content-frame');
+
+    function setActiveLink(href) {
+      links.forEach(link => {
+        if (link.getAttribute('href') === href) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    // 初始載入
+    setActiveLink(iframe.getAttribute('src'));
+
+    // 當使用者點擊側邊欄連結時，更新樣式
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        setActiveLink(link.getAttribute('href'));
+      });
+    });
+
+    // 當 iframe 中的內容變動時也嘗試更新
+    iframe.addEventListener('load', () => {
+      const src = iframe.contentWindow.location.pathname.split('/').pop();
+      const fullPath = 'Components/' + src;
+      setActiveLink(fullPath);
+    });
+  </script>
+</body>
+</html>

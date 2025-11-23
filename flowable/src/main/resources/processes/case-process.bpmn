@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:flowable="http://flowable.org/bpmn"
+             targetNamespace="http://flowable.org/bpmn">
+
+    <process id="caseProcess" name="案件流程" isExecutable="true">
+
+        <startEvent id="startEvent"/>
+        <sequenceFlow id="flow1" sourceRef="startEvent" targetRef="taskPickup"/>
+
+        <userTask id="taskPickup" name="取件" flowable:assignee="${assignee}"/>
+        <sequenceFlow id="flow2" sourceRef="taskPickup" targetRef="taskFiling"/>
+        
+        <userTask id="taskFiling" name="建檔" flowable:assignee="${assignee}"/>
+        <sequenceFlow id="flow3" sourceRef="taskFiling" targetRef="taskReview"/>
+
+        <userTask id="taskReview" name="審核" flowable:assignee="${assignee}"/>
+        <sequenceFlow id="flow4" sourceRef="taskReview" targetRef="gatewayDecision"/>
+
+        <exclusiveGateway id="gatewayDecision" name="審核決策"/>
+
+        <sequenceFlow id="flowPass" sourceRef="gatewayDecision" targetRef="taskApprove">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome == 'pass'}]]></conditionExpression>
+        </sequenceFlow>
+
+        <sequenceFlow id="flowConsult" sourceRef="gatewayDecision" targetRef="subProcessConsultation">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome == 'consult'}]]></conditionExpression>
+        </sequenceFlow>
+
+        <subProcess id="subProcessConsultation" name="照會流程">
+            <startEvent id="subStart"/>
+            <sequenceFlow id="subFlow1" sourceRef="subStart" targetRef="taskConsultUser"/>
+
+            <userTask id="taskConsultUser" name="照會回復" flowable:assignee="${consultAssignee}"/>
+            <sequenceFlow id="subFlow2" sourceRef="taskConsultUser" targetRef="subEnd"/>
+
+            <endEvent id="subEnd"/>
+        </subProcess>
+
+        <sequenceFlow id="flowReturn" sourceRef="subProcessConsultation" targetRef="taskReview"/>
+
+        <userTask id="taskApprove" name="送核" flowable:assignee="${assignee}"/>
+        <sequenceFlow id="flow5" sourceRef="taskApprove" targetRef="taskClose"/>
+
+        <userTask id="taskClose" name="結案" flowable:assignee="${assignee}"/>
+        <sequenceFlow id="flow6" sourceRef="taskClose" targetRef="endEvent"/>
+
+        <endEvent id="endEvent"/>
+
+    </process>
+</definitions>
