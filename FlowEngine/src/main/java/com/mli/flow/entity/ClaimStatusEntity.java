@@ -1,0 +1,172 @@
+package com.mli.flow.entity;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.Table;
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
+import java.util.Objects;
+
+@Entity
+@Table(name = "claim_status")
+@Schema(description = "案件狀態表")
+public class ClaimStatusEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Schema(description = "UUID")
+    @Column(name = "uuid")
+    private String uuid;
+
+    @Schema(description = "客戶證號")
+    @Column(name = "client_id")
+    private String clientId;
+
+    @Schema(description = "建檔編號")
+    @Column(name = "claim_seq")
+    private String claimSeq;
+
+    @Schema(description = "目前節點")
+    @Column(name = "status")
+    private String status;
+
+    @Schema(description = "處理者")
+    @Column(name = "process_user")
+    private String processUser;
+
+    @Schema(description = "處理日期")
+    @Column(name = "process_date")
+    private String processDate;
+
+    @Schema(description = "處理時間")
+    @Column(name = "process_time")
+    private String processTime;
+
+
+    public ClaimStatusEntity() {}
+
+    public String getUuid() {
+        return uuid!= null ? uuid.trim() : null;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getClientId() {
+        return clientId!= null ? clientId.trim() : null;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClaimSeq() {
+        return claimSeq!= null ? claimSeq.trim() : null;
+    }
+
+    public void setClaimSeq(String claimSeq) {
+        this.claimSeq = claimSeq;
+    }
+
+    public String getStatus() {
+        return status!= null ? status.trim() : null;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getProcessUser() {
+        return processUser!= null ? processUser.trim() : null;
+    }
+
+    public void setProcessUser(String processUser) {
+        this.processUser = processUser;
+    }
+
+    public String getProcessDate() {
+        return processDate!= null ? processDate.trim() : null;
+    }
+
+    public void setProcessDate(String processDate) {
+        this.processDate = processDate;
+    }
+
+    public String getProcessTime() {
+        return processTime!= null ? processTime.trim() : null;
+    }
+
+    public void setProcessTime(String processTime) {
+        this.processTime = processTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClaimStatusEntity that = (ClaimStatusEntity) o;
+        return Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
+    }
+
+    // 主鍵 實體類
+    public static class ClaimStatusKey implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private String uuid;
+
+        public ClaimStatusKey() {}
+
+        public String getUuid() {
+            return uuid;
+        }
+
+        public void setUuid(String uuid) {
+            this.uuid = uuid;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ClaimStatusKey that = (ClaimStatusKey) o;
+            return Objects.equals(uuid, that.uuid);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(uuid);
+        }
+    }
+
+    // update 實體類
+    public static class ClaimStatusUpdate implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private ClaimStatusEntity claimstatusOri;
+        private ClaimStatusEntity claimstatusNew;
+
+        public ClaimStatusEntity getClaimStatusOri() {
+            return claimstatusOri;
+        }
+
+        public void setClaimStatusOri(ClaimStatusEntity claimstatusOri) {
+            claimstatusOri = claimstatusOri;
+        }
+
+        public ClaimStatusEntity getClaimStatusNew() {
+            return claimstatusNew;
+        }
+
+        public void setClaimStatusNew(ClaimStatusEntity claimstatusNew) {
+            claimstatusNew = claimstatusNew;
+        }
+
+    }
+}
