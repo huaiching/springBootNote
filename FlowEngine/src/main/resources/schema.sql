@@ -19,8 +19,8 @@ INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status
 ('CLAIM', NULL, '1', NULL, '#status.isEmpty()'),                     -- 新案件 → 1
 ('CLAIM', '1',  '2', NULL, '#status == ''1'''),                       -- 1:建檔 → 2
 ('CLAIM', '2',  '3', '1',  '#status == ''2'' and #subFlow == false'),  -- 2:審核 → 3 (可退回1)
-('CLAIM', '2',  'a', '2',  '#status == ''2'' and #subFlow == true'),   -- 2:審核 → a (照會)
-('CLAIM', 'a',  '2', '2',  '#status == ''a'''),                       -- a:照會 → 2
+('CLAIM', '2',  'A', '2',  '#status == ''2'' and #subFlow == true'),   -- 2:審核 → A (照會)
+('CLAIM', 'A',  '2', '2',  '#status == ''A'''),                       -- a:照會 → 2
 ('CLAIM', '3',  '4', '2',  '#status == ''3'''),                       -- 3:送核 → 4
 ('CLAIM', '4',  NULL, '3',  '#status == ''4''');                      -- 4:結案 → 無
 
@@ -29,7 +29,7 @@ INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status
 CREATE TABLE IF NOT EXISTS claim_status (
     uuid          VARCHAR(36)  NOT NULL,        -- UUID
     client_id     VARCHAR(10)  NOT NULL,        -- 客戶證號
-    claim_seq     VARCHAR(1)  NOT NULL,         -- 建檔編號
+    claim_seq     INTEGER  NOT NULL,         -- 建檔編號
     status        VARCHAR(10)  NOT NULL,        -- 目前節點
     process_user  VARCHAR(50),                  -- 處理者
     process_date  CHAR(9),                      -- 處理日期
@@ -44,7 +44,7 @@ CREATE        INDEX index_3 ON claim_status(client_id, claim_seq);
 CREATE TABLE IF NOT EXISTS claim_history (
     uuid          VARCHAR(36)  NOT NULL,    -- UUID
     client_id     VARCHAR(50)  NOT NULL,    -- 客戶證號
-    claim_seq     VARCHAR(20)  NOT NULL,    -- 建檔編號
+    claim_seq     INTEGER  NOT NULL,    -- 建檔編號
     status        VARCHAR(10)  NOT NULL,    -- 目前節點
     process_user  VARCHAR(50),              -- 處理者
     process_date  CHAR(9),                  -- 處理日期

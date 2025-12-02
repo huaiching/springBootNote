@@ -9,8 +9,8 @@ public enum ClaimStatusEnum {
     VALUE_3("3", "送核"),
     /** 4.結案 */
     VALUE_4("4", "結案"),
-    /** a.照會 */
-    VALUE_a("a", "照會");
+    /** A.照會 */
+    VALUE_A("A", "照會");
 
     private String status;
     private String desc;

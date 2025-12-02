@@ -11,7 +11,7 @@ public class ClaimHistoryVo {
     private String clientId;
 
     @Schema(description = "建檔編號")
-    private String claimSeq;
+    private Integer claimSeq;
 
     @Schema(description = "目前節點")
     private String status;
@@ -44,11 +44,11 @@ public class ClaimHistoryVo {
         this.clientId = clientId;
     }
 
-    public String getClaimSeq() {
+    public Integer getClaimSeq() {
         return claimSeq;
     }
 
-    public void setClaimSeq(String claimSeq) {
+    public void setClaimSeq(Integer claimSeq) {
         this.claimSeq = claimSeq;
     }
 

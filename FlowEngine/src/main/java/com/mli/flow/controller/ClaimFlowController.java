@@ -1,7 +1,6 @@
 package com.mli.flow.controller;
 
-import com.mli.flow.entity.ClaimHistoryEntity;
-import com.mli.flow.entity.ClaimStatusEntity;
+import com.mli.flow.dto.ClientIdAndClaimSeqDto;
 import com.mli.flow.service.ClaimFlowService;
 import com.mli.flow.vo.ClaimHistoryVo;
 import com.mli.flow.vo.ClaimStatusVo;
@@ -9,10 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,39 +20,39 @@ public class ClaimFlowController {
     @Autowired
     private ClaimFlowService claimFlowService;
 
-    @GetMapping("/createClaimStatus")
+    @PostMapping("/createClaimStatus")
     @Operation(summary = "新增案件", description = "新增案件")
-    public ResponseEntity<ClaimStatusVo> createClaimStatus(@RequestParam String clientId, @RequestParam String claimSeq) {
-        return ResponseEntity.ok(claimFlowService.createClaimStatus(clientId, claimSeq));
+    public ResponseEntity<ClaimStatusVo> createClaimStatus(@RequestBody ClientIdAndClaimSeqDto clientIdAndClaimSeqDto) {
+        return ResponseEntity.ok(claimFlowService.createClaimStatus(clientIdAndClaimSeqDto.getClientId(), clientIdAndClaimSeqDto.getClaimSql()));
     }
 
-    @GetMapping("/nextClaimStatus")
+    @PostMapping("/nextClaimStatus")
     @Operation(summary = "前往下一關", description = "前往下一關")
-    public ResponseEntity<ClaimStatusVo> nextClaimStatus(@RequestParam String clientId, @RequestParam String claimSeq) {
-        return ResponseEntity.ok(claimFlowService.nextClaimStatus(clientId, claimSeq));
+    public ResponseEntity<ClaimStatusVo> nextClaimStatus(@RequestBody ClientIdAndClaimSeqDto clientIdAndClaimSeqDto) {
+        return ResponseEntity.ok(claimFlowService.nextClaimStatus(clientIdAndClaimSeqDto.getClientId(), clientIdAndClaimSeqDto.getClaimSql()));
     }
 
-    @GetMapping("/prewClaimStatus")
+    @PostMapping("/prewClaimStatus")
     @Operation(summary = "返回上一關", description = "返回上一關")
-    public ResponseEntity<ClaimStatusVo> prewClaimStatus(@RequestParam String clientId, @RequestParam String claimSeq) {
-        return ResponseEntity.ok(claimFlowService.prewClaimStatus(clientId, claimSeq));
+    public ResponseEntity<ClaimStatusVo> prewClaimStatus(@RequestBody ClientIdAndClaimSeqDto clientIdAndClaimSeqDto) {
+        return ResponseEntity.ok(claimFlowService.prewClaimStatus(clientIdAndClaimSeqDto.getClientId(), clientIdAndClaimSeqDto.getClaimSql()));
     }
 
-    @GetMapping("/subClaimStatus")
+    @PostMapping("/subClaimStatus")
     @Operation(summary = "送至照會", description = "送至照會")
-    public ResponseEntity<ClaimStatusVo> subClaimStatus(@RequestParam String clientId, @RequestParam String claimSeq) {
-        return ResponseEntity.ok(claimFlowService.subClaimStatus(clientId, claimSeq));
+    public ResponseEntity<ClaimStatusVo> subClaimStatus(@RequestBody ClientIdAndClaimSeqDto clientIdAndClaimSeqDto) {
+        return ResponseEntity.ok(claimFlowService.subClaimStatus(clientIdAndClaimSeqDto.getClientId(), clientIdAndClaimSeqDto.getClaimSql()));
     }
 
-    @GetMapping("/getClaimStatus")
+    @PostMapping("/getClaimStatus")
     @Operation(summary = "取得 目前案件資訊", description = "取得 目前案件資訊")
-    public ResponseEntity<ClaimStatusVo> getClaimStatus(@RequestParam String clientId, @RequestParam String claimSeq) {
-        return ResponseEntity.ok(claimFlowService.getClaimStatus(clientId, claimSeq));
+    public ResponseEntity<ClaimStatusVo> getClaimStatus(@RequestBody ClientIdAndClaimSeqDto clientIdAndClaimSeqDto) {
+        return ResponseEntity.ok(claimFlowService.getClaimStatus(clientIdAndClaimSeqDto.getClientId(), clientIdAndClaimSeqDto.getClaimSql()));
     }
 
-    @GetMapping("/getClaimHistory")
+    @PostMapping("/getClaimHistory")
     @Operation(summary = "取得 案件歷史資訊", description = "取得 案件歷史資訊")
-    public ResponseEntity<List<ClaimHistoryVo>> getClaimHistory(@RequestParam String clientId, @RequestParam String claimSeq) {
-        return ResponseEntity.ok(claimFlowService.getClaimHistory(clientId, claimSeq));
+    public ResponseEntity<List<ClaimHistoryVo>> getClaimHistory(@RequestBody ClientIdAndClaimSeqDto clientIdAndClaimSeqDto) {
+        return ResponseEntity.ok(claimFlowService.getClaimHistory(clientIdAndClaimSeqDto.getClientId(), clientIdAndClaimSeqDto.getClaimSql()));
     }
 }

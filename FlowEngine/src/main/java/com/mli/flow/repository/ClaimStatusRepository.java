@@ -6,5 +6,5 @@ import com.mli.flow.entity.ClaimStatusEntity;
 import java.util.List;
 
 public interface ClaimStatusRepository extends JpaRepository<ClaimStatusEntity, String> {
-    List<ClaimStatusEntity> findByClientIdAndClaimSeq(String clientId, String cliamSeq);
+    List<ClaimStatusEntity> findByClientIdAndClaimSeq(String clientId, Integer cliamSeq);
 }

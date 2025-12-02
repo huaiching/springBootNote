@@ -5,7 +5,6 @@ import com.mli.flow.entity.ClaimHistoryEntity;
 import com.mli.flow.entity.ClaimStatusEntity;
 import com.mli.flow.repository.ClaimHistoryRepository;
 import com.mli.flow.repository.ClaimStatusRepository;
-import com.mli.flow.repository.FlowDefinitionRepository;
 import com.mli.flow.util.DateUtil;
 import com.mli.flow.vo.ClaimHistoryVo;
 import com.mli.flow.vo.ClaimStatusVo;
@@ -24,8 +23,6 @@ import java.util.*;
 @Service
 public class ClaimFlowService {
     @Autowired
-    private FlowDefinitionRepository flowDefinitionRepository;
-    @Autowired
     private ClaimStatusRepository claimStatusRepository;
     @Autowired
     private ClaimHistoryRepository claimHistoryRepository;
@@ -39,7 +36,14 @@ public class ClaimFlowService {
      * @return ClaimStatusEntity 新增案件資訊
      */
     @Transactional
-    public ClaimStatusVo createClaimStatus(String clientId, String claimSeq) {
+    public ClaimStatusVo createClaimStatus(String clientId, Integer claimSeq) {
+        if (StringUtils.isEmpty(clientId)) {
+            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+        }
+        if (StringUtils.isEmpty(claimSeq)) {
+            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+        }
+
         // 取得目前案件資訊
         ClaimStatusVo claimStatusVo = getClaimStatus(clientId, claimSeq);
         if (claimStatusVo != null) {
@@ -88,7 +92,14 @@ public class ClaimFlowService {
      * @return ClaimStatusEntity 下一關案件資訊
      */
     @Transactional
-    public ClaimStatusVo nextClaimStatus(String clientId, String claimSeq) {
+    public ClaimStatusVo nextClaimStatus(String clientId, Integer claimSeq) {
+        if (StringUtils.isEmpty(clientId)) {
+            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+        }
+        if (StringUtils.isEmpty(claimSeq)) {
+            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+        }
+
         // 取得目前案件資訊
         ClaimStatusVo claimStatusVo = getClaimStatus(clientId, claimSeq);
 
@@ -149,7 +160,14 @@ public class ClaimFlowService {
      * @return ClaimStatusVo 上一關案件資訊
      */
     @Transactional
-    public ClaimStatusVo prewClaimStatus(String clientId, String claimSeq) {
+    public ClaimStatusVo prewClaimStatus(String clientId, Integer claimSeq) {
+        if (StringUtils.isEmpty(clientId)) {
+            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+        }
+        if (StringUtils.isEmpty(claimSeq)) {
+            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+        }
+
         // 取得目前案件資訊
         ClaimStatusVo claimStatusVo = getClaimStatus(clientId, claimSeq);
 
@@ -206,7 +224,14 @@ public class ClaimFlowService {
      * @return ClaimStatusEntity 下一關案件資訊
      */
     @Transactional
-    public ClaimStatusVo subClaimStatus(String clientId, String claimSeq) {
+    public ClaimStatusVo subClaimStatus(String clientId, Integer claimSeq) {
+        if (StringUtils.isEmpty(clientId)) {
+            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+        }
+        if (StringUtils.isEmpty(claimSeq)) {
+            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+        }
+
         // 取得目前案件資訊
         ClaimStatusVo claimStatusVo = getClaimStatus(clientId, claimSeq);
 
@@ -266,7 +291,14 @@ public class ClaimFlowService {
      * @param claimSeq 建檔序號
      * @return ClaimStatusVo 目前案件資訊
      */
-    public ClaimStatusVo getClaimStatus(String clientId, String claimSeq) {
+    public ClaimStatusVo getClaimStatus(String clientId, Integer claimSeq) {
+        if (StringUtils.isEmpty(clientId)) {
+            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+        }
+        if (StringUtils.isEmpty(claimSeq)) {
+            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+        }
+
         // 取得 目前案件資訊
         List<ClaimStatusEntity> claimStatusEntityList =  claimStatusRepository.findByClientIdAndClaimSeq(clientId, claimSeq);
         if (CollectionUtils.isEmpty(claimStatusEntityList)) {
@@ -287,7 +319,14 @@ public class ClaimFlowService {
      * @param claimSeq 建檔序號
      * @return List<ClaimHistoryVo> 案件歷史資訊
      */
-    public List<ClaimHistoryVo> getClaimHistory(String clientId, String claimSeq) {
+    public List<ClaimHistoryVo> getClaimHistory(String clientId, Integer claimSeq) {
+        if (StringUtils.isEmpty(clientId)) {
+            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+        }
+        if (StringUtils.isEmpty(claimSeq)) {
+            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+        }
+
         // 取得 案件歷史資訊
         List<ClaimHistoryEntity> claimHistoryEntityList =  claimHistoryRepository.findByClientIdAndClaimSeq(clientId, claimSeq);
         // 排序

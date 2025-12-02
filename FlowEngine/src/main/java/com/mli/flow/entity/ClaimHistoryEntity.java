@@ -25,7 +25,7 @@ public class ClaimHistoryEntity implements Serializable {
 
     @Schema(description = "建檔編號")
     @Column(name = "claim_seq")
-    private String claimSeq;
+    private Integer claimSeq;
 
     @Schema(description = "目前節點")
     @Column(name = "status")
@@ -62,11 +62,11 @@ public class ClaimHistoryEntity implements Serializable {
         this.clientId = clientId;
     }
 
-    public String getClaimSeq() {
-        return claimSeq!= null ? claimSeq.trim() : null;
+    public Integer getClaimSeq() {
+        return claimSeq;
     }
 
-    public void setClaimSeq(String claimSeq) {
+    public void setClaimSeq(Integer claimSeq) {
         this.claimSeq = claimSeq;
     }
 
