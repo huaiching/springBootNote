@@ -60,13 +60,6 @@
             <artifactId>swagger-ui</artifactId>
             <version>5.11.10</version>
         </dependency>
-
-        <!-- UUID Generator -->
-        <dependency>
-            <groupId>com.fasterxml.uuid</groupId>
-            <artifactId>java-uuid-generator</artifactId>
-            <version>4.0.1</version>
-        </dependency>
 	</dependencies>
 
 	<build>

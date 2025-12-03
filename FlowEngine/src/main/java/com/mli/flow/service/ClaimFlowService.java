@@ -3,6 +3,7 @@ package com.mli.flow.service;
 import com.mli.flow.constants.ClaimStatusEnum;
 import com.mli.flow.entity.ClaimHistoryEntity;
 import com.mli.flow.entity.ClaimStatusEntity;
+import com.mli.flow.exceptions.BusinessException;
 import com.mli.flow.repository.ClaimHistoryRepository;
 import com.mli.flow.repository.ClaimStatusRepository;
 import com.mli.flow.util.DateUtil;
@@ -10,6 +11,7 @@ import com.mli.flow.vo.ClaimHistoryVo;
 import com.mli.flow.vo.ClaimStatusVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -38,16 +40,16 @@ public class ClaimFlowService {
     @Transactional
     public ClaimStatusVo createClaimStatus(String clientId, Integer claimSeq) {
         if (StringUtils.isEmpty(clientId)) {
-            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：clientId 空白");
         }
         if (StringUtils.isEmpty(claimSeq)) {
-            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：claimSeq 空白");
         }
 
         // 取得目前案件資訊
         ClaimStatusVo claimStatusVo = getClaimStatus(clientId, claimSeq);
         if (claimStatusVo != null) {
-            throw new RuntimeException("新增案件執行錯誤，案件已存在，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "新增案件執行錯誤，案件已存在，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         // 取得 下一關節點
@@ -56,7 +58,7 @@ public class ClaimFlowService {
 
         String nextStatus = claimSpELService.getNextStatus(dataMap);
         if (StringUtils.isEmpty(nextStatus)) {
-            throw new RuntimeException("新增案件錯誤，找不到案件狀態，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "新增案件錯誤，找不到案件狀態，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         // 建立資料
@@ -97,18 +99,18 @@ public class ClaimFlowService {
             throw new RuntimeException("輸入參數錯誤：clientId 空白");
         }
         if (StringUtils.isEmpty(claimSeq)) {
-            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：claimSeq 空白");
         }
 
         // 取得目前案件資訊
         ClaimStatusVo claimStatusVo = getClaimStatus(clientId, claimSeq);
 
         if (claimStatusVo == null) {
-            throw new RuntimeException("前往下一關 執行錯誤，案件不存在，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "前往下一關 執行錯誤，案件不存在，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         if ("4".equals(claimStatusVo.getStatus())) {
-            throw new RuntimeException("案件已結案，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "案件已結案，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         // 取得 下一關節點
@@ -119,7 +121,7 @@ public class ClaimFlowService {
         String nextStatus = claimSpELService.getNextStatus(dataMap);
 
         if (StringUtils.isEmpty(nextStatus)) {
-            throw new RuntimeException("前往下一關 執行錯誤，找不到下一關狀態，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "前往下一關 執行錯誤，找不到下一關狀態，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         // 建立資料: 刪除
@@ -162,17 +164,17 @@ public class ClaimFlowService {
     @Transactional
     public ClaimStatusVo prewClaimStatus(String clientId, Integer claimSeq) {
         if (StringUtils.isEmpty(clientId)) {
-            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：clientId 空白");
         }
         if (StringUtils.isEmpty(claimSeq)) {
-            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：claimSeq 空白");
         }
 
         // 取得目前案件資訊
         ClaimStatusVo claimStatusVo = getClaimStatus(clientId, claimSeq);
 
         if (claimStatusVo == null) {
-            throw new RuntimeException("返回上一關 執行錯誤，案件不存在，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "返回上一關 執行錯誤，案件不存在，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         // 取得 下一關節點
@@ -183,7 +185,7 @@ public class ClaimFlowService {
         String prewStatus = claimSpELService.getPrewStatus(dataMap);
 
         if (StringUtils.isEmpty(prewStatus)) {
-            throw new RuntimeException("返回上一關 執行錯誤，找不到上一關狀態，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "返回上一關 執行錯誤，找不到上一關狀態，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         // 建立資料: 刪除
@@ -226,21 +228,21 @@ public class ClaimFlowService {
     @Transactional
     public ClaimStatusVo subClaimStatus(String clientId, Integer claimSeq) {
         if (StringUtils.isEmpty(clientId)) {
-            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：clientId 空白");
         }
         if (StringUtils.isEmpty(claimSeq)) {
-            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：claimSeq 空白");
         }
 
         // 取得目前案件資訊
         ClaimStatusVo claimStatusVo = getClaimStatus(clientId, claimSeq);
 
         if (claimStatusVo == null) {
-            throw new RuntimeException("送至照會 執行錯誤，案件不存在，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "送至照會 執行錯誤，案件不存在，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         if (!"2".equals(claimStatusVo.getStatus())) {
-            throw new RuntimeException("非審核 不可照會，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "非審核 不可照會，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         // 取得 下一關節點
@@ -251,7 +253,7 @@ public class ClaimFlowService {
         String nextStatus = claimSpELService.getNextStatus(dataMap);
 
         if (StringUtils.isEmpty(nextStatus)) {
-            throw new RuntimeException("送至照會 執行錯誤，找不到下一關狀態，clientId=" + clientId + " claimSeq=" + claimSeq);
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "送至照會 執行錯誤，找不到下一關狀態，clientId=" + clientId + " claimSeq=" + claimSeq);
         }
 
         // 建立資料: 刪除
@@ -293,10 +295,10 @@ public class ClaimFlowService {
      */
     public ClaimStatusVo getClaimStatus(String clientId, Integer claimSeq) {
         if (StringUtils.isEmpty(clientId)) {
-            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：clientId 空白");
         }
         if (StringUtils.isEmpty(claimSeq)) {
-            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：claimSeq 空白");
         }
 
         // 取得 目前案件資訊
@@ -321,10 +323,10 @@ public class ClaimFlowService {
      */
     public List<ClaimHistoryVo> getClaimHistory(String clientId, Integer claimSeq) {
         if (StringUtils.isEmpty(clientId)) {
-            throw new RuntimeException("輸入參數錯誤：clientId 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：clientId 空白");
         }
         if (StringUtils.isEmpty(claimSeq)) {
-            throw new RuntimeException("輸入參數錯誤：claimSeq 空白");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：claimSeq 空白");
         }
 
         // 取得 案件歷史資訊

@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS flow_definition;
 
 CREATE TABLE IF NOT EXISTS flow_definition (
-    id              BIGINT AUTO_INCREMENT,
+    id              BIGSERIAL,
     flow_type       VARCHAR(50),        -- 流程類型，例如 "CLAIM"
     current_status  VARCHAR(10),        -- 目前節點代碼，如 "1","2","a"
     next_status     VARCHAR(10),        -- 下一節點代碼，可為 NULL
@@ -15,15 +15,13 @@ CREATE        INDEX index_2 ON flow_definition(flow_type);
 CREATE        INDEX index_3 ON flow_definition(current_status);
 
 -- 插入預設流程定義 (CLAIM 流程)
-INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES
-('CLAIM', NULL, '1', NULL, '#status.isEmpty()'),                     -- 新案件 → 1
-('CLAIM', '1',  '2', NULL, '#status == ''1'''),                       -- 1:建檔 → 2
-('CLAIM', '2',  '3', '1',  '#status == ''2'' and #subFlow == false'),  -- 2:審核 → 3 (可退回1)
-('CLAIM', '2',  'A', '2',  '#status == ''2'' and #subFlow == true'),   -- 2:審核 → A (照會)
-('CLAIM', 'A',  '2', '2',  '#status == ''A'''),                       -- a:照會 → 2
-('CLAIM', '3',  '4', '2',  '#status == ''3'''),                       -- 3:送核 → 4
-('CLAIM', '4',  NULL, '3',  '#status == ''4''');                      -- 4:結案 → 無
-
+INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', NULL, '1', NULL, '#status.isEmpty()');                          -- 新案件 → 1
+INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '1',  '2', NULL, '#status == ''1''');                           -- 1:建檔 → 2
+INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '2',  '3', '1',  '#status == ''2'' and #subFlow == false');     -- 2:審核 → 3 (可退回1)
+INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '2',  'A', '2',  '#status == ''2'' and #subFlow == true');      -- 2:審核 → A (照會)
+INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', 'A',  '2', '2',  '#status == ''A''');                           -- a:照會 → 2
+INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '3',  '4', '2',  '#status == ''3''');                           -- 3:送核 → 4
+INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '4',  NULL, '3',  '#status == ''4''');                          -- 4:結案 → 無
 
 -- 案件狀態表
 CREATE TABLE IF NOT EXISTS claim_status (
