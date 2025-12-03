@@ -6,7 +6,7 @@ import com.mli.flow.entity.ClaimStatusEntity;
 import com.mli.flow.exceptions.BusinessException;
 import com.mli.flow.repository.ClaimHistoryRepository;
 import com.mli.flow.repository.ClaimStatusRepository;
-import com.mli.flow.util.DateUtil;
+import com.mli.flow.util.MliDateUtil;
 import com.mli.flow.vo.ClaimHistoryVo;
 import com.mli.flow.vo.ClaimStatusVo;
 import org.springframework.beans.BeanUtils;
@@ -68,8 +68,8 @@ public class ClaimFlowService {
         newClaimStatus.setClaimSeq(claimSeq);
         newClaimStatus.setStatus(nextStatus);
         newClaimStatus.setProcessUser("測試人員");
-        newClaimStatus.setProcessDate(DateUtil.getToday());
-        newClaimStatus.setProcessTime(DateUtil.getTime());
+        newClaimStatus.setProcessDate(MliDateUtil.getToday());
+        newClaimStatus.setProcessTime(MliDateUtil.getTime());
 
         // 新增案件狀態
         claimStatusRepository.save(newClaimStatus);
@@ -135,8 +135,8 @@ public class ClaimFlowService {
         newClaimStatus.setClaimSeq(claimStatusVo.getClaimSeq());
         newClaimStatus.setStatus(nextStatus);
         newClaimStatus.setProcessUser(claimStatusVo.getProcessUser());
-        newClaimStatus.setProcessDate(DateUtil.getToday());
-        newClaimStatus.setProcessTime(DateUtil.getTime());
+        newClaimStatus.setProcessDate(MliDateUtil.getToday());
+        newClaimStatus.setProcessTime(MliDateUtil.getTime());
 
         // 修改案件狀態: 先刪除，再新增
         claimStatusRepository.delete(oriClaimStatus);
@@ -199,8 +199,8 @@ public class ClaimFlowService {
         newClaimStatus.setClaimSeq(claimStatusVo.getClaimSeq());
         newClaimStatus.setStatus(prewStatus);
         newClaimStatus.setProcessUser(claimStatusVo.getProcessUser());
-        newClaimStatus.setProcessDate(DateUtil.getToday());
-        newClaimStatus.setProcessTime(DateUtil.getTime());
+        newClaimStatus.setProcessDate(MliDateUtil.getToday());
+        newClaimStatus.setProcessTime(MliDateUtil.getTime());
 
         // 修改案件狀態: 先刪除，再新增
         claimStatusRepository.delete(oriClaimStatus);
@@ -267,8 +267,8 @@ public class ClaimFlowService {
         newClaimStatus.setClaimSeq(claimStatusVo.getClaimSeq());
         newClaimStatus.setStatus(nextStatus);
         newClaimStatus.setProcessUser(claimStatusVo.getProcessUser());
-        newClaimStatus.setProcessDate(DateUtil.getToday());
-        newClaimStatus.setProcessTime(DateUtil.getTime());
+        newClaimStatus.setProcessDate(MliDateUtil.getToday());
+        newClaimStatus.setProcessTime(MliDateUtil.getTime());
 
         // 修改案件狀態: 先刪除，再新增
         claimStatusRepository.delete(oriClaimStatus);

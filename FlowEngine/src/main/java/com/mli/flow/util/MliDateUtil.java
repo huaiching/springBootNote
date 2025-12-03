@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-public class DateUtil {
+public class MliDateUtil {
 	private final static String FORMAT_YYYY_MM_DD = "yyyy/MM/dd";
 	private final static String FORMAT_HH_MM_SS = "HH:mm:ss";
 	
