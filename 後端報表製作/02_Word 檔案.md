@@ -64,12 +64,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Word 匯出工具（使用 poi-tl）
+ * Word 匯出工具
  */
 public class WordUtil {
-
     /**
-     * 產生 Word 檔案
+     * 產生 Word 檔案 (單筆資料)
      *
      * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param context   資料內容（Map 對應樣版中 {{key}} 欄位）

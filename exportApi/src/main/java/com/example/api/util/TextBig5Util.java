@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class TxtUtil {
+public class TextBig5Util {
 
     /**
      * 產生 文字檔 (自動換行) (BIG5)

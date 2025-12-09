@@ -60,12 +60,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Excel 匯出工具 (使用 JXLS 2)
+ * Excel 匯出工具
  */
 public class ExcelUtil {
-
     /**
-     * 產生 Excel 檔案
+     * 產生 Excel 檔案 (單筆資料)
      *
      * @param modelFile 樣版路徑 (resources/templates/{modelFile})
      * @param context   JXLS Context，包含資料模型與變數（例如 context.putVar("users", userList)）

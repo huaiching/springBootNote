@@ -31,9 +31,8 @@ import java.util.List;
  * PDF 匯出工具
  */
 public class MergePdrUtil {
-
     /**
-     * PDF 檔案合併 (Apache PDFBox)
+     * PDF 檔案合併
      *
      * @param pdfFileList 要合併的 PDF 清單
      * @return PDF 資料流
@@ -51,7 +50,7 @@ public class MergePdrUtil {
             }
 
             // 合併
-            merger.mergeDocuments(null); // null = 使用預設 MemoryUsageSetting
+            merger.mergeDocuments(null);
 
         } catch (Exception e) {
             throw new RuntimeException("PDF 合併失敗: ", e);
