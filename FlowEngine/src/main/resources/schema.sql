@@ -2,53 +2,74 @@
 DROP TABLE IF EXISTS flow_definition;
 
 CREATE TABLE IF NOT EXISTS flow_definition (
-    id              BIGSERIAL,
-    flow_type       VARCHAR(50),        -- 流程類型，例如 "CLAIM"
-    current_status  VARCHAR(10),        -- 目前節點代碼，如 "1","2","a"
-    next_status     VARCHAR(10),        -- 下一節點代碼，可為 NULL
-    prew_status     VARCHAR(10),        -- 上一節點代碼，可為 NULL
-    spel_expression VARCHAR(250)        -- SpEL 檢核規則，可為 NULL
+    id                  SERIAL,
+    module_type         VARCHAR(50),    -- 模組類型，例如 "CLAIM"
+    status_type         VARCHAR(1),     -- 狀態類型，例如：M.主流程 / S.子流程
+    current_status      VARCHAR(10),    -- 目前狀態
+    current_status_desc VARCHAR(50),    -- 目前狀態中文
+    next_status         VARCHAR(10),    -- 下一狀態
+    previous_staus      VARCHAR(10),    -- 上一狀態
+    expression_rule     VARCHAR(250)    -- 檢核規則
 );
 
 CREATE UNIQUE INDEX index_1 ON flow_definition(id);
-CREATE        INDEX index_2 ON flow_definition(flow_type);
-CREATE        INDEX index_3 ON flow_definition(current_status);
+CREATE        INDEX index_2 ON flow_definition(module_type);
+CREATE        INDEX index_3 ON flow_definition(status_type);
+CREATE        INDEX index_4 ON flow_definition(current_status);
 
--- 插入預設流程定義 (CLAIM 流程)
-INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', NULL, '1', NULL, '#status.isEmpty()');                          -- 新案件 → 1
-INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '1',  '2', NULL, '#status == ''1''');                           -- 1:建檔 → 2
-INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '2',  '3', '1',  '#status == ''2'' and #subFlow == false');     -- 2:審核 → 3 (可退回1)
-INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '2',  'A', '2',  '#status == ''2'' and #subFlow == true');      -- 2:審核 → A (照會)
-INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', 'A',  '2', '2',  '#status == ''A''');                           -- a:照會 → 2
-INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '3',  '4', '2',  '#status == ''3''');                           -- 3:送核 → 4
-INSERT INTO flow_definition (flow_type, current_status, next_status, prew_status, spel_expression) VALUES ('CLAIM', '4',  NULL, '3',  '#status == ''4''');                          -- 4:結案 → 無
+-- 預設流程定義
+INSERT INTO flow_definition VALUES (DEFAULT, 'claim', 'M', NULL, '新流程', 'M01', NULL, '#status.isEmpty()');
+INSERT INTO flow_definition VALUES (DEFAULT, 'claim', 'M', 'M01', '建檔', 'M02', NULL, '#status == ''M01''');
+INSERT INTO flow_definition VALUES (DEFAULT, 'claim', 'M', 'M02', '審核', 'M03', 'M01', '#status == ''M02''');
+INSERT INTO flow_definition VALUES (DEFAULT, 'claim', 'M', 'M03', '送核', 'M04', 'M02', '#status == ''M03''');
+INSERT INTO flow_definition VALUES (DEFAULT, 'claim', 'M', 'M04', '結案', NULL, 'M03', '#status == ''M04''');
 
--- 案件狀態表
-CREATE TABLE IF NOT EXISTS claim_status (
-    uuid          VARCHAR(36)  NOT NULL,        -- UUID
+INSERT INTO flow_definition VALUES (DEFAULT, 'inquiry', 'S', NULL, '照會-新流程', 'S01', NULL, '#status.isEmpty()');
+INSERT INTO flow_definition VALUES (DEFAULT, 'inquiry', 'S', 'S01', '照會-建檔', 'S02', NULL, '#status == ''S01''');
+INSERT INTO flow_definition VALUES (DEFAULT, 'inquiry', 'S', 'S02', '照會-回覆', 'S03', 'S01', '#status == ''S02''');
+INSERT INTO flow_definition VALUES (DEFAULT, 'inquiry', 'S', 'S03', '照會-結案', NULL, 'S02', '#status == ''S03''');
+
+-- 理賠主流程狀態表
+CREATE TABLE IF NOT EXISTS claim_main_status (
+    case_uuid     VARCHAR(36)  NOT NULL,        -- 當前 UUID
+    main_uuid     VARCHAR(36)  NOT NULL,        -- 主流程 UUID
     client_id     VARCHAR(10)  NOT NULL,        -- 客戶證號
-    claim_seq     INTEGER  NOT NULL,         -- 建檔編號
-    status        VARCHAR(10)  NOT NULL,        -- 目前節點
-    process_user  VARCHAR(50),                  -- 處理者
+    claim_seq     INTEGER      NOT NULL,        -- 建檔編號
+    module_type   VARCHAR(50),                  -- 模組類型
+    main_status   VARCHAR(10)  NOT NULL,        -- 主流程 目前狀態
+    valid         CHAR(1)      NOT NULL,        -- 效性 : 0.無效 / 1.有效
+    note          VARCHAR(250),                 -- 簽核意見
+    owner_user    VARCHAR(8),                   -- 負責人
+    process_user  VARCHAR(8),                   -- 處理者
     process_date  CHAR(9),                      -- 處理日期
     process_time  CHAR(8)                       -- 處理時間
 );
 
-CREATE UNIQUE INDEX index_1 ON claim_status(uuid);
-CREATE        INDEX index_2 ON claim_status(client_id);
-CREATE        INDEX index_3 ON claim_status(client_id, claim_seq);
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid);
+CREATE        INDEX index_2 ON claim_status(main_uuid);
+CREATE        INDEX index_3 ON claim_status(client_id);
+CREATE        INDEX index_4 ON claim_status(client_id, claim_seq);
 
--- 案件歷程表
-CREATE TABLE IF NOT EXISTS claim_history (
-    uuid          VARCHAR(36)  NOT NULL,    -- UUID
-    client_id     VARCHAR(50)  NOT NULL,    -- 客戶證號
-    claim_seq     INTEGER  NOT NULL,    -- 建檔編號
-    status        VARCHAR(10)  NOT NULL,    -- 目前節點
-    process_user  VARCHAR(50),              -- 處理者
-    process_date  CHAR(9),                  -- 處理日期
-    process_time  CHAR(8)                   -- 處理時間
+-- 理賠子流程狀態表
+CREATE TABLE IF NOT EXISTS claim_sub_status (
+    case_uuid     VARCHAR(36)  NOT NULL,        -- 當前 UUID
+    main_uuid     VARCHAR(36)  NOT NULL,        -- 主流程 UUID
+    sub_uuid      VARCHAR(36)  NOT NULL,        -- 子流程 UUID
+    client_id     VARCHAR(10)  NOT NULL,        -- 客戶證號
+    claim_seq     INTEGER      NOT NULL,        -- 建檔編號
+    module_type   VARCHAR(50),                  -- 模組類型
+    main_status   VARCHAR(10)  NOT NULL,        -- 主流程 目前狀態
+    sub_status    VARCHAR(10)  NOT NULL,        -- 子流程 目前狀態
+    valid         CHAR(1)      NOT NULL,        -- 效性 : 0.無效 / 1.有效
+    note          VARCHAR(250),                 -- 簽核意見
+    owner_user    VARCHAR(8),                   -- 負責人
+    process_user  VARCHAR(8),                   -- 處理者
+    process_date  CHAR(9),                      -- 處理日期
+    process_time  CHAR(8)                       -- 處理時間
 );
 
-CREATE UNIQUE INDEX index_1 ON claim_history(uuid);
-CREATE        INDEX index_2 ON claim_history(client_id);
-CREATE        INDEX index_3 ON claim_history(client_id, claim_seq);
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid);
+CREATE        INDEX index_2 ON claim_status(main_uuid);
+CREATE        INDEX index_3 ON claim_status(sub_uuid);
+CREATE        INDEX index_4 ON claim_status(client_id);
+CREATE        INDEX index_5 ON claim_status(client_id, claim_seq);

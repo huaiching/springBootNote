@@ -13,7 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 
-public class PdfUtil {
+public class WordToPdfUtil {
 
     /**
      * word 轉 PDF <br/>

@@ -11,35 +11,41 @@ import java.util.Objects;
 @Entity
 @Table(name = "flow_definition")
 @Schema(description = "流程定義表")
-public class FlowDefinitionEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class FlowDefinitionEntity {
     @Id
     @Column(name = "id")
     private Integer id;
 
-    @Schema(description = "流程類型")
-    @Column(name = "flow_type")
-    private String flowType;
+    @Schema(description = "模組類型")
+    @Column(name = "module_type")
+    private String moduleType;
 
-    @Schema(description = "目前節點代碼")
+    @Schema(description = "狀態類型：M.主流程 / S.子流程")
+    @Column(name = "status_type")
+    private String statusType;
+
+    @Schema(description = "目前狀態")
     @Column(name = "current_status")
     private String currentStatus;
 
-    @Schema(description = "下一節點代碼")
+    @Schema(description = "目前狀態中文")
+    @Column(name = "current_status_desc")
+    private String currentStatusDesc;
+
+    @Schema(description = "下一狀態")
     @Column(name = "next_status")
     private String nextStatus;
 
-    @Schema(description = "上一節點代碼")
-    @Column(name = "prew_status")
-    private String prewStatus;
+    @Schema(description = "上一狀態")
+    @Column(name = "previous_staus")
+    private String previousStaus;
 
-    @Schema(description = "SpEL")
-    @Column(name = "spel_expression")
-    private String spelExpression;
+    @Schema(description = "檢核規則")
+    @Column(name = "expression_rule")
+    private String expressionRule;
 
-
-    public FlowDefinitionEntity() {}
+    public FlowDefinitionEntity() {
+    }
 
     public Integer getId() {
         return id;
@@ -49,49 +55,64 @@ public class FlowDefinitionEntity implements Serializable {
         this.id = id;
     }
 
-    public String getFlowType() {
-        return flowType!= null ? flowType.trim() : null;
+    public String getModuleType() {
+        return moduleType;
     }
 
-    public void setFlowType(String flowType) {
-        this.flowType = flowType;
+    public void setModuleType(String moduleType) {
+        this.moduleType = moduleType;
+    }
+
+    public String getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(String statusType) {
+        this.statusType = statusType;
     }
 
     public String getCurrentStatus() {
-        return currentStatus!= null ? currentStatus.trim() : null;
+        return currentStatus;
     }
 
     public void setCurrentStatus(String currentStatus) {
         this.currentStatus = currentStatus;
     }
 
+    public String getCurrentStatusDesc() {
+        return currentStatusDesc;
+    }
+
+    public void setCurrentStatusDesc(String currentStatusDesc) {
+        this.currentStatusDesc = currentStatusDesc;
+    }
+
     public String getNextStatus() {
-        return nextStatus!= null ? nextStatus.trim() : null;
+        return nextStatus;
     }
 
     public void setNextStatus(String nextStatus) {
         this.nextStatus = nextStatus;
     }
 
-    public String getPrewStatus() {
-        return prewStatus!= null ? prewStatus.trim() : null;
+    public String getPreviousStaus() {
+        return previousStaus;
     }
 
-    public void setPrewStatus(String prewStatus) {
-        this.prewStatus = prewStatus;
+    public void setPreviousStaus(String previousStaus) {
+        this.previousStaus = previousStaus;
     }
 
-    public String getSpelExpression() {
-        return spelExpression!= null ? spelExpression.trim() : null;
+    public String getExpressionRule() {
+        return expressionRule;
     }
 
-    public void setSpelExpression(String spelExpression) {
-        this.spelExpression = spelExpression;
+    public void setExpressionRule(String expressionRule) {
+        this.expressionRule = expressionRule;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FlowDefinitionEntity that = (FlowDefinitionEntity) o;
         return Objects.equals(id, that.id);
@@ -99,61 +120,6 @@ public class FlowDefinitionEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    // 主鍵 實體類
-    public static class FlowDefinitionKey implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private Integer id;
-
-        public FlowDefinitionKey() {}
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            FlowDefinitionKey that = (FlowDefinitionKey) o;
-            return Objects.equals(id, that.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id);
-        }
-    }
-
-    // update 實體類
-    public static class FlowDefinitionUpdate implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private FlowDefinitionEntity flowdefinitionOri;
-        private FlowDefinitionEntity flowdefinitionNew;
-
-        public FlowDefinitionEntity getFlowDefinitionOri() {
-            return flowdefinitionOri;
-        }
-
-        public void setFlowDefinitionOri(FlowDefinitionEntity flowdefinitionOri) {
-            flowdefinitionOri = flowdefinitionOri;
-        }
-
-        public FlowDefinitionEntity getFlowDefinitionNew() {
-            return flowdefinitionNew;
-        }
-
-        public void setFlowDefinitionNew(FlowDefinitionEntity flowdefinitionNew) {
-            flowdefinitionNew = flowdefinitionNew;
-        }
-
+        return Objects.hashCode(id);
     }
 }

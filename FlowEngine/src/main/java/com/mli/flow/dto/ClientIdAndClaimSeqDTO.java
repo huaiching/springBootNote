@@ -2,12 +2,12 @@ package com.mli.flow.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "申請人ID 及 建檔編號")
-public class ClientIdAndClaimSeqDto {
-    @Schema(description = "申請人ID")
+@Schema(description = "客戶證號 及 建檔編號")
+public class ClientIdAndClaimSeqDTO {
+    @Schema(description = "客戶證號")
     private String clientId;
     @Schema(description = "建檔編號")
-    private Integer claimSql;
+    private Integer claimSeq;
 
     public String getClientId() {
         return clientId;
@@ -17,11 +17,11 @@ public class ClientIdAndClaimSeqDto {
         this.clientId = clientId;
     }
 
-    public Integer getClaimSql() {
-        return claimSql;
+    public Integer getClaimSeq() {
+        return claimSeq;
     }
 
-    public void setClaimSql(Integer claimSql) {
-        this.claimSql = claimSql;
+    public void setClaimSeq(Integer claimSeq) {
+        this.claimSeq = claimSeq;
     }
 }
