@@ -1,6 +1,7 @@
 package com.mli.flow.service;
 
 import com.mli.flow.constants.ValidEnum;
+import com.mli.flow.dto.ClientIdAndClaimSeqDTO;
 import com.mli.flow.dto.FlowChangeDTO;
 import com.mli.flow.dto.FlowCreateDTO;
 import com.mli.flow.entity.ClaimMainStatusEntity;
@@ -275,6 +276,36 @@ public class FlowMainService {
         ClaimMainStatusVO claimMainStatusVO = new ClaimMainStatusVO();
         BeanUtils.copyProperties(claimMainStatusEntity, claimMainStatusVO);
         claimMainStatusVO.setMainStatus(previousStatus + " " + mainStatusDesc);
+        claimMainStatusVO.setValid(claimMainStatusVO.getValid() + " " + validDesc);
+
+        return claimMainStatusVO;
+    }
+
+    /**
+     * 目前案件流程
+     * @param clientIdAndClaimSeqDTO 客戶證號 及 建檔編號
+     */
+    public ClaimMainStatusVO getCurrent(ClientIdAndClaimSeqDTO clientIdAndClaimSeqDTO) {
+        // 初始資料檢查
+        String clientId = clientIdAndClaimSeqDTO.getClientId();
+        if (StringUtils.isEmpty(clientId)) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：clientId 空白");
+        }
+        Integer claimSeq = clientIdAndClaimSeqDTO.getClaimSeq();
+        if (claimSeq == null) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, "輸入參數錯誤：claimSeq 空白");
+        }
+
+        ClaimMainStatusEntity current = claimMainStatusService.getCurrentData(clientId, claimSeq);
+
+        // 取得 中文
+        String mainStatusDesc = flowDefinitionService.getCliamStatusDesc(current.getModuleType(), current.getMainStatus());
+        String validDesc = ValidEnum.getDescByCode(current.getValid());
+
+        // 設定回傳資料
+        ClaimMainStatusVO claimMainStatusVO = new ClaimMainStatusVO();
+        BeanUtils.copyProperties(current, claimMainStatusVO);
+        claimMainStatusVO.setMainStatus(current.getMainStatus() + " " + mainStatusDesc);
         claimMainStatusVO.setValid(claimMainStatusVO.getValid() + " " + validDesc);
 
         return claimMainStatusVO;

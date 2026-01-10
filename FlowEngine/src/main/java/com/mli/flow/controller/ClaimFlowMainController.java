@@ -1,5 +1,6 @@
 package com.mli.flow.controller;
 
+import com.mli.flow.dto.ClientIdAndClaimSeqDTO;
 import com.mli.flow.dto.FlowChangeDTO;
 import com.mli.flow.dto.FlowCreateDTO;
 import com.mli.flow.service.FlowMainService;
@@ -39,6 +40,12 @@ public class ClaimFlowMainController {
     @Operation(summary = "上一關", description = "上一關")
     public ResponseEntity<ClaimMainStatusVO> previousFlow(@RequestBody FlowChangeDTO flowChangeDTO) {
         return ResponseEntity.ok(flowMainService.previousFlow(flowChangeDTO));
+    }
+
+    @PostMapping("/getCurrent")
+    @Operation(summary = "目前案件流程", description = "目前案件流程")
+    public ResponseEntity<ClaimMainStatusVO> getCurrent(@RequestBody ClientIdAndClaimSeqDTO clientIdAndClaimSeqDTO) {
+        return ResponseEntity.ok(flowMainService.getCurrent(clientIdAndClaimSeqDTO));
     }
 
 }
