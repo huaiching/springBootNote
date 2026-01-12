@@ -23,13 +23,7 @@ public class ClaimSubFlowController {
     @Autowired
     private ClaimSubFlowService claimSubFlowService;
 
-    @PostMapping("/createFlow")
-    @Operation(summary = "新增案件", description = "新增案件")
-    public ResponseEntity<ClaimSubStatusVO> createFlow(@RequestBody SubFlowCreateDTO subFlowCreateDTO) {
-        return ResponseEntity.ok(claimSubFlowService.createFlow(subFlowCreateDTO));
-    }
-
-    @PostMapping("/createInquiry")
+    @PostMapping("/createInquiry/v1")
     @Operation(summary = "新增照會", description = "新增照會")
     public ResponseEntity<ClaimSubStatusVO> createInquiry(@RequestBody FlowCreateDTO flowCreateDTO) {
         SubFlowCreateDTO subFlowCreateDTO = new SubFlowCreateDTO();
@@ -38,16 +32,16 @@ public class ClaimSubFlowController {
         return ResponseEntity.ok(claimSubFlowService.createFlow(subFlowCreateDTO));
     }
 
-    @PostMapping("/nextFlow")
+    @PostMapping("/nextFlow/v1")
     @Operation(summary = "下一關", description = "下一關")
     public ResponseEntity<ClaimSubStatusVO> nextFlow(@RequestBody SubFlowChangeDTO subFlowChangeDTO) {
         return ResponseEntity.ok(claimSubFlowService.nextFlow(subFlowChangeDTO));
     }
 
-    @PostMapping("/previousFlow")
+    @PostMapping("/prevFlow/v1")
     @Operation(summary = "上一關", description = "上一關")
-    public ResponseEntity<ClaimSubStatusVO> previousFlow(@RequestBody SubFlowChangeDTO subFlowChangeDTO) {
-        return ResponseEntity.ok(claimSubFlowService.previousFlow(subFlowChangeDTO));
+    public ResponseEntity<ClaimSubStatusVO> prevFlow(@RequestBody SubFlowChangeDTO subFlowChangeDTO) {
+        return ResponseEntity.ok(claimSubFlowService.prevFlow(subFlowChangeDTO));
     }
 
 }

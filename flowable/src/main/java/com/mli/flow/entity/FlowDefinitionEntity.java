@@ -38,8 +38,8 @@ public class FlowDefinitionEntity {
     private String nextStatus;
 
     @Schema(description = "上一節點代碼")
-    @Column(name = "prew_status")
-    private String prewStatus;
+    @Column(name = "prev_status")
+    private String prevStatus;
 
     @Schema(description = "檢核規則")
     @Column(name = "expression")
@@ -96,12 +96,12 @@ public class FlowDefinitionEntity {
         this.nextStatus = nextStatus;
     }
 
-    public String getPrewStatus() {
-        return prewStatus;
+    public String getPrevStatus() {
+        return prevStatus;
     }
 
-    public void setPrewStatus(String prewStatus) {
-        this.prewStatus = prewStatus;
+    public void setPrevStatus(String prevStatus) {
+        this.prevStatus = prevStatus;
     }
 
     public String getExpression() {

@@ -253,9 +253,9 @@ public class ClaimMainFlowService {
         if (flowDefinitionEntity == null) {
             throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "上一關 執行錯誤: 找不到對應流程！");
         }
-        String prewStatus = flowDefinitionEntity.getPrewStatus();
+        String prevStatus = flowDefinitionEntity.getPrevStatus();
 
-        if (StringUtils.isEmpty(prewStatus)) {
+        if (StringUtils.isEmpty(prevStatus)) {
             throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "上一關 執行錯誤: 查無上一個流程！");
         }
 
@@ -269,7 +269,7 @@ public class ClaimMainFlowService {
         claimMainStatusEntity.setClientId(clientId);
         claimMainStatusEntity.setClfpSeq(clfpSeq);
         claimMainStatusEntity.setModuleType(current.getModuleType());
-        claimMainStatusEntity.setStatus(prewStatus);
+        claimMainStatusEntity.setStatus(prevStatus);
         claimMainStatusEntity.setNote(flowChangeDTO.getNote());
         claimMainStatusEntity.setOwnerUser(ownerUser);
         claimMainStatusEntity.setProcessUser(processUser);
@@ -287,7 +287,7 @@ public class ClaimMainFlowService {
         claimHistoryService.insert(claimHistoryEntity);
 
         // 取得 中文
-        String status = prewStatus + " " + flowDefinitionService.getCliamStatusDesc(CLAIM_MODULE, prewStatus);
+        String status = prevStatus + " " + flowDefinitionService.getCliamStatusDesc(CLAIM_MODULE, prevStatus);
 
         // 設定回傳資料
         ClaimMainStatusVO claimMainStatusVO = new ClaimMainStatusVO();

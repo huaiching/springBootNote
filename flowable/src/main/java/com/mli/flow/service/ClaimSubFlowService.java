@@ -219,7 +219,7 @@ public class ClaimSubFlowService {
      * 理賠流程 上一關
      * @param subFlowChangeDTO 異動流程 Input
      */
-    public ClaimSubStatusVO previousFlow(SubFlowChangeDTO subFlowChangeDTO) {
+    public ClaimSubStatusVO prevFlow(SubFlowChangeDTO subFlowChangeDTO) {
         // 初始資料檢查
         String subUuid = subFlowChangeDTO.getSubUuid();
         if (StringUtils.isEmpty(subUuid)) {
@@ -256,9 +256,9 @@ public class ClaimSubFlowService {
         if (flowDefinitionEntity == null) {
             throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "上一關 執行錯誤: 找不到對應流程！");
         }
-        String prewStatus = flowDefinitionEntity.getPrewStatus();
+        String prevStatus = flowDefinitionEntity.getPrevStatus();
 
-        if (StringUtils.isEmpty(prewStatus)) {
+        if (StringUtils.isEmpty(prevStatus)) {
             throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "上一關 執行錯誤: 查無上一個流程！");
         }
 
@@ -273,7 +273,7 @@ public class ClaimSubFlowService {
         claimSubStatusEntity.setClientId(current.getClientId());
         claimSubStatusEntity.setClfpSeq(current.getClfpSeq());
         claimSubStatusEntity.setModuleType(moduleType);
-        claimSubStatusEntity.setStatus(prewStatus);
+        claimSubStatusEntity.setStatus(prevStatus);
         claimSubStatusEntity.setNote(subFlowChangeDTO.getNote());
         claimSubStatusEntity.setOwnerUser(ownerUser);
         claimSubStatusEntity.setProcessUser(processUser);
@@ -291,7 +291,7 @@ public class ClaimSubFlowService {
         claimHistoryService.insert(claimHistoryEntity);
 
         // 取得 中文
-        String status = prewStatus + " " + flowDefinitionService.getCliamStatusDesc(moduleType, prewStatus);
+        String status = prevStatus + " " + flowDefinitionService.getCliamStatusDesc(moduleType, prevStatus);
 
         // 設定回傳資料
         ClaimSubStatusVO claimSubStatusVO = new ClaimSubStatusVO();

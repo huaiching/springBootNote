@@ -23,13 +23,13 @@ public class ClaimHistoryController {
     @Autowired
     private ClaimHistoryFlowService claimHistoryFlowService;
 
-    @PostMapping("/getClaimHistory")
+    @PostMapping("/getClaimHistory/v1")
     @Operation(summary = "理賠歷史流程查詢", description = "理賠歷史流程查詢")
     public ResponseEntity<List<ClaimHistoryVO>> getClaimHistory(@RequestBody ClientIdAndClfpSeqDTO clientIdAndClfpSeqDTO) {
         return ResponseEntity.ok(claimHistoryFlowService.getClaimHistory(clientIdAndClfpSeqDTO));
     }
 
-    @PostMapping("/getCurrentMainFlow")
+    @PostMapping("/getCurrentMainFlow/v1")
     @Operation(summary = "目前案件主流程", description = "目前案件主流程")
     public ResponseEntity<ClaimMainStatusVO> getCurrentMainFlow(@RequestBody ClientIdAndClfpSeqDTO clientIdAndClfpSeqDTO) {
         return ResponseEntity.ok(claimHistoryFlowService.getCurrentMainFlow(clientIdAndClfpSeqDTO));

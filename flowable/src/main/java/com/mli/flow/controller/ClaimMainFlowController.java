@@ -21,19 +21,19 @@ public class ClaimMainFlowController {
     @Autowired
     private ClaimMainFlowService claimMainFlowService;
 
-    @PostMapping("/createFlow")
+    @PostMapping("/createFlow/v1")
     @Operation(summary = "新增案件", description = "新增案件")
     public ResponseEntity<ClaimMainStatusVO> createFlow(@RequestBody FlowCreateDTO flowCreateDTO) {
         return ResponseEntity.ok(claimMainFlowService.createFlow(flowCreateDTO));
     }
 
-    @PostMapping("/nextFlow")
+    @PostMapping("/nextFlow/v1")
     @Operation(summary = "下一關", description = "下一關")
     public ResponseEntity<ClaimMainStatusVO> nextFlow(@RequestBody FlowChangeDTO flowChangeDTO) {
         return ResponseEntity.ok(claimMainFlowService.nextFlow(flowChangeDTO));
     }
 
-    @PostMapping("/previousFlow")
+    @PostMapping("/previousFlow/v1")
     @Operation(summary = "上一關", description = "上一關")
     public ResponseEntity<ClaimMainStatusVO> previousFlow(@RequestBody FlowChangeDTO flowChangeDTO) {
         return ResponseEntity.ok(claimMainFlowService.previousFlow(flowChangeDTO));

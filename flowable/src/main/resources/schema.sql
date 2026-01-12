@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS flow_definition (
     current_status         VARCHAR(10),        -- 目前狀態代碼
     current_status_desc    VARCHAR(50),        -- 目前狀態中文
     next_status            VARCHAR(10),        -- 下一狀態
-    prew_status            VARCHAR(10),        -- 上一狀態
+    prev_status            VARCHAR(10),        -- 上一狀態
     expression             VARCHAR(250)        -- 檢核規則
 );
 
