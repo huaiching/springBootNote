@@ -25,6 +25,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
 
 # ==================== Springdoc / Swagger ====================
 springdoc:
@@ -38,23 +42,3 @@ springdoc:
 #    urls:
 #      - name: 自訂 API
 #        url: /api-docs
-
-# ==================== Flowable 專屬設定 ====================
-flowable:
-  # 流程定義部署
-  process-definition-location-prefix: classpath*:/processes/
-
-  # 資料庫設定
-  database-schema-update: true          # 自動建表
-
-  # 歷史資料設定
-  history-level: full                   # 完整歷史記錄
-
-  # 非同步執行器
-  async-executor-activate: true         # 啟用非同步執行
-
-  # 流程定義檢查
-  check-process-definitions: true       # 自動偵測流程變更
-
-  # IDM 身份管理
-  idm-enabled: true                     # 啟用身份管理

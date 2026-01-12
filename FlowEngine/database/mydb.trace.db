@@ -1,0 +1,135 @@
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(client_id) [42102-214]
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(sub_uuid) [42102-214]
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id) [42102-214]
+2026-01-10 19:51:46 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_5 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(client_id) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(sub_uuid) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id) [42102-214]
+2026-01-10 19:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_5 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(client_id) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(sub_uuid) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id) [42102-214]
+2026-01-10 20:06:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_5 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(client_id) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(sub_uuid) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id) [42102-214]
+2026-01-10 20:06:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_5 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(client_id) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id, claim_seq) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE UNIQUE INDEX index_1 ON claim_status(case_uuid) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_2 ON claim_status(main_uuid) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_3 ON claim_status(sub_uuid) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_4 ON claim_status(client_id) [42102-214]
+2026-01-11 10:48:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CLAIM_STATUS" not found; SQL statement:
+CREATE INDEX index_5 ON claim_status(client_id, claim_seq) [42102-214]
